@@ -5,9 +5,13 @@
     "f": "'Segoe UI',sans-serif",
     "a": "#0ea5e9",
     "d": "#075985",
+    "ly": "tl",
     "hd": "band",
     "h2": "under",
     "sk": "chips",
+    "ex": "timeline",
+    "av": 1,
+    "sw": "32%",
     "fs": 13.5
   }
 ]
