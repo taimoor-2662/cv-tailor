@@ -4,37 +4,71 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Free AI CV Tailor – Match Your CV to Any Job</title>
-<meta name="description" content="Upload your old CV, add the job description, and get a tailored ATS-friendly CV as a free PDF. No signup.">
+<meta name="description" content="Upload your old CV, add the job description, pick from 100+ templates and download a tailored ATS-friendly CV as a free PDF. No signup.">
 <style>
 :root{--bg:#f6f7fb;--card:#fff;--tx:#1b1f2a;--mut:#667085;--pri:#4f46e5;--bd:#e4e7ec}
 @media(prefers-color-scheme:dark){:root{--bg:#0f1117;--card:#181b24;--tx:#eceef4;--mut:#9aa3b5;--bd:#2a2f3c}}
 *{box-sizing:border-box}body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;background:var(--bg);color:var(--tx);line-height:1.5}
-header{text-align:center;padding:36px 16px 8px}h1{margin:0 0 8px;font-size:clamp(24px,5vw,38px)}header p{color:var(--mut);margin:0 auto;max-width:560px}
+header{text-align:center;padding:36px 16px 8px}h1.t{margin:0 0 8px;font-size:clamp(24px,5vw,38px)}header p{color:var(--mut);margin:0 auto;max-width:560px}
 main{max-width:960px;margin:0 auto;padding:16px}
 .card{background:var(--card);border:1px solid var(--bd);border-radius:14px;padding:18px;margin-bottom:16px}
 label{font-weight:600;display:block;margin:12px 0 6px}
-textarea,select,input[type=file]{width:100%;padding:10px;border:1px solid var(--bd);border-radius:10px;background:var(--bg);color:var(--tx);font:inherit}
+textarea,select,input[type=file],input[type=text],input[type=number]{width:100%;padding:10px;border:1px solid var(--bd);border-radius:10px;background:var(--bg);color:var(--tx);font:inherit}
 textarea{min-height:130px;resize:vertical}
-button{background:var(--pri);color:#fff;border:0;border-radius:10px;padding:12px 18px;font:inherit;font-weight:600;cursor:pointer}
+button{background:var(--pri);color:#fff;border:0;border-radius:10px;padding:11px 16px;font:inherit;font-weight:600;cursor:pointer}
 button:disabled{opacity:.6}button.sec{background:transparent;color:var(--pri);border:1px solid var(--pri)}
 .row{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px;align-items:center}
 #msg{color:var(--mut);margin-top:10px}#msg.err{color:#d92d20}
-.wrap{overflow-x:auto}
-#cv{background:#fff;color:#111;width:794px;max-width:none;margin:0 auto;padding:40px 44px;font-family:Georgia,'Times New Roman',serif;font-size:13.5px;line-height:1.45;min-height:400px}
-#cv h1{font-size:28px;margin:0}#cv .ttl{font-size:15px;margin:2px 0}#cv .ct{font-size:12.5px;color:#444}
-#cv h2{font-size:14px;text-transform:uppercase;letter-spacing:.08em;margin:18px 0 6px;padding-bottom:3px;border-bottom:1.5px solid #111}
-#cv ul{margin:4px 0 8px;padding-left:18px}#cv .job{margin-top:8px;font-weight:700}#cv .job span{font-weight:400;color:#444}
-#cv.modern{font-family:system-ui,Arial,sans-serif}#cv.modern h1{color:#4f46e5}#cv.modern h2{color:#4f46e5;border-color:#4f46e5}
-#cv.minimal{font-family:Arial,sans-serif;font-size:13px}#cv.minimal h2{border:0;letter-spacing:.15em;color:#555}
-.hint{color:var(--mut);font-size:13px;text-align:center}
+.wrap{overflow-x:auto;background:#d9dce3;padding:14px;border-radius:10px}
+.hint{color:var(--mut);font-size:13px;margin:6px 0 10px}
 footer{text-align:center;color:var(--mut);font-size:13px;padding:24px}footer a{color:var(--mut)}
 details{margin:8px 0}summary{cursor:pointer;font-weight:600}
+/* ===== CV templates (driven by variables + data attributes) ===== */
+.cvx{--f:Georgia,serif;--a:#2563eb;--d:#1e3a8a;--pad:46px;--fs:13.5px;background:#fff;color:#111;width:794px;max-width:none;margin:0 auto;font-family:var(--f);font-size:var(--fs);line-height:1.5;min-height:420px}
+.cvx .hd{padding:36px var(--pad) 14px}.cvx .bd{padding:0 var(--pad) 36px}
+.cvx h1{margin:0;font-size:2.1em;color:var(--d);font-weight:700;line-height:1.15}.cvx .ttl{margin:3px 0;font-size:1.1em;color:var(--a)}.cvx .ct{font-size:.92em;color:#444}
+.cvx h2{margin:1.3em 0 .45em;font-size:1em;text-transform:uppercase;letter-spacing:.08em;color:var(--d)}
+.cvx ul,.cvx ol{margin:4px 0 8px;padding-left:20px}.cvx .job{margin-top:.7em;font-weight:700}.cvx .job span{font-weight:400;color:#555}
+.cvx[data-hd=center] .hd{text-align:center;border-bottom:2px solid var(--d);margin:0 var(--pad);padding:36px 0 14px}
+.cvx[data-hd=bar] .hd{border-left:8px solid var(--a);margin:32px var(--pad) 0;padding:4px 0 4px 16px}
+.cvx[data-hd=band] .hd,.cvx[data-hd=accent] .hd,.cvx[data-hd=stripe] .hd{color:#fff;padding:36px var(--pad) 22px}
+.cvx[data-hd=band] .hd{background:var(--d)}.cvx[data-hd=accent] .hd{background:var(--a)}.cvx[data-hd=stripe] .hd{background:var(--d);border-bottom:6px solid var(--a)}
+.cvx[data-hd=band] h1,.cvx[data-hd=accent] h1,.cvx[data-hd=stripe] h1{color:#fff}
+.cvx[data-hd=band] .ttl,.cvx[data-hd=accent] .ttl,.cvx[data-hd=stripe] .ttl,.cvx[data-hd=band] .ct,.cvx[data-hd=accent] .ct,.cvx[data-hd=stripe] .ct{color:rgba(255,255,255,.88)}
+.cvx[data-h2=line] h2{border-bottom:1.5px solid var(--d);padding-bottom:3px}
+.cvx[data-h2=bar] h2{border-left:5px solid var(--a);background:#f1f3f6;padding:4px 10px}
+.cvx[data-h2=caps] h2{font-size:.78em;letter-spacing:.25em;color:#888}
+.cvx[data-h2=under] h2{display:inline-block;border-bottom:3px solid var(--a);padding-bottom:1px}
+.cvx[data-h2=pill] h2{display:inline-block;background:var(--a);color:#fff;padding:2px 14px;border-radius:14px}
+.cvx[data-h2=plain] h2{color:var(--a);text-transform:none;font-size:1.15em;letter-spacing:0}
+.cvx[data-sk=dots] .sk span:not(:last-child)::after{content:"  \2022  ";color:var(--a)}
+.cvx[data-sk=slash] .sk span:not(:last-child)::after{content:"  /  ";color:#aaa}
+.cvx[data-sk=plain] .sk span:not(:last-child)::after{content:", "}
+.cvx[data-sk=chips] .sk span,.cvx[data-sk=out] .sk span,.cvx[data-sk=fill] .sk span,.cvx[data-sk=box] .sk span{display:inline-block;margin:0 6px 6px 0;padding:1px 11px;font-size:.92em}
+.cvx[data-sk=chips] .sk span{background:#eef1f5;border-radius:14px}
+.cvx[data-sk=out] .sk span{border:1.5px solid var(--a);color:var(--a);border-radius:14px}
+.cvx[data-sk=fill] .sk span{background:var(--a);color:#fff;border-radius:4px}
+.cvx[data-sk=box] .sk span{border:1.5px solid var(--d);border-radius:3px;font-weight:600}
+#cv.editing{outline:3px dashed var(--pri);cursor:text}
+/* gallery */
+.ov{position:fixed;inset:0;background:rgba(0,0,0,.65);z-index:50;display:none;overflow:auto;padding:12px}.ov.on{display:block}
+.pn{max-width:980px;margin:0 auto;background:var(--card);border-radius:14px;padding:16px;border:1px solid var(--bd)}
+.tabs{display:flex;gap:6px;flex-wrap:wrap;margin:10px 0}.tab{background:var(--bg);color:var(--tx);border:1px solid var(--bd);padding:7px 12px;font-weight:500}.tab.on{background:var(--pri);color:#fff;border-color:var(--pri)}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(145px,1fr));gap:12px}
+.th{position:relative;aspect-ratio:210/297;overflow:hidden;border:3px solid var(--bd);border-radius:8px;cursor:pointer;background:#fff}.th.sel{border-color:var(--pri)}
+.th .cvx{position:absolute;top:0;left:0;transform-origin:0 0;pointer-events:none}.nm{font-size:12px;text-align:center;margin-top:4px;color:var(--mut)}
+#mk{display:none;border-top:1px solid var(--bd);margin-top:14px;padding-top:6px}#mk.on{display:block}
+.g2{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px}input[type=color]{width:100%;height:40px;padding:2px;border:1px solid var(--bd);border-radius:8px;background:var(--bg)}
+/* edit toolbar */
+.tb{position:sticky;top:0;z-index:20;background:var(--card);border:1px solid var(--bd);border-radius:10px;padding:8px;display:none;flex-wrap:wrap;gap:6px;margin-bottom:10px;align-items:center}.tb.on{display:flex}
+.tb button{padding:6px 10px;font-size:14px;background:var(--bg);color:var(--tx);border:1px solid var(--bd);font-weight:600}.tb select{width:auto;padding:6px;font-size:13px}.tb input[type=color]{width:34px;height:32px}.tb small{color:var(--mut);font-size:11px}
+@media print{*{-webkit-print-color-adjust:exact;print-color-adjust:exact}body *{visibility:hidden}#cv,#cv *{visibility:visible}#cv{position:absolute;left:0;top:0;outline:0}}
 </style>
 </head>
 <body>
 <header>
-  <h1>Free AI CV Tailor</h1>
-  <p>Upload your old CV, add the job you want, and download a tailored, ATS-friendly CV as a PDF. Free, no signup.</p>
+  <h1 class="t">Free AI CV Tailor</h1>
+  <p>Upload your old CV, add the job you want, pick from 100+ templates and download a tailored, ATS-friendly CV as a PDF. Free, no signup.</p>
 </header>
 <main>
   <div class="card">
@@ -43,18 +77,19 @@ details{margin:8px 0}summary{cursor:pointer;font-weight:600}
     <label for="cvtext">…or paste your CV text</label>
     <textarea id="cvtext" placeholder="Your CV text appears here after upload. You can edit it."></textarea>
     <label for="job">2. Job role or job description</label>
-    <textarea id="job" placeholder="e.g. Junior Web Developer, or paste the full job posting"></textarea>
+    <textarea id="job" placeholder="e.g. Office Administrator, or paste the full job posting"></textarea>
     <div class="row">
       <button id="go">Generate tailored CV</button>
-      <select id="tpl" style="width:auto"><option value="">Classic</option><option value="modern">Modern</option><option value="minimal">Minimal</option></select>
+      <button class="sec" id="gal">🎨 Templates: <span id="cur">Classic Navy</span></button>
     </div>
     <div id="msg"></div>
   </div>
 
   <div class="card" id="out" hidden>
-    <div class="row" style="margin:0 0 12px"><button id="dl">Download PDF</button><button class="sec" id="print">Print</button></div>
-    <p class="hint">Tip: click anywhere on the CV to edit the text before downloading. Check every detail is accurate.</p>
-    <div class="wrap"><div id="cv" contenteditable="true"></div></div>
+    <div class="row" style="margin:0 0 12px"><button id="dl">Download PDF</button><button class="sec" id="print">Print</button><button class="sec" id="edit">✏️ Edit CV</button><button class="sec" id="gal2">🎨 Change template</button></div>
+    <div class="tb" id="tb"></div>
+    <p class="hint" id="hint">Pick a template, or click <b>Edit CV</b> to change text, fonts, sizes and colors. Check every detail is accurate before sending.</p>
+    <div class="wrap"><div id="cv" class="cvx"></div></div>
   </div>
 
   <div class="card">
@@ -64,6 +99,28 @@ details{margin:8px 0}summary{cursor:pointer;font-weight:600}
     <details><summary>Will the AI invent experience?</summary><p>It is instructed to use only what is in your CV, but always review the result before sending it.</p></details>
   </div>
 </main>
+
+<div class="ov" id="ov"><div class="pn">
+  <div class="row" style="margin:0;justify-content:space-between"><h2 style="margin:0">Choose a template</h2><button class="sec" id="x">✕ Close</button></div>
+  <div class="tabs" id="tabs"></div>
+  <div class="grid" id="grid"></div>
+  <div class="row"><button class="sec" id="mkb">＋ Create your own template</button></div>
+  <div id="mk">
+    <div class="g2">
+      <div><label>Name</label><input type="text" id="mn" placeholder="My style"></div>
+      <div><label>Category</label><input type="text" id="mc" value="My Templates"></div>
+      <div><label>Font</label><select id="mf"></select></div>
+      <div><label>Base size (px)</label><input type="number" id="ms" value="13.5" step="0.5" min="10" max="18"></div>
+      <div><label>Accent color</label><input type="color" id="ma" value="#2563eb"></div>
+      <div><label>Dark / header color</label><input type="color" id="md" value="#1e3a8a"></div>
+      <div><label>Header style</label><select id="mh"></select></div>
+      <div><label>Heading style</label><select id="m2"></select></div>
+      <div><label>Skills style</label><select id="mk2"></select></div>
+    </div>
+    <div class="row"><button id="msv">Save in my browser</button><button class="sec" id="mcp">Copy template code</button></div>
+    <p class="hint">Saved templates appear under "My Templates" in this browser. To add a template for <b>everyone</b>, click "Copy template code" and paste it into <code>templates.json</code> in your GitHub repo (inside the [ ] list, separated by commas).</p>
+  </div>
+</div></div>
 <footer>© <span id="yr"></span> Free AI CV Tailor · <a href="/privacy.html">Privacy</a> · <a href="/about.html">About</a></footer>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
@@ -75,34 +132,23 @@ const esc = s => String(s == null ? "" : s).replace(/[&<>"]/g, c => ({ "&": "&am
 const arr = x => Array.isArray(x) ? x : [];
 $("yr").textContent = new Date().getFullYear();
 if (window.pdfjsLib) pdfjsLib.GlobalWorkerOptions.workerSrc = "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js";
+const say = (t, err) => { $("msg").textContent = t; $("msg").className = err ? "err" : ""; };
 
-function say(t, err) { $("msg").textContent = t; $("msg").className = err ? "err" : ""; }
-
+/* ---------- file reading + AI ---------- */
 $("file").onchange = async e => {
   const f = e.target.files[0]; if (!f) return;
   say("Reading file…");
   try {
-    let text = "";
-    const name = f.name.toLowerCase();
+    let text = ""; const name = f.name.toLowerCase();
     if (name.endsWith(".pdf")) {
       const pdf = await pdfjsLib.getDocument({ data: await f.arrayBuffer() }).promise;
-      for (let i = 1; i <= pdf.numPages; i++) {
-        const p = await (await pdf.getPage(i)).getTextContent();
-        text += p.items.map(x => x.str).join(" ") + "\n";
-      }
-    } else if (name.endsWith(".docx")) {
-      text = (await mammoth.extractRawText({ arrayBuffer: await f.arrayBuffer() })).value;
-    } else {
-      text = await f.text();
-    }
+      for (let i = 1; i <= pdf.numPages; i++) { const p = await (await pdf.getPage(i)).getTextContent(); text += p.items.map(x => x.str).join(" ") + "\n"; }
+    } else if (name.endsWith(".docx")) text = (await mammoth.extractRawText({ arrayBuffer: await f.arrayBuffer() })).value;
+    else text = await f.text();
     if (text.trim().length < 50) throw new Error("empty");
-    $("cvtext").value = text.trim();
-    say("CV loaded. Now add the job and click Generate.");
-  } catch (err) {
-    say("Couldn't read that file (scanned PDFs have no text). Please paste your CV text instead.", true);
-  }
+    $("cvtext").value = text.trim(); say("CV loaded. Now add the job and click Generate.");
+  } catch (err) { say("Couldn't read that file (scanned PDFs have no text). Please paste your CV text instead.", true); }
 };
-
 $("go").onclick = async () => {
   const cvText = $("cvtext").value.trim(), job = $("job").value.trim();
   if (cvText.length < 50) return say("Please upload or paste your CV first.", true);
@@ -112,46 +158,155 @@ $("go").onclick = async () => {
     const r = await fetch("/api", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ cvText, job }) });
     const d = await r.json();
     if (!r.ok || !d.cv) throw new Error(d.error || "Something went wrong.");
-    render(d.cv);
-    say("Done! Review, edit if needed, then download.");
+    lastCv = d.cv; show(); say("Done! Choose a template, edit if needed, then download.");
     $("out").hidden = false; $("out").scrollIntoView({ behavior: "smooth" });
   } catch (err) { say(err.message, true); }
   $("go").disabled = false;
 };
 
-function render(c) {
+/* ---------- CV markup ---------- */
+const SAMPLE = { name: "Your Name", title: "Job Title", contact: ["email@example.com", "+00 000 0000", "City"], summary: "Motivated professional with experience delivering results and working in teams.", skills: ["Communication", "Planning", "MS Office", "Teamwork"], experience: [{ title: "Role", company: "Company", dates: "2021 - 2024", bullets: ["Achieved key targets", "Improved processes"] }], education: [{ degree: "Degree", school: "University", dates: "2020" }], extra: [] };
+let lastCv = null;
+function cvHTML(c) {
   const contact = arr(c.contact).filter(Boolean).map(esc).join(" · ");
-  let h = `<h1>${esc(c.name)}</h1>`;
+  let h = `<div class="hd"><h1>${esc(c.name)}</h1>`;
   if (c.title) h += `<div class="ttl">${esc(c.title)}</div>`;
   if (contact) h += `<div class="ct">${contact}</div>`;
+  h += `</div><div class="bd">`;
   if (c.summary) h += `<h2>Summary</h2><div>${esc(c.summary)}</div>`;
-  if (arr(c.skills).length) h += `<h2>Skills</h2><div>${arr(c.skills).map(esc).join(" · ")}</div>`;
-  if (arr(c.experience).length) {
-    h += `<h2>Experience</h2>`;
-    arr(c.experience).forEach(j => {
-      h += `<div class="job">${esc(j.title)}${j.company ? ", " + esc(j.company) : ""} <span>${esc(j.dates)}</span></div>`;
-      h += `<ul>${arr(j.bullets).map(b => `<li>${esc(b)}</li>`).join("")}</ul>`;
-    });
-  }
-  if (arr(c.education).length) {
-    h += `<h2>Education</h2>`;
-    arr(c.education).forEach(e => { h += `<div class="job">${esc(e.degree)}${e.school ? ", " + esc(e.school) : ""} <span>${esc(e.dates)}</span></div>`; });
-  }
-  arr(c.extra).forEach(x => {
-    if (arr(x.items).length) h += `<h2>${esc(x.heading)}</h2><ul>${arr(x.items).map(i => `<li>${esc(i)}</li>`).join("")}</ul>`;
-  });
-  $("cv").innerHTML = h;
-  $("cv").className = $("tpl").value;
+  if (arr(c.skills).length) h += `<h2>Skills</h2><div class="sk">${arr(c.skills).map(x => `<span>${esc(x)}</span>`).join("")}</div>`;
+  if (arr(c.experience).length) { h += `<h2>Experience</h2>`; arr(c.experience).forEach(j => { h += `<div class="job">${esc(j.title)}${j.company ? ", " + esc(j.company) : ""} <span>${esc(j.dates)}</span></div><ul>${arr(j.bullets).map(b => `<li>${esc(b)}</li>`).join("")}</ul>`; }); }
+  if (arr(c.education).length) { h += `<h2>Education</h2>`; arr(c.education).forEach(e => { h += `<div class="job">${esc(e.degree)}${e.school ? ", " + esc(e.school) : ""} <span>${esc(e.dates)}</span></div>`; }); }
+  arr(c.extra).forEach(x => { if (arr(x.items).length) h += `<h2>${esc(x.heading)}</h2><ul>${arr(x.items).map(i => `<li>${esc(i)}</li>`).join("")}</ul>`; });
+  return h + `</div>`;
 }
 
-$("tpl").onchange = () => { $("cv").className = $("tpl").value; };
+/* ---------- 100 built-in templates: 10 categories x 10 palettes ---------- */
+const FONTS = [["Georgia","serif"],["Times New Roman","serif"],["Garamond","serif"],["Palatino Linotype","serif"],["Cambria","serif"],["Arial","sans-serif"],["Helvetica","sans-serif"],["Verdana","sans-serif"],["Trebuchet MS","sans-serif"],["Tahoma","sans-serif"],["Segoe UI","sans-serif"],["Calibri","sans-serif"],["Impact","sans-serif"],["Courier New","monospace"],["Consolas","monospace"]];
+const fam = n => { const f = FONTS.find(x => x[0] === n); return `'${n}',${f ? f[1] : "sans-serif"}`; };
+const HD = ["center","left","band","accent","bar","stripe"], H2 = ["line","bar","caps","under","pill","plain"], SK = ["dots","chips","out","fill","box","slash","plain"];
+const PAL = [["Navy","#2563eb","#1e3a8a"],["Teal","#0d9488","#134e4a"],["Crimson","#dc2626","#7f1d1d"],["Emerald","#059669","#064e3b"],["Purple","#7c3aed","#4c1d95"],["Amber","#d97706","#78350f"],["Slate","#475569","#0f172a"],["Rose","#e11d48","#4c0519"],["Sky","#0284c7","#0c4a6e"],["Charcoal","#f59e0b","#111827"]];
+const CATS = [
+  { n: "Classic", f: "Georgia", hd: ["center","left"], h2: ["line","plain"], sk: ["dots","slash"] },
+  { n: "Modern", f: "Segoe UI", hd: ["band","accent","left"], h2: ["bar","under"], sk: ["chips","out","fill"] },
+  { n: "Minimal", f: "Helvetica", hd: ["left","center"], h2: ["caps"], sk: ["slash","dots","plain"] },
+  { n: "Bold", f: "Trebuchet MS", hd: ["stripe","band"], h2: ["under","pill"], sk: ["box","fill"] },
+  { n: "Creative", f: "Verdana", hd: ["accent","bar"], h2: ["pill","bar"], sk: ["fill","out"] },
+  { n: "Corporate", f: "Calibri", hd: ["left","bar","center"], h2: ["line","bar"], sk: ["dots","chips"] },
+  { n: "Elegant", f: "Palatino Linotype", hd: ["center","stripe"], h2: ["caps","under","line"], sk: ["slash","dots"] },
+  { n: "Tech", f: "Consolas", hd: ["band","left"], h2: ["plain","bar","under"], sk: ["box","out"] },
+  { n: "Academic", f: "Times New Roman", hd: ["center","left"], h2: ["line","caps"], sk: ["plain","dots"] },
+  { n: "Compact", f: "Arial", hd: ["left","bar"], h2: ["bar","line"], sk: ["dots","chips"], fs: 12 },
+];
+let TPL = [], remote = [], custom = [];
+try { custom = JSON.parse(localStorage.getItem("cvt") || "[]"); } catch (e) { custom = []; }
+const okT = t => t && t.name && t.f && t.a && t.d && HD.includes(t.hd) && H2.includes(t.h2) && SK.includes(t.sk);
+function buildTpl() {
+  TPL = [];
+  CATS.forEach(c => PAL.forEach((p, i) => TPL.push({ id: c.n + i, cat: c.n, name: c.n + " " + p[0], f: fam(c.f), a: p[1], d: p[2], hd: c.hd[i % c.hd.length], h2: c.h2[(i >> 1) % c.h2.length], sk: c.sk[((i / 3) | 0) % c.sk.length], fs: c.fs || 13.5 })));
+  remote.filter(okT).forEach(t => TPL.push({ ...t, cat: t.cat || "Community", id: "r" + t.name, fs: t.fs || 13.5 }));
+  custom.filter(okT).forEach(t => TPL.push({ ...t, cat: "My Templates", id: "c" + t.name }));
+}
+fetch("/templates.json").then(r => r.json()).then(a => { if (Array.isArray(a)) { remote = a; buildTpl(); } }).catch(() => {});
+buildTpl();
+let cur = TPL[0];
+function apply(el, t) {
+  el.style.setProperty("--f", t.f); el.style.setProperty("--a", t.a); el.style.setProperty("--d", t.d); el.style.setProperty("--fs", (t.fs || 13.5) + "px");
+  el.dataset.hd = t.hd; el.dataset.h2 = t.h2; el.dataset.sk = t.sk;
+}
+function show() { if (!lastCv) return; $("cv").innerHTML = cvHTML(lastCv); apply($("cv"), cur); }
+function choose(t) { cur = t; $("cur").textContent = t.name; if (lastCv) { apply($("cv"), t); } $("ov").classList.remove("on"); }
 
+/* ---------- gallery ---------- */
+let tabCat = "Classic";
+function drawGallery() {
+  const cats = [...new Set(TPL.map(t => t.cat))];
+  if (!cats.includes(tabCat)) tabCat = cats[0];
+  $("tabs").innerHTML = cats.map(c => `<button class="tab ${c === tabCat ? "on" : ""}" data-c="${esc(c)}">${esc(c)}</button>`).join("");
+  $("grid").innerHTML = "";
+  TPL.filter(t => t.cat === tabCat).forEach(t => {
+    const box = document.createElement("div");
+    box.innerHTML = `<div class="th ${t.id === cur.id ? "sel" : ""}"><div class="cvx">${cvHTML(lastCv || SAMPLE)}</div></div><div class="nm">${esc(t.name)}</div>`;
+    const th = box.firstChild; apply(th.firstChild, t); th.onclick = () => choose(t);
+    $("grid").appendChild(box);
+  });
+  requestAnimationFrame(() => document.querySelectorAll(".th").forEach(th => { th.firstChild.style.transform = `scale(${th.clientWidth / 794})`; }));
+}
+$("tabs").onclick = e => { const b = e.target.closest(".tab"); if (b) { tabCat = b.dataset.c; drawGallery(); } };
+const openG = () => { $("ov").classList.add("on"); drawGallery(); };
+$("gal").onclick = openG; $("gal2").onclick = openG; $("x").onclick = () => $("ov").classList.remove("on");
+$("mkb").onclick = () => $("mk").classList.toggle("on");
+$("mf").innerHTML = FONTS.map(f => `<option>${f[0]}</option>`).join("");
+$("mh").innerHTML = HD.map(x => `<option>${x}</option>`).join("");
+$("m2").innerHTML = H2.map(x => `<option>${x}</option>`).join("");
+$("mk2").innerHTML = SK.map(x => `<option>${x}</option>`).join("");
+const newT = () => ({ name: $("mn").value.trim() || "My template", cat: $("mc").value.trim() || "My Templates", f: fam($("mf").value), a: $("ma").value, d: $("md").value, hd: $("mh").value, h2: $("m2").value, sk: $("mk2").value, fs: +$("ms").value || 13.5 });
+$("msv").onclick = () => {
+  const t = newT(); custom = custom.filter(x => x.name !== t.name); custom.push(t);
+  try { localStorage.setItem("cvt", JSON.stringify(custom)); } catch (e) {}
+  buildTpl(); tabCat = "My Templates"; drawGallery();
+};
+$("mcp").onclick = async () => {
+  const code = JSON.stringify(newT(), null, 2);
+  try { await navigator.clipboard.writeText(code); alert("Template code copied. Paste it into templates.json on GitHub."); } catch (e) { prompt("Copy this template code:", code); }
+};
+
+/* ---------- edit toolbar ---------- */
+let editing = false, sel = null;
+document.addEventListener("selectionchange", () => { const s = getSelection(); if (s.rangeCount && $("cv").contains(s.anchorNode)) sel = s.getRangeAt(0).cloneRange(); });
+function ex(c, v) {
+  if (!editing) return;
+  $("cv").focus();
+  if (sel) { const s = getSelection(); s.removeAllRanges(); s.addRange(sel); }
+  document.execCommand("styleWithCSS", false, c !== "fontSize");
+  document.execCommand(c, false, v);
+}
+const hasSel = () => sel && !sel.collapsed;
+const BTN = [["undo","↶","Undo"],["redo","↷","Redo"],["bold","B","Bold"],["italic","I","Italic"],["underline","U","Underline"],["strikeThrough","S","Strikethrough"],["justifyLeft","⇤","Align left"],["justifyCenter","↔","Center"],["justifyRight","⇥","Align right"],["justifyFull","☰","Justify"],["insertUnorderedList","• List","Bullets"],["insertOrderedList","1. List","Numbers"],["outdent","⇠","Outdent"],["indent","⇢","Indent"],["insertHorizontalRule","―","Divider line"],["subscript","x₂","Subscript"],["superscript","x²","Superscript"],["createLink","🔗","Link"],["removeFormat","Clear","Clear formatting"],["selectAll","All","Select all"]];
+const SZ = [8,9,10,11,12,13,14,16,18,20,24,28,32,36,48];
+$("tb").innerHTML = BTN.map(b => `<button data-c="${b[0]}" title="${b[2]}">${b[1]}</button>`).join("") +
+  `<select id="sf" title="Font"><option value="">Font</option>${FONTS.map(f => `<option>${f[0]}</option>`).join("")}</select>` +
+  `<select id="ss" title="Font size"><option value="">Size</option>${SZ.map(s => `<option>${s}</option>`).join("")}</select>` +
+  `<button data-g="-1" title="Smaller text (whole CV)">A−</button><button data-g="1" title="Bigger text (whole CV)">A+</button>` +
+  `<select id="sb" title="Text style"><option value="">Style</option><option value="p">Paragraph</option><option value="h1">Heading 1</option><option value="h2">Heading 2</option><option value="h3">Heading 3</option></select>` +
+  `<select id="sl" title="Line spacing"><option value="">Spacing</option><option>1.1</option><option>1.3</option><option>1.5</option><option>1.8</option><option>2</option></select>` +
+  `<small>Text</small><input type="color" id="cf" value="#000000" title="Text color"><small>Mark</small><input type="color" id="ch" value="#ffff00" title="Highlight">` +
+  `<small>Accent</small><input type="color" id="ca" value="#2563eb" title="Accent color (whole CV)"><small>Header</small><input type="color" id="cd" value="#1e3a8a" title="Header/dark color (whole CV)">` +
+  `<small>Margins</small><input type="range" id="rm" min="16" max="90" value="46" title="Page margins">`;
+$("tb").addEventListener("mousedown", e => { if (e.target.closest("button")) e.preventDefault(); });
+$("tb").addEventListener("click", e => {
+  const b = e.target.closest("button"); if (!b) return;
+  if (b.dataset.g) { const v = parseFloat(getComputedStyle($("cv")).fontSize) + (+b.dataset.g); $("cv").style.setProperty("--fs", Math.max(8, Math.min(24, v)) + "px"); return; }
+  if (b.dataset.c === "createLink") { const u = prompt("Link address (https://…)"); if (u) ex("createLink", u); return; }
+  ex(b.dataset.c);
+});
+$("sf").onchange = e => { if (!e.target.value) return; if (hasSel()) ex("fontName", e.target.value); else $("cv").style.setProperty("--f", fam(e.target.value)); };
+$("ss").onchange = e => {
+  const px = e.target.value; if (!px) return;
+  if (hasSel()) { ex("fontSize", 7); $("cv").querySelectorAll('font[size="7"]').forEach(f => { const s = document.createElement("span"); s.style.fontSize = px + "px"; s.innerHTML = f.innerHTML; f.replaceWith(s); }); }
+  else $("cv").style.setProperty("--fs", px + "px");
+};
+$("sb").onchange = e => { if (e.target.value) ex("formatBlock", e.target.value); };
+$("sl").onchange = e => { if (e.target.value) $("cv").style.lineHeight = e.target.value; };
+$("cf").oninput = e => ex("foreColor", e.target.value);
+$("ch").oninput = e => ex("hiliteColor", e.target.value);
+$("ca").oninput = e => $("cv").style.setProperty("--a", e.target.value);
+$("cd").oninput = e => $("cv").style.setProperty("--d", e.target.value);
+$("rm").oninput = e => $("cv").style.setProperty("--pad", e.target.value + "px");
+$("edit").onclick = () => {
+  editing = !editing;
+  $("cv").contentEditable = editing; $("cv").classList.toggle("editing", editing); $("tb").classList.toggle("on", editing);
+  $("edit").textContent = editing ? "✔ Done editing" : "✏️ Edit CV";
+  $("hint").textContent = editing ? "Edit mode: click any text to type. Select text to change its font, size, color or style. Accent, Header and Margins affect the whole CV." : "Pick a template, or click Edit CV to change text, fonts, sizes and colors. Check every detail is accurate before sending.";
+};
+
+/* ---------- download / print ---------- */
 $("dl").onclick = () => {
+  const was = $("cv").classList.contains("editing"); $("cv").classList.remove("editing");
   const name = ($("cv").querySelector("h1")?.textContent || "cv").trim().replace(/\s+/g, "-");
-  html2pdf().set({ margin: 8, filename: `${name}-tailored-cv.pdf`, image: { type: "jpeg", quality: 0.98 }, html2canvas: { scale: 2 }, jsPDF: { unit: "mm", format: "a4" }, pagebreak: { mode: ["avoid-all", "css"] } }).from($("cv")).save();
+  html2pdf().set({ margin: 0, filename: `${name}-tailored-cv.pdf`, image: { type: "jpeg", quality: 0.98 }, html2canvas: { scale: 2 }, jsPDF: { unit: "mm", format: "a4" }, pagebreak: { mode: ["css", "legacy"] } }).from($("cv")).save().then(() => { if (was) $("cv").classList.add("editing"); });
 };
 $("print").onclick = () => window.print();
 </script>
-<style media="print">body *{visibility:hidden}#cv,#cv *{visibility:visible}#cv{position:absolute;left:0;top:0;width:100%;padding:0}</style>
 </body>
 </html>
