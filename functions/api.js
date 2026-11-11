@@ -12,7 +12,7 @@ export async function onRequestPost({ request, env }) {
   const ip = request.headers.get("CF-Connecting-IP") || "x";
   const now = Date.now();
   const recent = (hits.get(ip) || []).filter((t) => now - t < 3600e3);
-  if (recent.length >= 8) return json({ error: "Hourly limit reached. Please try again later." }, 429);
+  if (recent.length >= 1000) return json({ error: "Hourly limit reached. Please try again later." }, 429);
   recent.push(now);
   hits.set(ip, recent);
 
