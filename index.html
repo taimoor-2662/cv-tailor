@@ -24,9 +24,9 @@ button:disabled{opacity:.6}button.sec{background:transparent;color:var(--pri);bo
 footer{text-align:center;color:var(--mut);font-size:13px;padding:24px}footer a{color:var(--mut)}
 details{margin:8px 0}summary{cursor:pointer;font-weight:600}
 /* ===== CV templates: layout (data-ly) + header (data-hd) + headings (data-h2) + skills (data-sk) + experience (data-ex) ===== */
-.cvx{--f:Georgia,serif;--a:#2563eb;--d:#1e3a8a;--pad:46px;--fs:13.5px;--sw:32%;background:#fff;color:#111;width:794px;max-width:none;margin:0 auto;font-family:var(--f);font-size:var(--fs);line-height:1.5;min-height:1123px;display:flex;flex-direction:column;padding-bottom:36px}
+.cvx{--f:Georgia,serif;--a:#2563eb;--d:#1e3a8a;--pad:46px;--fs:13.5px;--sw:32%;background:#fff;color:#111;width:794px;max-width:none;margin:0 auto;font-family:var(--f);font-size:var(--fs);line-height:1.5;min-height:1122px;position:relative;isolation:isolate;display:flex;flex-direction:column;padding-bottom:36px}
 .cvx .side,.cvx .main{display:contents}
-.cvx .hd{order:0;padding:36px var(--pad) 14px}.cvx .s-sum{order:1}.cvx .s-sk{order:2}.cvx .s-exp{order:3}.cvx .s-edu{order:4}.cvx .s-ex{order:5}.cvx .s{padding:0 var(--pad)}
+.cvx .hd{padding:36px var(--pad) 14px}.cvx .s{padding:0 var(--pad)}
 .cvx h1{margin:0;font-size:2.1em;color:var(--d);font-weight:700;line-height:1.15}.cvx .ttl{margin:3px 0;font-size:1.1em;color:var(--a)}.cvx .ct{font-size:.92em;color:#444}
 .cvx h2{margin:1.3em 0 .45em;font-size:1em;text-transform:uppercase;letter-spacing:.08em;color:var(--d)}
 .cvx ul{margin:4px 0 8px;padding-left:20px}.cvx .job{margin-top:.7em;font-weight:700}.cvx .job span{font-weight:400;color:#555}
@@ -88,7 +88,31 @@ details{margin:8px 0}summary{cursor:pointer;font-weight:600}
 .cvx[data-ly=grid] .side,.cvx[data-ly=grid] .main{display:contents}
 .cvx[data-ly=grid] .hd{grid-column:1/-1;grid-row:auto;margin-bottom:18px}
 .cvx[data-ly=grid] .s{margin:0 12px 14px;padding:14px 18px;border:1px solid #e3e6ec;border-radius:12px;box-shadow:0 1px 3px rgba(0,0,0,.07)}
-.cvx[data-ly=grid] .s-sum,.cvx[data-ly=grid] .s-exp,.cvx[data-ly=grid] .s-ex{grid-column:1/-1}.cvx[data-ly=grid] .s-sk{grid-column:1;order:2}.cvx[data-ly=grid] .s-edu{grid-column:2;order:3}.cvx[data-ly=grid] .s-exp{order:4}
+.cvx[data-ly=grid] .s-sum,.cvx[data-ly=grid] .s-exp,.cvx[data-ly=grid] .s-ex{grid-column:1/-1}.cvx[data-ly=grid] .s-sk{grid-column:1}.cvx[data-ly=grid] .s-edu{grid-column:2}
+/* extra structure variants */
+.cvx[data-fr=border]::before{content:"";position:absolute;inset:14px;border:2px solid var(--a);z-index:3;pointer-events:none}
+.cvx[data-fr=top]::before,.cvx[data-fr=bottom]::before{content:"";position:absolute;left:0;right:0;height:14px;background:var(--a);z-index:3}.cvx[data-fr=top]::before{top:0}.cvx[data-fr=bottom]::before{bottom:0}
+.cvx[data-fr=left]::before{content:"";position:absolute;left:0;top:0;bottom:0;width:14px;background:var(--a);z-index:3}
+.cvx[data-bu=dash] ul,.cvx[data-bu=arrow] ul,.cvx[data-bu=square] ul{list-style:none;padding-left:16px}.cvx[data-bu=none] ul{list-style:none;padding-left:0}
+.cvx[data-bu=dash] li,.cvx[data-bu=arrow] li,.cvx[data-bu=square] li{position:relative}
+.cvx[data-bu=dash] li::before,.cvx[data-bu=arrow] li::before,.cvx[data-bu=square] li::before{position:absolute;left:-14px;color:var(--a);font-weight:700}
+.cvx[data-bu=dash] li::before{content:"\2013"}.cvx[data-bu=arrow] li::before{content:"\203A"}.cvx[data-bu=square] li::before{content:"\25AA"}
+.cvx[data-sp=tight]{line-height:1.32}.cvx[data-sp=tight] h2{margin-top:.9em}.cvx[data-sp=airy]{line-height:1.75}.cvx[data-sp=airy] h2{margin-top:1.8em}
+.cvx[data-hh=round][data-hd=band] .hd,.cvx[data-hh=round][data-hd=accent] .hd,.cvx[data-hh=round][data-hd=stripe] .hd{border-radius:0 0 30px 30px}
+.cvx[data-hh=slant][data-hd=band] .hd,.cvx[data-hh=slant][data-hd=accent] .hd,.cvx[data-hh=slant][data-hd=stripe] .hd{clip-path:polygon(0 0,100% 0,100% 86%,0 100%);padding-bottom:46px}
+.cvx[data-up=upper] h1{text-transform:uppercase;letter-spacing:.06em;font-size:1.8em}.cvx[data-up=big] h1{font-size:2.7em;line-height:1}.cvx[data-up=light] h1{font-weight:300;letter-spacing:.02em}
+.cvx[data-sbs=accent][data-sb=dark] .side,.cvx[data-sbs=accent][data-ly=sn] .hd{background:var(--a)}
+.cvx[data-ly=sn][data-sb=light] .hd{background:#f3f4f7;color:#222}.cvx[data-ly=sn][data-sb=light] .hd h1{color:var(--d)}.cvx[data-ly=sn][data-sb=light] .hd .ttl{color:var(--a)}.cvx[data-ly=sn][data-sb=light] .hd .ct{color:#444}.cvx[data-ly=sn][data-sb=light] .av{background:var(--a);color:#fff}
+#cv.pgl::after{content:"";position:absolute;left:0;right:0;top:0;bottom:0;pointer-events:none;z-index:9;background:repeating-linear-gradient(to bottom,transparent 0,transparent 1120px,rgba(110,110,140,.55) 1120px,rgba(110,110,140,.55) 1122px)}
+/* designer */
+#ds{padding:0;background:var(--bg);z-index:70}.dtop{position:sticky;top:0;z-index:30;background:var(--card);border-bottom:1px solid var(--bd)}
+.dsb{display:flex;gap:6px;padding:6px 8px;overflow-x:auto;align-items:center;white-space:nowrap}.dsb button{padding:6px 10px;font-size:13px;background:var(--bg);color:var(--tx);border:1px solid var(--bd);flex:none}.dsb button.p{background:var(--pri);color:#fff;border-color:var(--pri)}
+.dsb select,.dsb input[type=number]{width:auto;padding:5px;font-size:13px;flex:none}.dsb input[type=color]{width:32px;height:30px;flex:none}.dsb small{color:var(--mut);flex:none}.dsb label{margin:0;font-weight:500;font-size:13px;flex:none}
+#dcv{padding:6px 0 80px}.pgw{margin:12px auto;position:relative;box-shadow:0 2px 12px rgba(0,0,0,.35);background:#fff}
+.pg{width:794px;height:1122px;position:relative;background:#fff;overflow:hidden;transform-origin:0 0;font-family:Arial,sans-serif;color:#111}
+.el{position:absolute;box-sizing:border-box;touch-action:none;cursor:move;user-select:none;line-height:1.4}.el[contenteditable=true]{cursor:text;user-select:text;outline:2px dashed #f59e0b}.el.sel{outline:2px solid #4f46e5}
+.el .rz{position:absolute;right:2px;bottom:2px;width:14px;height:14px;background:#4f46e5;border:2px solid #fff;border-radius:50%;cursor:nwse-resize}
+.el img{width:100%;height:100%;object-fit:cover;display:block;pointer-events:none}.el .dh{font-weight:700;letter-spacing:.1em;text-transform:uppercase;border-bottom:2px solid currentColor;margin:0 0 6px;padding-bottom:2px;font-size:.95em}.el ul{margin:4px 0;padding-left:18px}
 #cv.editing{outline:3px dashed var(--pri);cursor:text}
 /* gallery */
 .ov{position:fixed;inset:0;background:rgba(0,0,0,.65);z-index:50;display:none;overflow:auto;padding:12px}.ov.on{display:block}
@@ -104,7 +128,7 @@ details{margin:8px 0}summary{cursor:pointer;font-weight:600}
 /* edit toolbar */
 .tb{position:sticky;top:0;z-index:20;background:var(--card);border:1px solid var(--bd);border-radius:10px;padding:8px;display:none;flex-wrap:wrap;gap:6px;margin-bottom:10px;align-items:center}.tb.on{display:flex}
 .tb button{padding:6px 10px;font-size:14px;background:var(--bg);color:var(--tx);border:1px solid var(--bd);font-weight:600}.tb select{width:auto;padding:6px;font-size:13px}.tb input[type=color]{width:34px;height:32px}.tb small{color:var(--mut);font-size:11px}
-@media print{*{-webkit-print-color-adjust:exact;print-color-adjust:exact}body *{visibility:hidden}#cv,#cv *{visibility:visible}#cv{position:absolute;left:0;top:0;outline:0}}
+@media print{#cv.pgl::after{display:none}*{-webkit-print-color-adjust:exact;print-color-adjust:exact}body *{visibility:hidden}#cv,#cv *{visibility:visible}#cv{position:absolute;left:0;top:0;outline:0}}
 </style>
 </head>
 <body>
@@ -122,17 +146,17 @@ details{margin:8px 0}summary{cursor:pointer;font-weight:600}
     <textarea id="job" placeholder="e.g. Office Administrator, or paste the full job posting"></textarea>
     <div class="row">
       <button id="go">Generate tailored CV</button>
-      <button class="sec" id="gal">🎨 Templates: <span id="cur">Classic Navy</span></button>
+      <button class="sec" id="dsn">✨ Design from scratch</button><button class="sec" id="gal">🎨 Templates: <span id="cur">Classic Navy</span></button>
     </div>
     <div id="msg"></div>
   </div>
 
   <div class="card" id="out" hidden>
-    <div class="row" style="margin:0 0 12px"><button id="dl">Download PDF</button><button class="sec" id="print">Print</button><button class="sec" id="edit">✏️ Edit CV</button><button class="sec" id="gal2">🎨 Change template</button></div>
+    <div class="row" style="margin:0 0 12px"><button id="dl">Download PDF</button><button class="sec" id="print">Print</button><button class="sec" id="edit">✏️ Edit CV</button><button class="sec" id="gal2">🎨 Change template</button><button class="sec" id="dsn2">✨ Design from scratch</button></div>
     <div class="tb on" id="pb" style="position:static"><b>📷 Photo</b><button id="pup">Upload / Replace</button><button id="prm">Remove</button><select id="psh" title="Photo shape"><option value="50%">Circle</option><option value="16px">Rounded</option><option value="0">Square</option></select><small>Size</small><input type="range" id="psz" min="60" max="170" value="96"><input type="file" id="pfile" accept="image/*" hidden></div>
     <div class="tb" id="tb"></div>
     <p class="hint" id="hint">Pick a template, or click <b>Edit CV</b> to change text, fonts, sizes and colors. Check every detail is accurate before sending.</p>
-    <div class="wrap"><div id="cv" class="cvx"></div></div>
+    <div class="wrap"><div id="cv" class="cvx pgl"></div></div>
   </div>
 
   <div class="card">
@@ -172,6 +196,24 @@ details{margin:8px 0}summary{cursor:pointer;font-weight:600}
   <div class="bar"><button class="sec" id="pvback">← Back</button><b id="pvn"></b><span><button class="sec" id="pvz">🔍 Actual size</button> <button id="pvuse">✓ Use this template</button></span></div>
   <div id="pvb"><div id="pvc" class="cvx"></div></div>
 </div></div>
+<div class="ov" id="ds">
+  <div class="dtop">
+    <div class="dsb"><button id="dback">← Back</button><b>Design from scratch</b><button id="dundo" title="Undo">↶</button><button id="dredo" title="Redo">↷</button>
+      <select id="dzoom"><option value="fit">Fit</option><option value="1">100%</option><option value=".75">75%</option><option value=".5">50%</option></select>
+      <label><input type="checkbox" id="dsnap" checked> Snap</label><button id="dnew">New blank</button><button class="p" id="ddl">Download PDF</button></div>
+    <div class="dsb"><button data-a="head">＋ Heading</button><button data-a="text">＋ Text</button><button data-a="list">＋ Bullets</button><button data-a="photo">＋ Photo</button><button data-a="rect">▭ Box</button><button data-a="circ">◯ Circle</button><button data-a="line">― Line</button>
+      <select id="dfrom"><option value="">＋ From my CV…</option><option value="all">Whole CV (auto layout)</option><option value="head">Name + title</option><option value="contact">Contact</option><option value="sum">Summary</option><option value="sk">Skills</option><option value="exp">Experience</option><option value="edu">Education</option></select>
+      <button data-a="page">＋ Page</button><button data-a="delpage">🗑 Page</button><input type="file" id="dpf" accept="image/*" hidden></div>
+    <div class="dsb" id="dprop"><select id="pf"></select><input type="number" id="pz" min="6" max="200" placeholder="Size" style="width:62px">
+      <button id="pbb"><b>B</b></button><button id="pib"><i>I</i></button><button id="pub"><u>U</u></button><button data-al="left">⇤</button><button data-al="center">↔</button><button data-al="right">⇥</button>
+      <small>Text</small><input type="color" id="pc" value="#111111"><small>Fill</small><input type="color" id="pbg" value="#e5e7eb"><button id="pnf">No fill</button>
+      <small>Round</small><input type="range" id="prad" min="0" max="100" value="0"><small>Border</small><select id="pbw"><option>0</option><option>1</option><option>2</option><option>4</option><option>8</option></select><input type="color" id="pbc" value="#111111">
+      <small>Opacity</small><input type="range" id="pop" min="10" max="100" value="100"><select id="plh"><option value="">Line</option><option>1</option><option>1.2</option><option>1.5</option><option>1.8</option><option>2.2</option></select>
+      <select id="pls"><option value="">Letter</option><option>0</option><option>1</option><option>2</option><option>4</option></select><small>Pad</small><input type="range" id="ppad" min="0" max="40" value="0">
+      <button id="pfr">▲ Front</button><button id="pbk">▼ Back</button><button id="pdp">⧉ Copy</button><button id="pcn">⇔ Center</button><button id="pdl">🗑 Delete</button><small>Page</small><input type="color" id="ppg" value="#ffffff"></div>
+  </div>
+  <div id="dcv"></div>
+</div>
 <footer>© <span id="yr"></span> Free AI CV Tailor · <a href="/privacy.html">Privacy</a> · <a href="/about.html">About</a></footer>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
@@ -290,38 +332,80 @@ const HD = ["center","left","band","accent","bar","stripe"], H2 = ["line","bar",
 const LY = [["stack","Single column"],["sl","Sidebar left"],["sr","Sidebar right"],["sn","Name in sidebar"],["tl","Banner + left sidebar"],["tr","Banner + right column"],["grid","Card grid"]];
 const PAL = [["Navy","#2563eb","#1e3a8a"],["Teal","#0d9488","#134e4a"],["Crimson","#dc2626","#7f1d1d"],["Emerald","#059669","#064e3b"],["Purple","#7c3aed","#4c1d95"],["Amber","#d97706","#78350f"],["Slate","#475569","#0f172a"],["Rose","#e11d48","#4c0519"],["Sky","#0284c7","#0c4a6e"],["Charcoal","#f59e0b","#111827"]];
 const CATS = [
-  { n: "Classic", ly: "stack", f: ["Georgia","Garamond"], hd: ["center","left"], h2: ["line","plain"], sk: ["dots","slash"], ex: ["plain","line"] },
-  { n: "Sidebar Left", ly: "sl", f: ["Segoe UI","Calibri"], hd: ["left"], h2: ["line","under","plain"], sk: ["list"], ex: ["line","plain","timeline"], av: [0,1] },
-  { n: "Sidebar Right", ly: "sr", f: ["Calibri","Arial"], hd: ["left"], h2: ["under","bar","plain"], sk: ["list"], ex: ["timeline","card","plain"] },
-  { n: "Profile Sidebar", ly: "sn", f: ["Helvetica","Verdana"], hd: ["left"], h2: ["under","plain","bar"], sk: ["list"], ex: ["split","plain","line"], av: [1] },
-  { n: "Banner + Sidebar", ly: "tl", f: ["Arial","Tahoma"], hd: ["band","accent","stripe"], h2: ["bar","under"], sk: ["chips","list","out"], ex: ["timeline","plain"], av: [0,1] },
-  { n: "Banner + Column", ly: "tr", f: ["Trebuchet MS","Segoe UI"], hd: ["stripe","band"], h2: ["pill","under"], sk: ["fill","box","list"], ex: ["card","line"], av: [1,0] },
-  { n: "Grid Cards", ly: "grid", f: ["Verdana","Calibri"], hd: ["accent","band","stripe"], h2: ["under","plain","pill"], sk: ["chips","out","fill"], ex: ["plain","line","card"] },
-  { n: "Timeline", ly: "stack", f: ["Segoe UI","Cambria"], hd: ["left","bar","accent"], h2: ["bar","caps","under"], sk: ["chips","out"], ex: ["timeline"], av: [1,0] },
-  { n: "Minimal", ly: "stack", f: ["Helvetica","Arial"], hd: ["left","center"], h2: ["caps"], sk: ["slash","dots","plain"], ex: ["split","plain"] },
-  { n: "Creative", ly: "grid", f: ["Trebuchet MS","Verdana"], hd: ["accent","stripe"], h2: ["pill","bar"], sk: ["fill","box","out"], ex: ["card","timeline"], av: [1] },
+  { n: "Classic", ly: ["stack"], f: ["Georgia","Garamond","Cambria"], hd: ["center","left","bar"], h2: ["line","plain","caps"], sk: ["dots","slash","plain"], ex: ["plain","line"] },
+  { n: "Sidebar", ly: ["sl","sr"], f: ["Segoe UI","Calibri","Arial"], hd: ["left"], h2: ["line","under","plain"], sk: ["list"], ex: ["line","plain","timeline"], av: [0,1] },
+  { n: "Profile", ly: ["sn","sl"], f: ["Helvetica","Verdana","Tahoma"], hd: ["left"], h2: ["under","plain","bar"], sk: ["list"], ex: ["split","plain","line"], av: [1] },
+  { n: "Banner", ly: ["tl","tr"], f: ["Arial","Trebuchet MS","Segoe UI"], hd: ["band","accent","stripe"], h2: ["bar","under","pill"], sk: ["chips","list","out"], ex: ["timeline","plain","card"], av: [0,1] },
+  { n: "Grid Cards", ly: ["grid"], f: ["Verdana","Calibri","Helvetica"], hd: ["accent","band","stripe","left"], h2: ["under","plain","pill","bar"], sk: ["chips","out","fill"], ex: ["plain","line","card"] },
+  { n: "Timeline", ly: ["stack","tr"], f: ["Segoe UI","Cambria","Arial"], hd: ["left","bar","accent","band"], h2: ["bar","caps","under"], sk: ["chips","out","slash"], ex: ["timeline"], av: [1,0] },
+  { n: "Minimal", ly: ["stack","sr","tl"], f: ["Helvetica","Arial","Calibri"], hd: ["left","center"], h2: ["caps","plain"], sk: ["slash","dots","plain"], ex: ["split","plain","line"] },
+  { n: "Creative", ly: ["grid","tl","sn"], f: ["Trebuchet MS","Verdana","Segoe UI"], hd: ["accent","stripe","band"], h2: ["pill","bar","under"], sk: ["fill","box","out"], ex: ["card","timeline","line"], av: [1] },
+  { n: "Corporate", ly: ["tr","sl","stack"], f: ["Calibri","Arial","Tahoma"], hd: ["band","bar","left","stripe"], h2: ["line","bar","under"], sk: ["dots","chips","box"], ex: ["plain","line","split"] },
+  { n: "Modern", ly: ["sn","tl","stack","grid"], f: ["Segoe UI","Trebuchet MS","Calibri"], hd: ["stripe","left","band","accent"], h2: ["under","pill","bar","plain"], sk: ["chips","out","fill","list"], ex: ["timeline","card","split"], av: [1,0] },
 ];
 let TPL = [], remote = [], custom = [];
 try { custom = JSON.parse(localStorage.getItem("cvt") || "[]"); } catch (e) { custom = []; }
 const okT = t => t && t.name && t.f && t.a && t.d && HD.includes(t.hd) && H2.includes(t.h2) && SK.includes(t.sk);
 const pick = (a, i) => a[i % a.length];
+const FR = ["none","border","top","left","bottom"], BU = ["disc","dash","arrow","square","none"], SPD = ["normal","tight","airy"], HH = ["flat","round","slant"], UP = ["normal","upper","big","light"], SBS = ["solid","accent","tint"], SW = [27,30,33,36,39];
+const PL = {
+  stack: [["sum","sk","exp","edu","ex"],["sum","exp","sk","edu","ex"],["sk","sum","exp","edu","ex"],["sum","exp","edu","sk","ex"]],
+  col: [[["sk","edu"],["sum","exp","ex"]],[["edu","sk"],["sum","exp","ex"]],[["sum","sk"],["exp","edu","ex"]],[["sk","edu","ex"],["sum","exp"]],[["sk"],["sum","exp","edu","ex"]]],
+  grid: [["sum","sk","edu","exp","ex"],["sk","edu","sum","exp","ex"],["sum","exp","sk","edu","ex"],["exp","sum","sk","edu","ex"]]
+};
 function buildTpl() {
   TPL = [];
-  CATS.forEach(c => PAL.forEach((p, i) => TPL.push({ id: c.n + i, cat: c.n, name: c.n + " " + p[0], f: fam(pick(c.f, i)), a: p[1], d: p[2], ly: c.ly, hd: pick(c.hd, i), h2: pick(c.h2, i >> 1), sk: pick(c.sk, (i / 3) | 0), ex: pick(c.ex, (i >> 1) + 1), av: c.av ? pick(c.av, i >> 1) : 0, sw: (30 + (i % 3) * 3) + "%", fs: 13.5 })));
+  CATS.forEach((c, ci) => PAL.forEach((p, i) => {
+    const ly = pick(c.ly, i + ci), bright = p[1] === "#f59e0b";
+    let hd = ["sl","sr","sn"].includes(ly) ? "left" : pick(c.hd, i), sbs = SBS[(i + ci) % 3];
+    if (bright && hd === "accent") hd = "band"; if (bright && sbs === "accent") sbs = "solid";
+    TPL.push({ id: c.n + i, cat: c.n, name: c.n + " " + p[0], f: fam(pick(c.f, i * 2 + ci)), a: p[1], d: p[2], ly, hd, h2: pick(c.h2, i >> 1), sk: pick(c.sk, (i / 3) | 0), ex: pick(c.ex, (i >> 1) + 1), av: c.av ? pick(c.av, i >> 1) : 0,
+      fr: FR[(i + ci) % 5], bu: BU[(i * 3 + 1) % 5], sp: SPD[(i * 2 + ci) % 3], hh: HH[(i * 5 + ci) % 3], up: UP[(i + ci * 3) % 4], sbs, pl: (i * 2 + ci) % 5, sw: SW[(i * 2 + ci) % 5] + "%", fs: c.fs || 13.5 });
+  }));
   remote.filter(okT).forEach(t => TPL.push({ ...t, cat: t.cat || "Community", id: "r" + t.name, fs: t.fs || 13.5 }));
   custom.filter(okT).forEach(t => TPL.push({ ...t, cat: "My Templates", id: "c" + t.name }));
 }
 fetch("/templates.json").then(r => r.json()).then(a => { if (Array.isArray(a)) { remote = a; buildTpl(); } }).catch(() => {});
 buildTpl();
 let cur = TPL[0];
-function apply(el, t) {
-  const ly = t.ly || "stack";
-  el.style.setProperty("--f", t.f); el.style.setProperty("--a", t.a); el.style.setProperty("--d", t.d); el.style.setProperty("--fs", (t.fs || 13.5) + "px"); el.style.setProperty("--sw", t.sw || "32%");
-  el.dataset.ly = ly; el.dataset.hd = t.hd; el.dataset.h2 = t.h2; el.dataset.sk = t.sk; el.dataset.ex = t.ex || "plain"; el.dataset.av = t.av ? "on" : "off";
-  el.dataset.sb = ["sl", "sr", "sn"].includes(ly) ? "dark" : "light";
+function place(el, t) {
+  const ly = t.ly || "stack", side = el.querySelector(".side"), main = el.querySelector(".main"); if (!side || !main) return;
+  const g = ly === "stack" ? "stack" : ly === "grid" ? "grid" : "col", L = PL[g], p = L[(t.pl || 0) % L.length], S = g === "col" ? p[0] : [], M = g === "col" ? p[1] : p, used = new Set();
+  const all = [...el.querySelectorAll(".s")];
+  S.forEach(k => { const n = el.querySelector(".s-" + k); if (n) { side.appendChild(n); used.add(n); } });
+  M.forEach(k => { const n = el.querySelector(".s-" + k); if (n) { main.appendChild(n); used.add(n); } });
+  all.forEach(n => { if (!used.has(n)) main.appendChild(n); });
 }
-function show() { if (!lastCv) return; $("cv").innerHTML = cvHTML(lastCv); apply($("cv"), cur); }
-function choose(t) { cur = t; $("cur").textContent = t.name; if (lastCv) { apply($("cv"), t); } $("pv").classList.remove("on"); $("ov").classList.remove("on"); }
+function apply(el, t) {
+  const ly = t.ly || "stack", d = el.dataset;
+  el.style.setProperty("--f", t.f); el.style.setProperty("--a", t.a); el.style.setProperty("--d", t.d); el.style.setProperty("--fs", (t.fs || 13.5) + "px"); el.style.setProperty("--sw", t.sw || "32%");
+  d.ly = ly; d.hd = t.hd; d.h2 = t.h2; d.sk = t.sk; d.ex = t.ex || "plain"; d.av = t.av ? "on" : "off";
+  d.fr = t.fr || "none"; d.bu = t.bu || "disc"; d.sp = t.sp || "normal"; d.hh = t.hh || "flat"; d.up = t.up || "normal"; d.sbs = t.sbs || "solid"; d.sb = t.sbs === "tint" ? "light" : "dark";
+  place(el, t);
+}
+/* ---------- multi-page flow: keeps lines/entries whole and moves them to the next A4 page ---------- */
+const PH = 1122; let pgT;
+function paginate(root) {
+  root.style.minHeight = "";
+  root.querySelectorAll("[data-pg]").forEach(e => { e.style.marginTop = e.dataset.pg; delete e.dataset.pg; });
+  const sel = "h2,.job,li,.it,.sk,.s-sum>div";
+  for (let n = 0; n < 400; n++) {
+    const top0 = root.getBoundingClientRect().top; let moved = false;
+    for (const e of root.querySelectorAll(sel)) {
+      const r = e.getBoundingClientRect(), t = r.top - top0, b = r.bottom - top0, h = b - t;
+      if (h < 1 || h > 260) continue;
+      const pg = Math.floor((t + 1) / PH), lim = (pg + 1) * PH - 36 - (e.tagName === "H2" ? 60 : 0);
+      if (b > lim) {
+        if (e.dataset.pg === undefined) e.dataset.pg = e.style.marginTop;
+        e.style.marginTop = (parseFloat(getComputedStyle(e).marginTop) + (pg + 1) * PH + 40 - t) + "px"; moved = true; break;
+      }
+    }
+    if (!moved) break;
+  }
+  root.style.minHeight = Math.max(1, Math.ceil(root.getBoundingClientRect().height / PH - 0.01)) * PH + "px";
+}
+function show() { if (!lastCv) return; $("cv").innerHTML = cvHTML(lastCv); apply($("cv"), cur); paginate($("cv")); }
+function choose(t) { cur = t; $("cur").textContent = t.name; if (lastCv) { apply($("cv"), t); paginate($("cv")); } $("pv").classList.remove("on"); $("ov").classList.remove("on"); }
 
 /* ---------- gallery ---------- */
 let tabCat = "Classic";
@@ -416,6 +500,7 @@ $("sl").onchange = e => { if (e.target.value) $("cv").style.lineHeight = e.targe
 $("cf").oninput = e => ex("foreColor", e.target.value);
 $("ch").oninput = e => ex("hiliteColor", e.target.value);
 $("ca").oninput = e => $("cv").style.setProperty("--a", e.target.value);
+$("cv").addEventListener("input", () => { clearTimeout(pgT); pgT = setTimeout(() => paginate($("cv")), 700); });
 $("cd").oninput = e => $("cv").style.setProperty("--d", e.target.value);
 $("rm").oninput = e => $("cv").style.setProperty("--pad", e.target.value + "px");
 $("edit").onclick = () => {
@@ -430,7 +515,7 @@ function refreshAv() {
   const hd = $("cv").querySelector(".hd"); if (!hd) return;
   const ini = ($("cv").querySelector("h1")?.textContent || "").trim().split(/\s+/).slice(0, 2).map(w => w[0]).join("").toUpperCase();
   const t = document.createElement("div"); t.innerHTML = avHTML(ini);
-  const old = hd.querySelector(".av"); old ? old.replaceWith(t.firstChild) : hd.prepend(t.firstChild);
+  const old = hd.querySelector(".av"); old ? old.replaceWith(t.firstChild) : hd.prepend(t.firstChild); paginate($("cv"));
 }
 $("pup").onclick = () => $("pfile").click();
 $("pfile").onchange = e => {
@@ -445,11 +530,169 @@ $("psz").oninput = e => $("cv").style.setProperty("--ph", e.target.value + "px")
 
 /* ---------- download / print ---------- */
 $("dl").onclick = () => {
-  const was = $("cv").classList.contains("editing"); $("cv").classList.remove("editing");
-  const name = ($("cv").querySelector("h1")?.textContent || "cv").trim().replace(/\s+/g, "-");
-  html2pdf().set({ margin: 0, filename: `${name}-tailored-cv.pdf`, image: { type: "jpeg", quality: 0.98 }, html2canvas: { scale: 2 }, jsPDF: { unit: "mm", format: "a4" }, pagebreak: { mode: ["css", "legacy"] } }).from($("cv")).save().then(() => { if (was) $("cv").classList.add("editing"); });
+  const cv = $("cv"), was = cv.classList.contains("editing"); cv.classList.remove("editing", "pgl"); paginate(cv);
+  const name = (cv.querySelector("h1")?.textContent || "cv").trim().replace(/\s+/g, "-");
+  html2pdf().set({ margin: 0, filename: `${name}-tailored-cv.pdf`, image: { type: "jpeg", quality: 0.98 }, html2canvas: { scale: 2 }, jsPDF: { unit: "mm", format: "a4" }, pagebreak: { mode: ["css"] } }).from(cv).save().then(() => { cv.classList.add("pgl"); if (was) cv.classList.add("editing"); });
 };
 $("print").onclick = () => window.print();
+
+/* ---------- design from scratch ---------- */
+let dz = 1, dsel = null, dhist = [], dhp = -1;
+const dpgs = () => [...$("dcv").querySelectorAll(".pg")];
+$("pf").innerHTML = '<option value="">Font</option>' + FONTS.map(f => `<option>${f[0]}</option>`).join("");
+function dzoom() {
+  const v = $("dzoom").value; dz = v === "fit" ? Math.max(.3, Math.min(1, ($("dcv").clientWidth - 24) / 794)) : +v;
+  $("dcv").querySelectorAll(".pgw").forEach(w => { w.style.width = 794 * dz + "px"; w.style.height = PH * dz + "px"; w.firstChild.style.transform = `scale(${dz})`; });
+}
+function dpage(html, bg) {
+  const w = document.createElement("div"), p = document.createElement("div"); w.className = "pgw"; p.className = "pg"; if (bg) p.style.background = bg; p.innerHTML = html || "";
+  w.appendChild(p); $("dcv").appendChild(w); dzoom(); return p;
+}
+function curPage() {
+  if (dsel && dsel.isConnected) return dsel.closest(".pg");
+  const m = innerHeight / 2; return dpgs().find(p => { const r = p.getBoundingClientRect(); return r.top <= m && r.bottom >= m; }) || dpgs()[0];
+}
+function ddesel() { $("dcv").querySelectorAll(".rz").forEach(r => r.remove()); $("dcv").querySelectorAll(".sel").forEach(e => e.classList.remove("sel")); dsel = null; }
+function dselect(el) {
+  ddesel(); dsel = el; el.classList.add("sel");
+  if (!el.isContentEditable) { const r = document.createElement("div"); r.className = "rz"; el.appendChild(r); }
+  $("pz").value = parseInt(getComputedStyle(el).fontSize) || "";
+}
+function dpush() {
+  const s = dsel; ddesel();
+  const st = JSON.stringify(dpgs().map(p => ({ bg: p.style.background, h: p.innerHTML })));
+  if (dhist[dhp] !== st) { dhist = dhist.slice(0, dhp + 1); dhist.push(st); if (dhist.length > 60) dhist.shift(); dhp = dhist.length - 1; try { localStorage.setItem("cvds", st); } catch (e) {} }
+  if (s && s.isConnected) dselect(s);
+}
+function drestore(st) { $("dcv").innerHTML = ""; JSON.parse(st).forEach(x => dpage(x.h, x.bg)); dsel = null; try { localStorage.setItem("cvds", st); } catch (e) {} }
+const dundo = () => { if (dhp > 0) { dhp--; drestore(dhist[dhp]); } }, dredo = () => { if (dhp < dhist.length - 1) { dhp++; drestore(dhist[dhp]); } };
+function dopen() {
+  $("ds").classList.add("on"); $("ds").scrollTop = 0;
+  if (!$("dcv").children.length) { let st = null; try { st = localStorage.getItem("cvds"); } catch (e) {} if (st) drestore(st); else dpage(""); dhist = []; dhp = -1; dpush(); }
+  dzoom();
+}
+$("dsn").onclick = dopen; $("dsn2").onclick = dopen; $("dback").onclick = () => $("ds").classList.remove("on");
+$("dzoom").onchange = dzoom; addEventListener("resize", () => { if ($("ds").classList.contains("on")) dzoom(); });
+$("dundo").onclick = dundo; $("dredo").onclick = dredo;
+$("dnew").onclick = () => { if (confirm("Clear the whole design and start with a blank page?")) { $("dcv").innerHTML = ""; dpage(""); dhist = []; dhp = -1; dpush(); } };
+
+const DEF = {
+  head: ["head", 60, 60, 380, 0, "Your Heading", "font-size:30px;font-weight:700;color:#111;"],
+  text: ["text", 60, 130, 380, 0, "Double-click to edit this text.", "font-size:14px;color:#333;line-height:1.5;"],
+  list: ["list", 60, 200, 300, 0, "<ul><li>First point</li><li>Second point</li></ul>", "font-size:14px;color:#333;"],
+  rect: ["rect", 60, 300, 220, 120, "", "background:#e5e7eb;"],
+  circ: ["circ", 60, 300, 120, 120, "", "background:#c7d2fe;border-radius:50%;"],
+  line: ["line", 60, 300, 240, 3, "", "background:#111;"],
+  photo: ["photo", 60, 60, 130, 130, "", "border-radius:50%;overflow:hidden;background:#ddd;"],
+};
+function dmk(k, x, y, html, pg) {
+  const d = DEF[k], e = document.createElement("div"), n = ((pg || curPage()).children.length % 10) * 14; e.className = "el"; e.dataset.t = d[0];
+  e.style.cssText = `left:${x ?? d[1] + n}px;top:${y ?? d[2] + n}px;width:${d[3]}px;` + (d[4] ? `height:${d[4]}px;` : "") + d[6];
+  e.innerHTML = html ?? d[5]; (pg || curPage()).appendChild(e); return e;
+}
+let dreplace = null;
+function dadd(a) {
+  if (a === "page") { const p = dpage(""); p.parentNode.scrollIntoView({ behavior: "smooth" }); return dpush(); }
+  if (a === "delpage") { const p = curPage(); if (!p || !confirm("Delete this page?")) return; if (dpgs().length > 1) p.parentNode.remove(); else p.innerHTML = ""; dsel = null; return dpush(); }
+  if (a === "photo") { if (photoData) { const e = dmk("photo", null, null, `<img src="${photoData}" alt="">`); dselect(e); return dpush(); } dreplace = null; return $("dpf").click(); }
+  const e = dmk(a); dselect(e); dpush();
+}
+document.querySelectorAll("#ds [data-a]").forEach(b => b.onclick = () => dadd(b.dataset.a));
+$("dpf").onchange = e => {
+  const f = e.target.files[0]; if (!f) return; const r = new FileReader();
+  r.onload = async () => {
+    const p = await normPhoto(r.result, false); $("dpf").value = ""; if (!p) return alert("Couldn't read that image.");
+    photoData = p;
+    if (dreplace && dreplace.isConnected) { dreplace.innerHTML = `<img src="${p}" alt="">`; } else { dselect(dmk("photo", null, null, `<img src="${p}" alt="">`)); }
+    dreplace = null; dpush();
+  };
+  r.readAsDataURL(f);
+};
+const dsec = (t, b) => `<div class="dh">${esc(t)}</div>${b}`;
+function cvParts(c) {
+  return {
+    head: `<div style="font-size:34px;font-weight:800;line-height:1.1">${esc(c.name)}</div><div style="font-size:16px;margin-top:4px">${esc(c.title || "")}</div>`,
+    contact: arr(c.contact).filter(Boolean).map(esc).join("<br>"),
+    sum: dsec("Summary", `<div>${esc(c.summary || "")}</div>`),
+    sk: dsec("Skills", arr(c.skills).map(esc).join(" • ")),
+    exp: dsec("Experience", arr(c.experience).map(j => `<div style="margin-bottom:8px"><b>${esc(j.title)}${j.company ? ", " + esc(j.company) : ""}</b> <i>${esc(j.dates)}</i><ul>${arr(j.bullets).map(b => `<li>${esc(b)}</li>`).join("")}</ul></div>`).join("")),
+    edu: dsec("Education", arr(c.education).map(e => `<div><b>${esc(e.degree)}</b>${e.school ? ", " + esc(e.school) : ""} <i>${esc(e.dates)}</i></div>`).join("")),
+  };
+}
+function dstack(list, y, gap) { list.forEach(e => { e.style.top = y + "px"; y += e.offsetHeight + gap; }); }
+function dall() {
+  const P = cvParts(lastCv || SAMPLE), pg = curPage(), side = dmk("rect", 0, 0, "", pg);
+  side.style.cssText = "left:0;top:0;width:250px;height:1122px;background:" + cur.d + ";";
+  const tx = (x, w, col, html, fs) => { const e = dmk("text", x, 0, html, pg); e.style.width = w + "px"; e.style.color = col; e.style.fontSize = fs + "px"; return e; };
+  const sx = [], mx = [];
+  if (photoData) { const ph = dmk("photo", 60, 40, `<img src="${photoData}" alt="">`, pg); sx.push(ph); }
+  sx.push(tx(28, 194, "#fff", P.contact, 12), tx(28, 194, "#fff", P.sk, 13), tx(28, 194, "#fff", P.edu, 12));
+  const h = dmk("head", 280, 0, P.head, pg); h.style.width = "480px"; h.style.color = cur.d; mx.push(h, tx(280, 480, "#222", P.sum, 13), tx(280, 480, "#222", P.exp, 13));
+  dstack(sx, 40, 18); dstack(mx, 40, 16); dpush();
+}
+$("dfrom").onchange = e => {
+  const k = e.target.value; e.target.value = ""; if (!k) return;
+  if (k === "all") return dall();
+  const html = cvParts(lastCv || SAMPLE)[k], el = dmk(k === "head" ? "head" : "text", null, null, html); el.style.width = (k === "exp" ? 480 : 340) + "px"; dselect(el); dpush();
+};
+
+/* pointer: select, drag, resize */
+$("dcv").addEventListener("pointerdown", e => {
+  const el = e.target.closest(".el"); if (!el) { if (!e.target.closest(".rz")) { ddesel(); } return; }
+  if (el.isContentEditable) return;
+  const rz = e.target.classList.contains("rz"); dselect(el);
+  const sx = e.clientX, sy = e.clientY, L = el.offsetLeft, T = el.offsetTop, W = el.offsetWidth, Hh = el.offsetHeight, sn = v => $("dsnap").checked ? Math.round(v / 8) * 8 : Math.round(v);
+  const mv = ev => {
+    const dx = (ev.clientX - sx) / dz, dy = (ev.clientY - sy) / dz;
+    if (rz) { el.style.width = Math.max(12, sn(W + dx)) + "px"; el.style.height = Math.max(3, sn(Hh + dy)) + "px"; } else { el.style.left = sn(L + dx) + "px"; el.style.top = sn(T + dy) + "px"; }
+  };
+  const up = () => { removeEventListener("pointermove", mv); removeEventListener("pointerup", up); dpush(); };
+  addEventListener("pointermove", mv); addEventListener("pointerup", up); e.preventDefault();
+});
+$("dcv").addEventListener("dblclick", e => {
+  const el = e.target.closest(".el"); if (!el) return;
+  if (el.dataset.t === "photo") { dreplace = el; return $("dpf").click(); }
+  if (!["head", "text", "list"].includes(el.dataset.t)) return;
+  el.querySelector(".rz")?.remove(); el.contentEditable = true; el.focus();
+  const r = document.createRange(); r.selectNodeContents(el); r.collapse(false); const s = getSelection(); s.removeAllRanges(); s.addRange(r);
+});
+$("dcv").addEventListener("focusout", e => { const el = e.target.closest && e.target.closest(".el"); if (el && el.isContentEditable) { el.contentEditable = false; dpush(); } });
+
+/* properties */
+const dp = (id, css, fmt = v => v) => $(id).addEventListener("input", e => { if (dsel) dsel.style[css] = fmt(e.target.value); });
+dp("pf", "fontFamily", v => v ? fam(v) : ""); dp("pz", "fontSize", v => v + "px"); dp("pc", "color"); dp("pbg", "background"); dp("prad", "borderRadius", v => v + "px");
+dp("pop", "opacity", v => v / 100); dp("plh", "lineHeight"); dp("pls", "letterSpacing", v => v + "px"); dp("ppad", "padding", v => v + "px");
+$("pbw").onchange = e => { if (dsel) { dsel.style.borderStyle = "solid"; dsel.style.borderWidth = e.target.value + "px"; } };
+$("pbc").oninput = e => { if (dsel) { dsel.style.borderStyle = "solid"; if (!dsel.style.borderWidth || dsel.style.borderWidth === "0px") dsel.style.borderWidth = "2px"; dsel.style.borderColor = e.target.value; } };
+$("ppg").oninput = e => { const p = curPage(); if (p) p.style.background = e.target.value; };
+$("dprop").addEventListener("change", () => dpush());
+$("pnf").onclick = () => { if (dsel) { dsel.style.background = "transparent"; dpush(); } };
+$("dprop").addEventListener("mousedown", e => { if (e.target.closest("button")) e.preventDefault(); });
+const dfmt = (cmd, prop, on, off) => { if (!dsel) return; if (dsel.isContentEditable) document.execCommand(cmd); else { dsel.style[prop] = dsel.style[prop] === on ? off : on; dpush(); } };
+$("pbb").onclick = () => dfmt("bold", "fontWeight", "700", "400"); $("pib").onclick = () => dfmt("italic", "fontStyle", "italic", "normal"); $("pub").onclick = () => dfmt("underline", "textDecoration", "underline", "none");
+document.querySelectorAll("#dprop [data-al]").forEach(b => b.onclick = () => { if (dsel) { dsel.style.textAlign = b.dataset.al; dpush(); } });
+$("pfr").onclick = () => { if (dsel) { dsel.parentNode.appendChild(dsel); dpush(); } };
+$("pbk").onclick = () => { if (dsel) { dsel.parentNode.insertBefore(dsel, dsel.parentNode.firstChild); dpush(); } };
+const ddup = () => { if (!dsel) return; const c = dsel.cloneNode(true); c.classList.remove("sel"); c.querySelector(".rz")?.remove(); c.style.left = dsel.offsetLeft + 20 + "px"; c.style.top = dsel.offsetTop + 20 + "px"; dsel.parentNode.appendChild(c); dselect(c); dpush(); };
+const ddel = () => { if (dsel) { dsel.remove(); dsel = null; dpush(); } };
+$("pdp").onclick = ddup; $("pdl").onclick = ddel;
+$("pcn").onclick = () => { if (dsel) { dsel.style.left = Math.round((794 - dsel.offsetWidth) / 2) + "px"; dpush(); } };
+addEventListener("keydown", e => {
+  if (!$("ds").classList.contains("on")) return;
+  const a = document.activeElement, tag = a && a.tagName; if ((a && a.isContentEditable) || tag === "INPUT" || tag === "SELECT" || tag === "TEXTAREA") return;
+  const k = e.key.toLowerCase(), ctl = e.ctrlKey || e.metaKey;
+  if (ctl && k === "z") { e.preventDefault(); return dundo(); } if (ctl && k === "y") { e.preventDefault(); return dredo(); } if (ctl && k === "d") { e.preventDefault(); return ddup(); }
+  if (!dsel) return;
+  if (k === "delete" || k === "backspace") { e.preventDefault(); return ddel(); }
+  const st = e.shiftKey ? 10 : 1, mv = { arrowleft: ["left", -st], arrowright: ["left", st], arrowup: ["top", -st], arrowdown: ["top", st] }[k];
+  if (mv) { e.preventDefault(); dsel.style[mv[0]] = (mv[0] === "left" ? dsel.offsetLeft : dsel.offsetTop) + mv[1] + "px"; clearTimeout(dsel._t); dsel._t = setTimeout(dpush, 400); }
+});
+$("ddl").onclick = () => {
+  ddesel(); const box = document.createElement("div"); box.style.cssText = "position:fixed;left:-10000px;top:0;width:794px;background:#fff";
+  dpgs().forEach(p => { const c = p.cloneNode(true); c.style.transform = "none"; c.querySelectorAll(".rz").forEach(r => r.remove()); c.querySelectorAll(".sel").forEach(r => r.classList.remove("sel")); box.appendChild(c); });
+  document.body.appendChild(box);
+  html2pdf().set({ margin: 0, filename: "my-cv-design.pdf", image: { type: "jpeg", quality: 0.98 }, html2canvas: { scale: 2 }, jsPDF: { unit: "mm", format: "a4" }, pagebreak: { mode: ["css"], after: ".pg:not(:last-child)" } }).from(box).save().then(() => box.remove(), () => box.remove());
+};
 </script>
 </body>
 </html>
