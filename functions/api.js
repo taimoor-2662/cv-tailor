@@ -24,16 +24,20 @@ export async function onRequestPost({ request, env }) {
 
   const user = `CANDIDATE CV:\n${cvText}\n\nTARGET JOB (title and/or description):\n${job}`;
   let out = "";
+  let dbg = "";
 
   try {
+    if (!env.AI) dbg = "AI binding missing (add Workers AI binding named AI, then redeploy). ";
     if (env.AI) {
       const r = await env.AI.run("@cf/meta/llama-3.1-8b-instruct", {
         messages: [{ role: "system", content: SYSTEM }, { role: "user", content: user }],
-        max_tokens: 1800,
+        max_tokens: 3500,
       });
       out = r.response || "";
     }
-  } catch (e) { out = ""; }
+  } catch (e) { out = ""; dbg += "AI error: " + String(e && e.message || e).slice(0, 200) + ". "; }
+
+  if (out && !parse(out)) dbg += "AI replied but not valid JSON. ";
 
   if (!parse(out) && env.GEMINI_API_KEY) {
     try {
@@ -55,7 +59,7 @@ export async function onRequestPost({ request, env }) {
   }
 
   const cv = parse(out);
-  if (!cv) return json({ error: "The AI is busy or its daily free limit is used up. Please try again later." }, 503);
+  if (!cv) return json({ error: "The AI could not finish. " + dbg + "Please try again." }, 503);
   return json({ cv });
 }
 
