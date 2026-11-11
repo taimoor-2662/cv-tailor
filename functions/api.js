@@ -12,7 +12,7 @@ export async function onRequestPost({ request, env }) {
   const ip = request.headers.get("CF-Connecting-IP") || "x";
   const now = Date.now();
   const recent = (hits.get(ip) || []).filter((t) => now - t < 3600e3);
-  if (recent.length >= 1000) return json({ error: "Hourly limit reached. Please try again later." }, 429);
+  if (recent.length >= 8) return json({ error: "Hourly limit reached. Please try again later." }, 429);
   recent.push(now);
   hits.set(ip, recent);
 
@@ -26,16 +26,29 @@ export async function onRequestPost({ request, env }) {
   let out = "";
   let dbg = "";
 
-  try {
-    if (!env.AI) dbg = "AI binding missing (add Workers AI binding named AI, then redeploy). ";
-    if (env.AI) {
-      const r = await env.AI.run("@cf/meta/llama-3.1-8b-instruct", {
-        messages: [{ role: "system", content: SYSTEM }, { role: "user", content: user }],
-        max_tokens: 3500,
-      });
-      out = r.response || "";
+  const MODELS = [
+    "@cf/meta/llama-3.1-8b-instruct-fp8-fast",
+    "@cf/meta/llama-3.3-70b-instruct-fp8-fast",
+    "@cf/meta/llama-3.2-3b-instruct",
+  ];
+  if (!env.AI) dbg = "AI binding missing (add Workers AI binding named AI, then redeploy). ";
+  else {
+    for (const model of MODELS) {
+      try {
+        const r = await env.AI.run(model, {
+          messages: [{ role: "system", content: SYSTEM }, { role: "user", content: user }],
+          max_tokens: 3500,
+        });
+        let t = r && r.response;
+        if (t && typeof t === "object") t = JSON.stringify(t);
+        out = t || "";
+        if (parse(out)) break;
+        dbg += model.split("/").pop() + ": reply was not valid JSON. ";
+      } catch (e) {
+        dbg += model.split("/").pop() + ": " + String((e && e.message) || e).slice(0, 120) + ". ";
+      }
     }
-  } catch (e) { out = ""; dbg += "AI error: " + String(e && e.message || e).slice(0, 200) + ". "; }
+  }
 
   if (out && !parse(out)) dbg += "AI replied but not valid JSON. ";
 
