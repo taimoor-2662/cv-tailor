@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Free AI CV Tailor – Match Your CV to Any Job</title>
+<meta name="description" content="Upload your old CV, add the job description, and get a tailored ATS-friendly CV as a free PDF. No signup.">
+<style>
+:root{--bg:#f6f7fb;--card:#fff;--tx:#1b1f2a;--mut:#667085;--pri:#4f46e5;--bd:#e4e7ec}
+@media(prefers-color-scheme:dark){:root{--bg:#0f1117;--card:#181b24;--tx:#eceef4;--mut:#9aa3b5;--bd:#2a2f3c}}
+*{box-sizing:border-box}body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;background:var(--bg);color:var(--tx);line-height:1.5}
+header{text-align:center;padding:36px 16px 8px}h1{margin:0 0 8px;font-size:clamp(24px,5vw,38px)}header p{color:var(--mut);margin:0 auto;max-width:560px}
+main{max-width:960px;margin:0 auto;padding:16px}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:14px;padding:18px;margin-bottom:16px}
+label{font-weight:600;display:block;margin:12px 0 6px}
+textarea,select,input[type=file]{width:100%;padding:10px;border:1px solid var(--bd);border-radius:10px;background:var(--bg);color:var(--tx);font:inherit}
+textarea{min-height:130px;resize:vertical}
+button{background:var(--pri);color:#fff;border:0;border-radius:10px;padding:12px 18px;font:inherit;font-weight:600;cursor:pointer}
+button:disabled{opacity:.6}button.sec{background:transparent;color:var(--pri);border:1px solid var(--pri)}
+.row{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px;align-items:center}
+#msg{color:var(--mut);margin-top:10px}#msg.err{color:#d92d20}
+.wrap{overflow-x:auto}
+#cv{background:#fff;color:#111;width:794px;max-width:none;margin:0 auto;padding:40px 44px;font-family:Georgia,'Times New Roman',serif;font-size:13.5px;line-height:1.45;min-height:400px}
+#cv h1{font-size:28px;margin:0}#cv .ttl{font-size:15px;margin:2px 0}#cv .ct{font-size:12.5px;color:#444}
+#cv h2{font-size:14px;text-transform:uppercase;letter-spacing:.08em;margin:18px 0 6px;padding-bottom:3px;border-bottom:1.5px solid #111}
+#cv ul{margin:4px 0 8px;padding-left:18px}#cv .job{margin-top:8px;font-weight:700}#cv .job span{font-weight:400;color:#444}
+#cv.modern{font-family:system-ui,Arial,sans-serif}#cv.modern h1{color:#4f46e5}#cv.modern h2{color:#4f46e5;border-color:#4f46e5}
+#cv.minimal{font-family:Arial,sans-serif;font-size:13px}#cv.minimal h2{border:0;letter-spacing:.15em;color:#555}
+.hint{color:var(--mut);font-size:13px;text-align:center}
+footer{text-align:center;color:var(--mut);font-size:13px;padding:24px}footer a{color:var(--mut)}
+details{margin:8px 0}summary{cursor:pointer;font-weight:600}
+</style>
+</head>
+<body>
+<header>
+  <h1>Free AI CV Tailor</h1>
+  <p>Upload your old CV, add the job you want, and download a tailored, ATS-friendly CV as a PDF. Free, no signup.</p>
+</header>
+<main>
+  <div class="card">
+    <label for="file">1. Upload your old CV (PDF, DOCX or TXT)</label>
+    <input type="file" id="file" accept=".pdf,.docx,.txt">
+    <label for="cvtext">…or paste your CV text</label>
+    <textarea id="cvtext" placeholder="Your CV text appears here after upload. You can edit it."></textarea>
+    <label for="job">2. Job role or job description</label>
+    <textarea id="job" placeholder="e.g. Junior Web Developer, or paste the full job posting"></textarea>
+    <div class="row">
+      <button id="go">Generate tailored CV</button>
+      <select id="tpl" style="width:auto"><option value="">Classic</option><option value="modern">Modern</option><option value="minimal">Minimal</option></select>
+    </div>
+    <div id="msg"></div>
+  </div>
+
+  <div class="card" id="out" hidden>
+    <div class="row" style="margin:0 0 12px"><button id="dl">Download PDF</button><button class="sec" id="print">Print</button></div>
+    <p class="hint">Tip: click anywhere on the CV to edit the text before downloading. Check every detail is accurate.</p>
+    <div class="wrap"><div id="cv" contenteditable="true"></div></div>
+  </div>
+
+  <div class="card">
+    <h2 style="margin-top:0">FAQ</h2>
+    <details><summary>Is it really free?</summary><p>Yes. Download as many tailored CVs as you like.</p></details>
+    <details><summary>Do you store my CV?</summary><p>No. Your file is read in your browser, the text is sent only to generate your CV, and nothing is saved on our servers.</p></details>
+    <details><summary>Will the AI invent experience?</summary><p>It is instructed to use only what is in your CV, but always review the result before sending it.</p></details>
+  </div>
+</main>
+<footer>© <span id="yr"></span> Free AI CV Tailor · <a href="/privacy.html">Privacy</a> · <a href="/about.html">About</a></footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.6.0/mammoth.browser.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+<script>
+const $ = id => document.getElementById(id);
+const esc = s => String(s == null ? "" : s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+const arr = x => Array.isArray(x) ? x : [];
+$("yr").textContent = new Date().getFullYear();
+if (window.pdfjsLib) pdfjsLib.GlobalWorkerOptions.workerSrc = "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js";
+
+function say(t, err) { $("msg").textContent = t; $("msg").className = err ? "err" : ""; }
+
+$("file").onchange = async e => {
+  const f = e.target.files[0]; if (!f) return;
+  say("Reading file…");
+  try {
+    let text = "";
+    const name = f.name.toLowerCase();
+    if (name.endsWith(".pdf")) {
+      const pdf = await pdfjsLib.getDocument({ data: await f.arrayBuffer() }).promise;
+      for (let i = 1; i <= pdf.numPages; i++) {
+        const p = await (await pdf.getPage(i)).getTextContent();
+        text += p.items.map(x => x.str).join(" ") + "\n";
+      }
+    } else if (name.endsWith(".docx")) {
+      text = (await mammoth.extractRawText({ arrayBuffer: await f.arrayBuffer() })).value;
+    } else {
+      text = await f.text();
+    }
+    if (text.trim().length < 50) throw new Error("empty");
+    $("cvtext").value = text.trim();
+    say("CV loaded. Now add the job and click Generate.");
+  } catch (err) {
+    say("Couldn't read that file (scanned PDFs have no text). Please paste your CV text instead.", true);
+  }
+};
+
+$("go").onclick = async () => {
+  const cvText = $("cvtext").value.trim(), job = $("job").value.trim();
+  if (cvText.length < 50) return say("Please upload or paste your CV first.", true);
+  if (job.length < 3) return say("Please enter a job role or description.", true);
+  $("go").disabled = true; say("Tailoring your CV… this can take 10-30 seconds.");
+  try {
+    const r = await fetch("/api", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ cvText, job }) });
+    const d = await r.json();
+    if (!r.ok || !d.cv) throw new Error(d.error || "Something went wrong.");
+    render(d.cv);
+    say("Done! Review, edit if needed, then download.");
+    $("out").hidden = false; $("out").scrollIntoView({ behavior: "smooth" });
+  } catch (err) { say(err.message, true); }
+  $("go").disabled = false;
+};
+
+function render(c) {
+  const contact = arr(c.contact).filter(Boolean).map(esc).join(" · ");
+  let h = `<h1>${esc(c.name)}</h1>`;
+  if (c.title) h += `<div class="ttl">${esc(c.title)}</div>`;
+  if (contact) h += `<div class="ct">${contact}</div>`;
+  if (c.summary) h += `<h2>Summary</h2><div>${esc(c.summary)}</div>`;
+  if (arr(c.skills).length) h += `<h2>Skills</h2><div>${arr(c.skills).map(esc).join(" · ")}</div>`;
+  if (arr(c.experience).length) {
+    h += `<h2>Experience</h2>`;
+    arr(c.experience).forEach(j => {
+      h += `<div class="job">${esc(j.title)}${j.company ? ", " + esc(j.company) : ""} <span>${esc(j.dates)}</span></div>`;
+      h += `<ul>${arr(j.bullets).map(b => `<li>${esc(b)}</li>`).join("")}</ul>`;
+    });
+  }
+  if (arr(c.education).length) {
+    h += `<h2>Education</h2>`;
+    arr(c.education).forEach(e => { h += `<div class="job">${esc(e.degree)}${e.school ? ", " + esc(e.school) : ""} <span>${esc(e.dates)}</span></div>`; });
+  }
+  arr(c.extra).forEach(x => {
+    if (arr(x.items).length) h += `<h2>${esc(x.heading)}</h2><ul>${arr(x.items).map(i => `<li>${esc(i)}</li>`).join("")}</ul>`;
+  });
+  $("cv").innerHTML = h;
+  $("cv").className = $("tpl").value;
+}
+
+$("tpl").onchange = () => { $("cv").className = $("tpl").value; };
+
+$("dl").onclick = () => {
+  const name = ($("cv").querySelector("h1")?.textContent || "cv").trim().replace(/\s+/g, "-");
+  html2pdf().set({ margin: 8, filename: `${name}-tailored-cv.pdf`, image: { type: "jpeg", quality: 0.98 }, html2canvas: { scale: 2 }, jsPDF: { unit: "mm", format: "a4" }, pagebreak: { mode: ["avoid-all", "css"] } }).from($("cv")).save();
+};
+$("print").onclick = () => window.print();
+</script>
+<style media="print">body *{visibility:hidden}#cv,#cv *{visibility:visible}#cv{position:absolute;left:0;top:0;width:100%;padding:0}</style>
+</body>
+</html>
