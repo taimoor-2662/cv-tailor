@@ -636,6 +636,23 @@ function drawGallery() {
 $("tabs").addEventListener("change", e => { if (e.target.id === "gcat") { tabCat = e.target.value; drawGallery(); } if (e.target.id === "gats") { atsOnly = e.target.checked; drawGallery(); } });
 $("tabs").addEventListener("click", e => { if (e.target.id === "gshuf") { drawGallery(); glist = glist.map(t => [Math.random(), t]).sort((a, b) => a[0] - b[0]).map(x => x[1]); $("grid").innerHTML = ""; gDone = 0; thumbs(); } });
 $("gmore").onclick = () => { gShown += 12; thumbs(); };
+let pvT = null, actual = false;
+function fit() {
+  const c = $("pvc"), b = $("pvb"), k = actual ? 1 : Math.min(1, (b.clientWidth - 16) / 794);
+  c.style.transform = `scale(${k})`; c.style.width = "794px";
+  c.parentNode.style.height = "auto"; c.style.marginBottom = (c.offsetHeight * (k - 1)) + "px";
+  c.style.marginRight = actual ? "0" : (794 * (k - 1)) + "px";
+  $("pvz").textContent = actual ? "🔍 Fit to screen" : "🔍 Actual size";
+}
+function preview(t) {
+  pvT = t; $("pvn").textContent = t.name; $("pvc").innerHTML = cvHTML(lastCv || SAMPLE); apply($("pvc"), t);
+  $("pv").classList.add("on"); $("pv").scrollTop = 0; actual = false; fit();
+}
+$("pvback").onclick = () => $("pv").classList.remove("on");
+$("pvuse").onclick = () => choose(pvT);
+$("pvz").onclick = () => { actual = !actual; fit(); };
+addEventListener("resize", () => { if ($("pv").classList.contains("on")) fit(); });
+addEventListener("keydown", e => { if (e.key === "Escape") { if ($("pv").classList.contains("on")) $("pv").classList.remove("on"); else $("ov").classList.remove("on"); } });
 const openG = () => { $("ov").classList.add("on"); drawGallery(); };
 $("gal").onclick = openG; $("gal2").onclick = openG; $("x").onclick = () => $("ov").classList.remove("on");
 $("mkb").onclick = () => $("mk").classList.toggle("on");
