@@ -1,7 +1,7 @@
 // Cloudflare Pages Function -> /api   (bindings: AI = Workers AI, optional secret GEMINI_API_KEY)
 const hits = new Map();
 const json = (o, s = 200) => new Response(JSON.stringify(o), { status: s, headers: { "Content-Type": "application/json" } });
-const MODELS = ["@cf/meta/llama-3.1-8b-instruct-fp8-fast", "@cf/meta/llama-3.3-70b-instruct-fp8-fast", "@cf/meta/llama-3.2-3b-instruct"];
+const M8 = "@cf/meta/llama-3.1-8b-instruct-fp8-fast", M70 = "@cf/meta/llama-3.3-70b-instruct-fp8-fast", M3 = "@cf/meta/llama-3.2-3b-instruct";
 const REG = {
   us: " Format for the USA: concise one-page style, no photo, no age/nationality/marital status, quantified bullets, 'Professional Summary'.",
   ca: " Format for Canada: like a US resume with a 'Summary of Qualifications'; no photo or personal details.",
@@ -29,7 +29,15 @@ const REG = {
 const SCHEMA = `{"name":"","title":"","contact":["email","phone","city"],"summary":"2-3 sentences","skills":["..."],"experience":[{"title":"","company":"","dates":"","bullets":["..."]}],"education":[{"degree":"","school":"","dates":""}],"personal":[{"label":"Nationality","value":""}],"languages":[{"name":"","level":""}],"extra":[{"heading":"Projects","items":["..."]}],"labels":{"summary":"","skills":"","experience":"","education":"","personal":"","languages":""}}`;
 const RULES = "Use ONLY facts present in the CV. Never invent employers, degrees, dates, skills or numbers. The \"personal\" and \"languages\" lists may only contain facts present in the CV; use empty arrays if there are none.";
 const SYS = {
-  tailor: `You are an expert CV writer. Rewrite the candidate's CV so it is tailored to the target job. ${RULES} Mirror relevant keywords from the job description, put the most relevant items first, use strong action verbs, keep bullets concise (max 5 per job). Return ONLY valid JSON, no markdown, in this exact shape: ${SCHEMA}`,
+  tailor: `You are an expert CV writer. The CV text below may come from a designed PDF, so columns can appear separated by " | " and one line may hold several fields. Rewrite the CV so it suits the target job.
+STRICT RULES: ${RULES}
+1. Include EVERY job from the CV, in the same order, with the exact employer name, job title and dates as written. Never merge, drop, repeat or invent a job.
+2. "education" holds only degrees and schools with their own dates. Certifications, courses and licences go in "extra" under the heading "Certifications".
+3. Keep each school and each employer together with its own dates exactly as in the CV. Do not move a date to another entry.
+4. "contact" is the email, phone and city exactly as written.
+5. "skills": use skills named in the CV; if there are none, derive 6-10 from the job bullets only.
+6. You may improve the wording of the summary and bullets and put the most relevant items first, but every fact must stay the same.
+Return ONLY valid JSON, no markdown, in this exact shape: ${SCHEMA}`,
   translate: `You translate CVs. Translate every text value of the given CV JSON into the requested language (including the "labels" section headings and the "label" of each personal detail), keeping names, emails, phone numbers, numbers and company names unchanged. Return ONLY valid JSON in the same shape: ${SCHEMA}`,
   ats: `You are an ATS and recruiter expert. Given a CV, an optional job description and automated findings, give practical advice. ${RULES} Return ONLY valid JSON: {"tips":["max 6 short actionable tips"],"rewrites":[{"before":"weak line copied from the CV","after":"stronger version using only facts in the CV"}],"keywords":["up to 10 keywords the CV should include only if the candidate truly has them"]}`,
   interview: `You are an interview coach. Write the 10 most likely interview questions for this job and candidate, each with a short tip on how to answer using the candidate's REAL experience from the CV. Return ONLY valid JSON: {"questions":[{"q":"","tip":""}]}`,
@@ -42,28 +50,50 @@ function parse(t, check) {
   const a = t.indexOf("{"), b = t.lastIndexOf("}"); if (a < 0 || b < 0) return null;
   try { const o = JSON.parse(t.slice(a, b + 1)); return o && check(o) ? o : null; } catch { return null; }
 }
-async function ai(env, system, user, check) {
-  let dbg = "";
+const norm = t => " " + String(t || "").toLowerCase().replace(/[^\p{L}\p{N}]+/gu, " ") + " ";
+function grounded(o, src) {
+  const n = norm(src), lines = String(src).split(/\n/).map(norm), seen = new Set();
+  for (const j of Array.isArray(o.experience) ? o.experience : []) {
+    const key = [j.title, j.company, j.dates].join("|").toLowerCase(); if (seen.has(key)) return false; seen.add(key);
+    const w = norm(j.company).trim().split(" ").filter(k => k.length > 2); if (!w.length) continue;
+    if (w.filter(k => n.includes(k)).length / w.length < 0.6) return false;
+    const yrs = String(j.dates || "").match(/(?:19|20)\d{2}/g) || [], tk = norm(j.company).trim().split(" "), phrase = tk.slice(0, 2).join(" ");
+    if (yrs.length) {
+      let at = lines.map((l, i) => (l.includes(" " + phrase + " ") || l.includes(phrase) ? i : -1)).filter(i => i >= 0);
+      if (!at.length) at = lines.map((l, i) => (l.includes(" " + tk[0] + " ") ? i : -1)).filter(i => i >= 0);
+      if (at.length && !at.some(i => { const win = lines.slice(Math.max(0, i - 2), i + 4).join(" "); return yrs.every(y => win.includes(y)); })) return false;
+    }
+  }
+  return true;
+}
+async function ai(env, system, user, loose, strict, o = {}) {
+  let dbg = "", fb = null;
+  const take = t => { if (!loose) return t.trim() || null; const x = parse(t, loose); if (x && (!strict || strict(x))) return x; if (x && !fb) fb = x; return null; };
+  const gem = async () => {
+    if (!env.GEMINI_API_KEY) return null;
+    for (const gm of [...new Set([env.GEMINI_MODEL, "gemini-3.8-flash", "gemini-2.5-flash"].filter(Boolean))]) {
+      try {
+        const r = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${gm}:generateContent?key=${env.GEMINI_API_KEY}`, { method: "POST", headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ systemInstruction: { parts: [{ text: system }] }, contents: [{ role: "user", parts: [{ text: user }] }], generationConfig: loose ? { responseMimeType: "application/json" } : {} }) });
+        const d = await r.json(); const t = d?.candidates?.[0]?.content?.parts?.[0]?.text;
+        if (!t) { dbg += `${gm}: ${String(d?.error?.message || "no reply").slice(0, 100)}. `; continue; }
+        const v = take(t); if (v) return v;
+      } catch (e) { dbg += gm + " failed. "; }
+    }
+    return null;
+  };
+  if (o.geminiFirst) { const v = await gem(); if (v) return { v, dbg }; }
   if (!env.AI) dbg += "AI binding missing (add Workers AI binding named AI, then redeploy). ";
-  else for (const m of MODELS) {
+  else for (const m of o.models || [M8, M70, M3]) {
     try {
       const r = await env.AI.run(m, { messages: [{ role: "system", content: system }, { role: "user", content: user }], max_tokens: 4000 });
-      let t = r && r.response; if (t && typeof t === "object") t = JSON.stringify(t); t = t || "";
-      const v = check ? parse(t, check) : t.trim(); if (v) return { v, dbg };
+      let t = r && r.response; if (t && typeof t === "object") t = JSON.stringify(t);
+      const v = take(t || ""); if (v) return { v, dbg };
       dbg += m.split("/").pop() + ": reply not usable. ";
     } catch (e) { dbg += m.split("/").pop() + ": " + String((e && e.message) || e).slice(0, 120) + ". "; }
   }
-  if (env.GEMINI_API_KEY) {
-    try {
-      const r = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${env.GEMINI_API_KEY}`, {
-        method: "POST", headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ systemInstruction: { parts: [{ text: system }] }, contents: [{ role: "user", parts: [{ text: user }] }], generationConfig: check ? { responseMimeType: "application/json" } : {} }),
-      });
-      const d = await r.json(); const t = d?.candidates?.[0]?.content?.parts?.[0]?.text || "";
-      const v = check ? parse(t, check) : t.trim(); if (v) return { v, dbg };
-    } catch (e) {}
-  }
-  return { v: null, dbg };
+  if (!o.geminiFirst) { const v = await gem(); if (v) return { v, dbg }; }
+  return fb ? { v: fb, dbg, unverified: true } : { v: null, dbg };
 }
 
 export async function onRequestPost({ request, env }) {
@@ -85,9 +115,10 @@ export async function onRequestPost({ request, env }) {
   if (mode === "ats") user += `\n\nAUTOMATED FINDINGS:\n${String(b.findings || "").slice(0, 1500)}`;
   if (mode === "cover") user += `\n\nCOMPANY: ${String(b.company || "").slice(0, 80) || "(not given)"}\nHIRING MANAGER: ${String(b.manager || "").slice(0, 80) || "(not given)"}`;
 
-  const { v, dbg } = await ai(env, system, user, OK[mode]);
+  const heavy = mode === "tailor" || mode === "translate";
+  const { v, dbg, unverified } = await ai(env, system, user, OK[mode], mode === "tailor" ? o => grounded(o, cv) : null, { geminiFirst: heavy, models: heavy ? [M70, M8, M3] : [M8, M70, M3] });
   if (!v) return json({ error: "The AI could not finish. " + dbg + "Please try again." }, 503);
   if (mode === "cover") return json({ text: v });
-  if (mode === "tailor" || mode === "translate") return json({ cv: v });
+  if (mode === "tailor" || mode === "translate") return json({ cv: v, unverified: !!unverified });
   return json({ data: v });
 }
