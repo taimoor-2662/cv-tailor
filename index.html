@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta property="og:title" content="Free AI CV Tailor – ATS-friendly CV builder"><meta property="og:description" content="Tailor your CV to any job, check your ATS score and download as PDF or Word. 1,000+ templates, free."><meta property="og:type" content="website">
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"Free AI CV Tailor","applicationCategory":"BusinessApplication","operatingSystem":"Any","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"}}</script>
+<link rel="canonical" href="https://cv-tailor-220.pages.dev/">
 <link rel="manifest" href="/manifest.json"><meta name="theme-color" content="#4f46e5"><link rel="icon" href="/icon-192.png">
 <title>Free AI CV Tailor – Match Your CV to Any Job</title>
 <meta name="description" content="Upload your old CV, add the job description, pick from 1,000+ templates and download a tailored ATS-friendly CV as a free PDF. No signup.">
@@ -189,21 +190,30 @@ textarea,select,input[type=text],input[type=number],input[type=file]{transition:
 .cvx[data-ly=eu] .s{display:grid;grid-template-columns:26% 1fr;column-gap:18px;row-gap:0;margin-bottom:14px}.cvx[data-ly=eu] .s>h2{grid-column:1;grid-row:1/span 60;margin:0;padding-top:2px}.cvx[data-ly=eu] .s>*:not(h2){grid-column:2}.cvx[data-ly=eu] .s-ft{display:block}
 .cvx .pd div,.cvx .lg div{margin:2px 0}.cvx .s-ft{margin-top:18px;font-size:.88em;color:#555;font-style:italic}
 .cvx .side .job{display:block}.cvx .side .sk{columns:1}.cvx .side .it{display:block}
+/* ===== v4: workspace tabs, toast, ads, partners ===== */
+.wtabs{display:flex;gap:6px;overflow-x:auto;padding:5px;background:var(--card);border:1px solid var(--bd);border-radius:16px;margin-bottom:16px;position:sticky;top:58px;z-index:35;box-shadow:0 4px 14px rgba(16,24,40,.08)}
+.wtabs button{flex:1;white-space:nowrap;background:transparent;color:var(--mut);box-shadow:none;border-radius:12px;padding:9px 14px;font-size:14px}.wtabs button.on{background:var(--grad);color:#fff;box-shadow:0 6px 16px rgba(124,58,237,.3)}
+body[data-t=build] [data-tab]:not([data-tab=build]),body[data-t=ats] [data-tab]:not([data-tab=ats]),body[data-t=tk] [data-tab]:not([data-tab=tk]),body[data-t=design] [data-tab]:not([data-tab=design]){display:none!important}
+.dlm{position:fixed;right:14px;bottom:14px;max-width:320px;z-index:80;background:var(--card);border:1px solid var(--bd);border-radius:16px;padding:14px 16px;box-shadow:0 16px 40px rgba(0,0,0,.3);animation:pop .2s ease}.dlm[hidden]{display:none}.dlm .x{position:absolute;right:6px;top:6px;padding:2px 8px;background:transparent;color:var(--mut);box-shadow:none}.dlm a{color:var(--pri)}
+.adslot{min-height:120px;margin:0 0 16px;border:1px dashed var(--bd);border-radius:14px;padding:8px;text-align:center}.adslot[hidden]{display:none}
+.aff a small{display:block;color:var(--mut);font-size:11px;text-transform:uppercase;letter-spacing:.06em}
+@media(hover:hover){.wtabs button:not(.on):hover{background:rgba(124,58,237,.12);color:var(--pri);transform:none;box-shadow:none}}
 @media print{#cv.pgl::after{display:none}*{-webkit-print-color-adjust:exact;print-color-adjust:exact}body *{visibility:hidden}#cv,#cv *{visibility:visible}#cv{position:absolute;left:0;top:0;outline:0}}
 </style>
 </head>
-<body>
+<body data-t="build">
 <nav class="nav"><a class="logo" href="#top">📄 CV Tailor</a><div class="navl"><a href="#tool">Build CV</a><a href="#ats">ATS Checker</a><a href="#tk">Toolkit</a><a href="#feat">Features</a><a href="/guides/">Guides</a></div></nav>
 <header class="hero" id="top">
   <span class="pill">✨ 100% free · No signup needed</span>
   <h1 class="t">Build a CV that beats the ATS and wins interviews</h1>
   <p>Upload your old CV, add the job, and get a tailored, ATS-friendly CV in seconds. Pick from 1,000+ templates, check your ATS score, and download as PDF or Word.</p>
   <div class="row" style="justify-content:center"><a class="btn" href="#tool">Build my CV free</a><a class="btn sec" href="#ats">Check my ATS score</a></div>
-  <div class="badges"><span>✓ Free forever</span><span>✓ Nothing is stored</span><span>✓ ATS-friendly</span><span>✓ PDF, Word &amp; more</span></div>
+  <div class="badges"><span>✓ Free forever</span><span>✓ We don't store your CV</span><span>✓ ATS-friendly</span><span>✓ PDF, Word &amp; more</span></div>
 </header>
 <main>
-  <div class="flow"><span><b>1</b> Upload CV</span><i>→</i><span><b>2</b> Add job</span><i>→</i><span><b>3</b> Download</span></div>
-  <div class="card" id="tool">
+  <div class="wtabs" id="wtabs"><button data-t="build" class="on">📝 Build CV</button><button data-t="ats">📊 ATS Checker</button><button data-t="tk">🧰 Career Toolkit</button><button data-t="design">✨ Design Studio</button></div>
+  <div class="flow" data-tab="build"><span><b>1</b> Upload CV</span><i>→</i><span><b>2</b> Add job</span><i>→</i><span><b>3</b> Download</span></div>
+  <div class="card" id="tool" data-tab="build">
     <label for="file">1. Upload your old CV (PDF, DOCX or TXT)</label>
     <input type="file" id="file" accept=".pdf,.docx,.txt">
     <label for="cvtext">…or paste your CV text</label>
@@ -224,19 +234,20 @@ textarea,select,input[type=text],input[type=number],input[type=file]{transition:
     <div id="msg"></div>
   </div>
 
-  <div class="card" id="out" hidden>
+  <div class="card" id="out" data-tab="build" hidden>
     <div class="row" style="margin:0 0 12px">
       <div class="dd"><button data-dd>⬇ Download ▾</button><div class="ddm">
         <button id="dl">📕 PDF document (.pdf)</button><button id="wd">📘 Word document (.doc)</button><button id="dtxt">📄 Plain text (.txt)</button><button id="dhtml">🌐 Web page (.html)</button><button id="dpng">🖼️ Image (.png)</button><button id="djson">🧾 Data (.json)</button><hr><button id="dcp">📋 Copy as text</button></div></div>
       <button class="sec" id="print">🖨️ Print</button><button class="sec" id="edit">✏️ Edit CV</button><button class="sec" id="gal2">🎨 Change template</button><button class="sec" id="dsn2">✨ Design from scratch</button>
     </div>
+    <div id="gchk"></div>
     <div class="tb on" id="pb" style="position:static"><b>📷 Photo</b><button id="pup">Upload / Replace</button><button id="prm">Remove</button><select id="psh" title="Photo shape"><option value="50%">Circle</option><option value="16px">Rounded</option><option value="0">Square</option></select><small>Size</small><input type="range" id="psz" min="60" max="170" value="96"><input type="file" id="pfile" accept="image/*" hidden></div>
     <div class="tb" id="tb"></div>
     <p class="hint" id="hint">Pick a template, or click <b>Edit CV</b> to change text, fonts, sizes and colors. Check every detail is accurate before sending.</p>
     <div class="wrap"><div id="cv" class="cvx pgl"></div></div>
   </div>
 
-  <div class="card" id="ats">
+  <div class="card" id="ats" data-tab="ats">
     <h2 style="margin-top:0">📊 ATS Score Checker</h2>
     <p class="hint" style="margin-top:0">Upload any CV (or use the one generated above) and see how well Applicant Tracking Systems can read it.</p>
     <label for="afile">Upload a CV (PDF, DOCX or TXT)</label><input type="file" id="afile" accept=".pdf,.docx,.txt">
@@ -246,10 +257,10 @@ textarea,select,input[type=text],input[type=number],input[type=file]{transition:
     <div id="ares"></div>
   </div>
 
-  <div class="card" id="tk">
+  <div class="card" id="tk" data-tab="tk">
     <h2 style="margin-top:0">🧰 Career Toolkit</h2>
     <p class="hint" style="margin-top:0">These tools use the CV and job you entered at the top (or your generated CV).</p>
-    <div class="tabs" id="tkt"><button class="tab on" data-p="cover">Cover letter</button><button class="tab" data-p="int">Interview prep</button><button class="tab" data-p="li">LinkedIn</button><button class="tab" data-p="tr">Translate CV</button><button class="tab" data-p="sh">Share &amp; Word</button><button class="tab" data-p="jt">Job tracker</button></div>
+    <div class="tabs" id="tkt"><button class="tab on" data-p="cover">Cover letter</button><button class="tab" data-p="int">Interview prep</button><button class="tab" data-p="li">LinkedIn</button><button class="tab" data-p="tr">Translate CV</button><button class="tab" data-p="sh">Share link</button><button class="tab" data-p="jt">Job tracker</button></div>
     <div class="tp on" id="p-cover"><div class="g2"><div><label>Company (optional)</label><input type="text" id="cco"></div><div><label>Hiring manager (optional)</label><input type="text" id="cmg"></div></div>
       <div class="row"><button id="cgo">Write cover letter</button></div><textarea id="cvo" style="min-height:260px;margin-top:10px" placeholder="Your cover letter appears here and is fully editable"></textarea>
       <div class="row"><button class="sec" id="ccp">📋 Copy</button><div class="dd"><button data-dd>⬇ Download ▾</button><div class="ddm"><button id="cpdf">📕 PDF (.pdf)</button><button id="cwd">📘 Word (.doc)</button><button id="ctx">📄 Plain text (.txt)</button><button id="chtml">🌐 Web page (.html)</button><button id="cmd">📝 Markdown (.md)</button></div></div></div></div>
@@ -257,13 +268,15 @@ textarea,select,input[type=text],input[type=number],input[type=file]{transition:
     <div class="tp" id="p-li"><div class="row" style="margin-top:0"><button id="lgo">Write headline and About</button></div><div id="lout"></div></div>
     <div class="tp" id="p-tr"><label>Translate my generated CV into</label><input type="text" id="tlang" list="langs" placeholder="Type or choose any language" value="Arabic">
       <div class="row"><button id="tgo">Translate CV</button></div><p class="hint">Works with any language. Quality is best for widely used languages, so please review the result carefully.</p></div>
-    <div class="tp" id="p-sh"><div class="row" style="margin-top:0"><button id="wd2">📄 Download Word (.doc)</button><button class="sec" id="shl">🔗 Copy share link</button></div>
-      <p class="hint">The Word file opens in Microsoft Word and Google Docs (layout is simplified). The share link contains your CV inside the address, so anyone with it can view your CV (your photo is not included). Share it only with people you trust.</p><div id="shout" class="hint"></div></div>
+    <div class="tp" id="p-sh"><div class="row" style="margin-top:0"><button id="shl">🔗 Copy share link</button></div>
+      <p class="hint">The share link contains your CV inside the address, so anyone with it can view your CV (your photo is not included). Share it only with people you trust. For Word or PDF, use the <b>⬇ Download</b> menu in the CV section: the .doc file opens cleanly in Microsoft Word and Google Docs.</p><div id="shout" class="hint"></div></div>
     <div class="tp" id="p-jt"><div class="g2"><div><label>Company</label><input type="text" id="jco"></div><div><label>Role</label><input type="text" id="jro"></div><div><label>Notes / link</label><input type="text" id="jno"></div></div>
       <div class="row"><button id="jad">Add application</button></div><div id="jl" style="margin-top:10px"></div></div>
   </div>
 
-  <div id="feat" class="feat">
+  <div class="adslot" data-tab="ats" hidden></div><div class="adslot" data-tab="tk" hidden></div>
+  <div class="card" id="dsc" data-tab="design"><h2 style="margin-top:0">✨ Design Studio</h2><p class="hint" style="margin-top:0">Design your CV from scratch on a blank A4 page. Drag, resize and style text, photos, boxes and lines, add pages, and download a PDF. Your drafts are saved in this browser.</p><div class="row"><button id="dsn3">Open Design Studio</button></div></div>
+  <div id="feat" class="feat" data-tab="build">
     <div class="st"><i>🎨</i><b>1,000+ templates</b><span>1,000+ unique layouts plus 22 regional CV formats, all editable.</span><button data-click="gal">Browse templates</button></div>
     <div class="st"><i>📊</i><b>ATS score checker</b><span>See what to fix so robots can read your CV.</span><a class="btn" href="#ats" style="padding:7px 12px;font-size:13px">Check my CV</a></div>
     <div class="st"><i>✉️</i><b>Cover letters</b><span>A tailored letter for any job in seconds.</span><a class="btn" href="#tk" style="padding:7px 12px;font-size:13px">Write one</a></div>
@@ -271,12 +284,13 @@ textarea,select,input[type=text],input[type=number],input[type=file]{transition:
     <div class="st"><i>🌍</i><b>Translate &amp; formats</b><span>Arabic, Urdu, Italian and more, plus USA, Europe and Gulf styles.</span><a class="btn" href="#tool" style="padding:7px 12px;font-size:13px">Try it</a></div>
     <div class="st"><i>📚</i><b>Free CV guides</b><span>Examples and keywords for 18+ jobs.</span><a class="btn" href="/guides/" style="padding:7px 12px;font-size:13px">Read guides</a></div>
   </div>
-  <div class="card" id="aff" hidden><h2 style="margin-top:0">Level up your job search</h2><p class="hint" style="margin-top:0">Hand-picked resources. Some links are affiliate links, so we may earn a commission at no extra cost to you.</p><div class="aff" id="affg"></div></div>
+  <div class="card" id="aff" data-tab="build" hidden><h2 style="margin-top:0">Level up your job search</h2><p class="hint" style="margin-top:0">Hand-picked resources. Some links are affiliate links, so we may earn a commission at no extra cost to you.</p><div class="aff" id="affg"></div></div>
 
-  <div class="card">
+  <div class="adslot" data-tab="build" hidden></div>
+  <div class="card" data-tab="build">
     <h2 style="margin-top:0">FAQ</h2>
     <details><summary>Is it really free?</summary><p>Yes. Download as many tailored CVs as you like.</p></details>
-    <details><summary>Do you store my CV?</summary><p>No. Your file is read in your browser, the text is sent only to generate your CV, and nothing is saved on our servers. Your photo never leaves your browser.</p></details>
+    <details><summary>Do you store my CV?</summary><p>No. Your file is read in your browser. The CV text is sent to our server only to generate your CV, where it is processed by Cloudflare Workers AI. We do not save it, and Cloudflare states it does not use it to train AI models. Your photo never leaves your browser. See the <a href="/privacy">Privacy Policy</a>.</p></details>
     <details><summary>Will the AI invent experience?</summary><p>It is instructed to use only what is in your CV, but always review the result before sending it.</p></details>
   </div>
 </main>
@@ -303,8 +317,9 @@ textarea,select,input[type=text],input[type=number],input[type=file]{transition:
       <div><label>Experience style</label><select id="me"></select></div>
       <div><label>Initials circle</label><select id="mav"><option value="0">Off</option><option value="1">On</option></select></div>
     </div>
-    <div class="row"><button id="msv">Save in my browser</button><button class="sec" id="mcp">Copy template code</button></div>
-    <p class="hint">Saved templates appear under "My Templates" in this browser. To add a template for <b>everyone</b>, click "Copy template code" and paste it into <code>templates.json</code> in your GitHub repo (inside the [ ] list, separated by commas).</p>
+    <div class="row"><button id="msv">Save in my browser</button><button class="sec" id="mcp">Export Template JSON</button></div>
+    <p class="hint">Saved templates appear under "My Templates" in this browser. <b>Export Template JSON</b> downloads a file you can keep or share.</p>
+    <details><summary>Developer / Contribute</summary><p class="hint">Site owners can publish a template for everyone by adding its exported JSON to <code>templates.json</code> in the GitHub repo, inside the [ ] list.</p></details>
   </div>
 </div></div>
 <div class="ov" id="pv"><div class="pn">
@@ -329,13 +344,16 @@ textarea,select,input[type=text],input[type=number],input[type=file]{transition:
   </div>
   <div id="dcv"></div>
 </div>
-<footer>© <span id="yr"></span> Free AI CV Tailor · <a href="/privacy.html">Privacy</a> · <a href="/about.html">About</a> · <a href="/guides/">Guides</a> <button class="sec" id="inst" style="display:none;padding:4px 10px;margin-left:8px">📲 Install app</button></footer>
+<div id="dlm" class="dlm" hidden><button class="x" id="dlx" aria-label="Close">✕</button><b>✅ Download started</b><p class="hint" style="margin:4px 0 8px">What would you like to do next?</p><div class="row" style="margin:0"><button id="dlc">✉️ Cover letter</button><button class="sec" id="dla">📊 ATS score</button></div><p class="hint" id="dltip" style="margin:8px 0 0"></p></div>
+<footer>© <span id="yr"></span> Free AI CV Tailor · <a href="/privacy">Privacy</a> · <a href="/about">About</a> · <a href="/guides/">Guides</a> · <a id="ghl" href="https://github.com/taimoor-2662/cv-tailor" target="_blank" rel="noopener">GitHub</a> <button class="sec" id="inst" style="display:none;padding:4px 10px;margin-left:8px">📲 Install app</button></footer>
 
+<script src="/site-config.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.6.0/mammoth.browser.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 <script>
 const $ = id => document.getElementById(id);
+const SITE = window.SITE || {};
 const esc = s => String(s == null ? "" : s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
 const arr = x => Array.isArray(x) ? x : [];
 $("yr").textContent = new Date().getFullYear();
@@ -343,6 +361,36 @@ if (window.pdfjsLib) pdfjsLib.GlobalWorkerOptions.workerSrc = "https://cdnjs.clo
 const say = (t, err) => { $("msg").textContent = t; $("msg").className = err ? "err" : ""; };
 
 /* ---------- file reading + AI ---------- */
+async function pdfText(pdf, sep) {
+  let out = "";
+  for (let p = 1; p <= pdf.numPages; p++) {
+    const tc = await (await pdf.getPage(p)).getTextContent();
+    const its = tc.items.filter(i => i.str && i.str.trim()).map(i => ({ r: i.str, x: i.transform[4], y: i.transform[5], w: i.width || 0 }));
+    its.sort((a, b) => b.y - a.y || a.x - b.x);
+    const lines = []; let cur = [], cy = null;
+    for (const it of its) { if (cy === null || Math.abs(it.y - cy) > 4) { if (cur.length) lines.push(cur); cur = [it]; cy = it.y; } else cur.push(it); }
+    if (cur.length) lines.push(cur);
+    lines.forEach(l => {
+      l.sort((a, b) => a.x - b.x); let s = l[0].r.trim();
+      for (let i = 1; i < l.length; i++) { const gap = l[i].x - (l[i - 1].x + l[i - 1].w), sp = /\s$/.test(l[i - 1].r) || /^\s/.test(l[i].r); s += (gap > 18 ? sep : gap > 1 || sp ? " " : "") + l[i].r.trim(); }
+      out += s + "\n";
+    });
+    out += "\n";
+  }
+  return out;
+}
+const nrmG = t => " " + String(t || "").toLowerCase().replace(/[^a-z0-9\u0600-\u06FF\u0900-\u097F]+/g, " ") + " ";
+function groundCheck(cv, src) {
+  if (cv.lang && !/^english/i.test(cv.lang)) return [];
+  const n = nrmG(src), bad = [];
+  const has = x => { const w = nrmG(x).trim().split(" ").filter(k => k.length > 2); return !w.length || w.filter(k => n.includes(k)).length / w.length >= 0.6; };
+  arr(cv.experience).forEach(j => {
+    if (j.company && !has(j.company)) bad.push(`employer "${j.company}"`);
+    if (j.dates && (String(j.dates).match(/\b(19|20)\d{2}\b/g) || []).some(y => !n.includes(" " + y + " "))) bad.push(`dates "${j.dates}" (${j.company || j.title})`);
+  });
+  arr(cv.education).forEach(e => { if (e.school && !has(e.school)) bad.push(`school "${e.school}"`); });
+  return [...new Set(bad)];
+}
 const normPhoto = (src, strict) => new Promise(res => {
   const im = new Image();
   im.onload = () => {
@@ -394,7 +442,7 @@ $("file").onchange = async e => {
     let text = ""; const name = f.name.toLowerCase();
     if (name.endsWith(".pdf")) {
       const pdf = await pdfjsLib.getDocument({ data: await f.arrayBuffer() }).promise;
-      for (let i = 1; i <= pdf.numPages; i++) { const p = await (await pdf.getPage(i)).getTextContent(); text += p.items.map(x => x.str).join(" ") + "\n"; }
+      text = await pdfText(pdf, " | ");
       try { photoData = await pdfPhoto(pdf); } catch (e) {}
     } else if (name.endsWith(".docx")) {
       const buf = await f.arrayBuffer();
@@ -415,7 +463,10 @@ $("go").onclick = async () => {
     const r = await fetch("/api", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ cvText, job, region: $("reg").value, lang: $("lang").value.trim() || "English" }) });
     const d = await r.json();
     if (!r.ok || !d.cv) throw new Error(d.error || "Something went wrong.");
-    lastCv = d.cv; lastCv.lang = $("lang").value.trim() || "English"; show(); say("Done! Choose a template, edit if needed, then download.");
+    lastCv = d.cv; lastCv.lang = $("lang").value.trim() || "English"; const gb = groundCheck(lastCv, cvText), bn = [];
+    if (d.truncated) bn.push("Your CV or job text was very long, so the end was trimmed before the AI read it. Shorten it or remove less relevant parts, then generate again.");
+    if (d.unverified || gb.length) bn.push("Please double-check your job dates and company names before downloading." + (gb.length ? " Not found in your original CV: " + gb.map(esc).join("; ") + "." : "") + " Fix anything with ✏️ Edit CV.");
+    $("gchk").innerHTML = bn.map(x => `<div class="is warn">⚠ ${x}</div>`).join(""); show(); say("Done! Choose a template, edit if needed, then download.");
     $("out").hidden = false; $("out").scrollIntoView({ behavior: "smooth" });
   } catch (err) { say(err.message, true); }
   $("go").disabled = false;
@@ -613,7 +664,7 @@ function show() { if (!lastCv) return; $("cv").dir = isRtl(lastCv.lang) ? "rtl" 
 function choose(t) { cur = t; $("cur").textContent = t.name; if (lastCv) { apply($("cv"), t); paginate($("cv")); } $("pv").classList.remove("on"); $("ov").classList.remove("on"); }
 
 /* ---------- gallery ---------- */
-let tabCat = "Classic", atsOnly = false, gShown = 12, gDone = 0, glist = [];
+let tabCat = "__all", atsOnly = true, gShown = 12, gDone = 0, glist = [];
 function galList() {
   let l = tabCat === "__all" ? TPL.slice() : TPL.filter(t => t.cat === tabCat); if (atsOnly) l = l.filter(t => t.ats); return l;
 }
@@ -630,8 +681,9 @@ function drawGallery() {
   const sty = [...new Set(TPL.filter(t => !t.rg).map(t => t.cat))], reg = [...new Set(TPL.filter(t => t.rg).map(t => t.cat))];
   if (tabCat !== "__all" && ![...sty, ...reg].includes(tabCat)) tabCat = sty[0];
   const o = a => a.map(c => `<option ${c === tabCat ? "selected" : ""}>${esc(c)}</option>`).join("");
-  $("tabs").className = "gf"; $("tabs").innerHTML = `<select id="gcat"><option value="__all" ${tabCat === "__all" ? "selected" : ""}>All templates (${TPL.length})</option><optgroup label="Styles">${o(sty)}</optgroup><optgroup label="Regional formats">${o(reg)}</optgroup></select><label><input type="checkbox" id="gats" ${atsOnly ? "checked" : ""}> ATS-safe only</label><button class="sec" id="gshuf">🔀 Shuffle</button>`;
+  $("tabs").className = "gf"; $("tabs").innerHTML = `<select id="gcat"><option value="__all" ${tabCat === "__all" ? "selected" : ""}>All templates (${TPL.length})</option><optgroup label="Styles">${o(sty)}</optgroup><optgroup label="Regional formats">${o(reg)}</optgroup></select><label><input type="checkbox" id="gats" ${atsOnly ? "checked" : ""}> ATS-safe only (untick to see all layouts)</label><button class="sec" id="gshuf">🔀 Shuffle</button>`;
   glist = galList(); gShown = 12; gDone = 0; $("grid").innerHTML = ""; $("gcnt").textContent = glist.length + " templates"; thumbs();
+  if (!glist.length) $("grid").innerHTML = '<p class="hint">No ATS-safe templates in this category. Untick "ATS-safe only" to see all layouts.</p>';
 }
 $("tabs").addEventListener("change", e => { if (e.target.id === "gcat") { tabCat = e.target.value; drawGallery(); } if (e.target.id === "gats") { atsOnly = e.target.checked; drawGallery(); } });
 $("tabs").addEventListener("click", e => { if (e.target.id === "gshuf") { drawGallery(); glist = glist.map(t => [Math.random(), t]).sort((a, b) => a[0] - b[0]).map(x => x[1]); $("grid").innerHTML = ""; gDone = 0; thumbs(); } });
@@ -668,10 +720,7 @@ $("msv").onclick = () => {
   try { localStorage.setItem("cvt", JSON.stringify(custom)); } catch (e) {}
   buildTpl(); tabCat = "My Templates"; drawGallery();
 };
-$("mcp").onclick = async () => {
-  const code = JSON.stringify(newT(), null, 2);
-  try { await navigator.clipboard.writeText(code); alert("Template code copied. Paste it into templates.json on GitHub."); } catch (e) { prompt("Copy this template code:", code); }
-};
+$("mcp").onclick = () => { const t = newT(); saveF("cv-template-" + t.name.replace(/[^a-z0-9]+/gi, "-").toLowerCase() + ".json", "application/json", JSON.stringify(t, null, 2)); };
 
 /* ---------- edit toolbar ---------- */
 let editing = false, sel = null;
@@ -745,7 +794,7 @@ $("psz").oninput = e => $("cv").style.setProperty("--ph", e.target.value + "px")
 $("dl").onclick = () => {
   const cv = $("cv"), was = cv.classList.contains("editing"); cv.classList.remove("editing", "pgl"); paginate(cv);
   const name = (cv.querySelector("h1")?.textContent || "cv").trim().replace(/\s+/g, "-");
-  html2pdf().set({ margin: 0, filename: `${name}-tailored-cv.pdf`, image: { type: "jpeg", quality: 0.98 }, html2canvas: { scale: 2 }, jsPDF: { unit: "mm", format: "a4" }, pagebreak: { mode: ["css"] } }).from(cv).save().then(() => { cv.classList.add("pgl"); if (was) cv.classList.add("editing"); });
+  html2pdf().set({ margin: 0, filename: `${name}-tailored-cv.pdf`, image: { type: "jpeg", quality: 0.98 }, html2canvas: { scale: 2 }, jsPDF: { unit: "mm", format: "a4" }, pagebreak: { mode: ["css"] } }).from(cv).save().then(() => { cv.classList.add("pgl"); if (was) cv.classList.add("editing"); afterDl(); });
 };
 $("print").onclick = () => window.print();
 
@@ -966,7 +1015,7 @@ function hlHTML(t, kw, weak) {
 }
 async function fileText(f) {
   const n = f.name.toLowerCase();
-  if (n.endsWith(".pdf")) { const pdf = await pdfjsLib.getDocument({ data: await f.arrayBuffer() }).promise; let t = ""; for (let i = 1; i <= pdf.numPages; i++) { const p = await (await pdf.getPage(i)).getTextContent(); t += p.items.map(x => x.str).join(" ") + "\n"; } return t; }
+  if (n.endsWith(".pdf")) { const pdf = await pdfjsLib.getDocument({ data: await f.arrayBuffer() }).promise; return pdfText(pdf, "   "); }
   if (n.endsWith(".docx")) return (await mammoth.extractRawText({ arrayBuffer: await f.arrayBuffer() })).value;
   return f.text();
 }
@@ -989,6 +1038,7 @@ $("acheck").onclick = () => {
   ${r.kw ? `<h3>Keywords</h3><div>${r.kw.miss.map(k => `<span class="chip m">✗ ${esc(k)}</span>`).join("")}${r.kw.hit.map(k => `<span class="chip">✓ ${esc(k)}</span>`).join("")}</div>` : ""}
   <h3>Your CV with highlights</h3><p class="hint"><mark class="r">weak phrases</mark> <mark class="g">matched keywords</mark> <mark class="b">measurable results</mark></p><div class="hl">${hlHTML(t, r.kw ? r.kw.hit : [], r.weak)}</div>
   <div class="row"><button id="aai">✨ Get AI improvement tips</button><button class="sec" id="afix">Tailor my CV with the job</button></div><div id="aaiout"></div>`;
+  if (r.kw && r.kw.miss.length) $("ares").insertAdjacentHTML("beforeend", partnerHTML(PARTNERS.ats, "Close your skill gaps"));
   $("aai").onclick = async () => {
     $("aai").disabled = true; $("aaiout").innerHTML = '<p class="hint">Thinking…</p>';
     try {
@@ -1013,7 +1063,7 @@ $("tkt").onclick = e => { const b = e.target.closest(".tab"); if (!b) return; do
 $("cgo").onclick = () => need(true) && busy($("cgo"), async () => { $("cvo").value = "Writing…"; $("cvo").value = (await callAI("cover", { company: $("cco").value, manager: $("cmg").value })).text; });
 $("ccp").onclick = () => copyT($("cvo").value); $("ctx").onclick = () => saveF("cover-letter.txt", "text/plain", $("cvo").value);
 $("cwd").onclick = () => saveF("cover-letter.doc", "application/msword", "\ufeff<html><head><meta charset='utf-8'></head><body style='font-family:Calibri;font-size:11pt'>" + $("cvo").value.split(/\n\n+/).map(p => `<p>${esc(p).replace(/\n/g, "<br>")}</p>`).join("") + "</body></html>");
-$("igo").onclick = () => need(true) && busy($("igo"), async () => { $("iout").innerHTML = '<p class="hint">Preparing…</p>'; const d = (await callAI("interview")).data; $("iout").innerHTML = arr(d.questions).map((q, i) => `<div class="is ok"><b>${i + 1}. ${esc(q.q)}</b><small>${esc(q.tip)}</small></div>`).join(""); });
+$("igo").onclick = () => need(true) && busy($("igo"), async () => { $("iout").innerHTML = '<p class="hint">Preparing…</p>'; const d = (await callAI("interview")).data; $("iout").innerHTML = arr(d.questions).map((q, i) => `<div class="is ok"><b>${i + 1}. ${esc(q.q)}</b><small>${esc(q.tip)}</small></div>`).join("") + partnerHTML(PARTNERS.interview, "Practise for the real thing"); });
 $("lgo").onclick = () => need(false) && busy($("lgo"), async () => { $("lout").innerHTML = '<p class="hint">Writing…</p>'; const d = (await callAI("linkedin")).data; $("lout").innerHTML = `<h3>Headline</h3><div class="hl" id="lh">${esc(d.headline)}</div><div class="row"><button class="sec" id="lch">Copy headline</button></div><h3>About</h3><div class="hl" id="la">${esc(d.about)}</div><div class="row"><button class="sec" id="lca">Copy About</button></div>`; $("lch").onclick = () => copyT(d.headline); $("lca").onclick = () => copyT(d.about); });
 $("tgo").onclick = () => { if (!lastCv) return alert("Generate a CV in step 1 first."); busy($("tgo"), async () => { const l = $("tlang").value.trim() || "English", d = await callAI("translate", { lang: l, cvJson: JSON.stringify({ ...lastCv, lang: undefined, labels: undefined }) }); lastCv = d.cv; lastCv.lang = l; show(); scrollTo({ top: $("out").offsetTop, behavior: "smooth" }); }); };
 function wordHTML() {
@@ -1022,14 +1072,14 @@ function wordHTML() {
   const ttl = cv.querySelector(".ttl")?.textContent || "", ct = cv.querySelector(".ct")?.textContent || "";
   return `\ufeff<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w="urn:schemas-microsoft-com:office:word"><head><meta charset="utf-8"><title>CV</title><style>body{font-family:Calibri,Arial,sans-serif;font-size:11pt;color:#111}h1{font-size:24pt;color:${cur.d};margin:0}h2{font-size:12pt;color:${cur.d};border-bottom:1.5pt solid ${cur.a};text-transform:uppercase;margin:14pt 0 4pt}.job{font-weight:bold;margin-top:6pt}.job .jd{font-weight:normal;color:#555}ul{margin:2pt 0}</style></head><body><h1>${esc(h1.textContent)}</h1><p>${esc(ttl)}<br>${esc(ct)}</p>${secs}</body></html>`;
 }
-const doWord = () => { if (!lastCv) return alert("Generate a CV in step 1 first."); saveF(($("cv").querySelector("h1")?.textContent || "cv").trim().replace(/\s+/g, "-") + "-cv.doc", "application/msword", wordHTML()); };
-$("wd").onclick = doWord; $("wd2").onclick = doWord;
+const doWord = () => { if (!lastCv) return alert("Generate a CV in step 1 first."); saveF(($("cv").querySelector("h1")?.textContent || "cv").trim().replace(/\s+/g, "-") + "-cv.doc", "application/msword", wordHTML()); afterDl(); };
+$("wd").onclick = doWord;
 const b64u = u8 => { let s = ""; u8.forEach(b => s += String.fromCharCode(b)); return btoa(s).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, ""); };
 const unb64 = s => Uint8Array.from(atob(s.replace(/-/g, "+").replace(/_/g, "/")), c => c.charCodeAt(0));
 async function pipe(u8, S) { const st = new S("gzip"), w = st.writable.getWriter(); w.write(u8); w.close(); return new Uint8Array(await new Response(st.readable).arrayBuffer()); }
 $("shl").onclick = () => { if (!lastCv) return alert("Generate a CV in step 1 first."); busy($("shl"), async () => {
   const url = location.origin + "/#v=" + b64u(await pipe(new TextEncoder().encode(JSON.stringify({ c: lastCv, t: cur })), CompressionStream)); await copyT(url);
-  $("shout").textContent = url.length > 6000 ? "Link copied, but it is very long. Some apps may cut it off." : "Link copied to your clipboard.";
+  $("shout").textContent = url.length > 2000 ? `Link copied, but it is long (${url.length} characters). WhatsApp, LinkedIn and some other apps may cut long links, so please download a PDF or Word file instead.` : "Link copied to your clipboard.";
 }); };
 (async () => { if (!location.hash.startsWith("#v=")) return; try {
   const o = JSON.parse(new TextDecoder().decode(await pipe(unb64(location.hash.slice(3)), DecompressionStream))); lastCv = o.c; if (o.t && okT(o.t)) cur = o.t; $("cur").textContent = cur.name; show(); $("out").hidden = false; say("Shared CV. Make your own free CV below."); $("out").scrollIntoView();
@@ -1059,7 +1109,7 @@ document.querySelectorAll("[data-click]").forEach(b => b.onclick = () => $(b.dat
 const cvName = () => ($("cv").querySelector("h1")?.textContent || "cv").trim().replace(/\s+/g, "-") + "-cv";
 function cvDomText() { const cv = $("cv"), t = [cv.querySelector(".hd")?.innerText.trim()]; ["sum", "pd", "sk", "lg", "exp", "edu", "ex"].forEach(k => { const n = cv.querySelector(".s-" + k); if (n) t.push(n.innerText.trim()); }); return t.filter(Boolean).join("\n\n"); }
 const needCv = () => { if (!lastCv) { alert("Generate a CV in step 1 first."); return false; } return true; };
-$("dtxt").onclick = () => needCv() && saveF(cvName() + ".txt", "text/plain", cvDomText());
+$("dtxt").onclick = () => needCv() && (saveF(cvName() + ".txt", "text/plain", cvDomText()), afterDl());
 $("dhtml").onclick = () => needCv() && saveF(cvName() + ".html", "text/html", wordHTML().replace(/^\ufeff/, ""));
 $("djson").onclick = () => needCv() && saveF(cvName() + ".json", "application/json", JSON.stringify(lastCv, null, 2));
 $("dcp").onclick = () => needCv() && copyT(cvDomText());
@@ -1076,13 +1126,49 @@ $("cpdf").onclick = () => {
 };
 $("chtml").onclick = () => !noLetter() && saveF("cover-letter.html", "text/html", "<!DOCTYPE html><html><head><meta charset='utf-8'><title>Cover letter</title></head><body style='font-family:Calibri,Arial,sans-serif;max-width:700px;margin:40px auto;line-height:1.6'>" + letter().split(/\n\n+/).map(p => `<p>${esc(p).replace(/\n/g, "<br>")}</p>`).join("") + "</body></html>");
 $("cmd").onclick = () => !noLetter() && saveF("cover-letter.md", "text/markdown", letter());
+let PARTNERS = { general: [], ats: [], interview: [] };
+const okP = x => x && x.title && /^https:\/\//.test(x.url);
+const partnerCard = x => `<a href="${esc(x.url)}" target="_blank" rel="sponsored noopener"><small>Partner</small><b>${esc(x.title)}</b><span>${esc(x.desc || "")}</span><em>${esc(x.cta || "Learn more")} →</em></a>`;
+const partnerHTML = (l, t) => { const ok = arr(l).filter(okP); return ok.length ? `<h3>${esc(t)}</h3><div class="aff">${ok.map(partnerCard).join("")}</div><p class="hint">Partner links: we may earn a commission at no extra cost to you.</p>` : ""; };
 fetch("/affiliates.json").then(r => r.json()).then(a => {
-  const ok = arr(a).filter(x => x && x.title && /^https:\/\//.test(x.url)); if (!ok.length) return;
-  $("affg").innerHTML = ok.map(x => `<a href="${esc(x.url)}" target="_blank" rel="sponsored noopener"><b>${esc(x.title)}</b><span>${esc(x.desc || "")}</span><em>${esc(x.cta || "Learn more")} →</em></a>`).join(""); $("aff").hidden = false;
+  PARTNERS = Array.isArray(a) ? { general: a, ats: [], interview: [] } : { general: [], ats: [], interview: [], ...a };
+  const g = arr(PARTNERS.general).filter(okP); if (!g.length) return;   // nothing configured: the section stays hidden
+  $("affg").innerHTML = g.map(partnerCard).join(""); $("aff").hidden = false;
 }).catch(() => {});
 try { const io = new IntersectionObserver(es => es.forEach(x => { if (x.isIntersecting) { x.target.classList.add("in"); io.unobserve(x.target); } }), { threshold: 0.06 }); document.querySelectorAll(".card,.st").forEach(e => { e.classList.add("rv"); io.observe(e); }); } catch (e) {}
 
 $("reg").addEventListener("change", e => { const t = TPL.find(x => x.rg === e.target.value); if (t) { cur = t; $("cur").textContent = t.name; if (lastCv) { apply($("cv"), t); paginate($("cv")); } } });
+
+/* ---------- workspace tabs, download prompt, ads, deep links ---------- */
+const TABS = ["build", "ats", "tk", "design"], HASHTAB = { tool: "build", feat: "build", top: "build", ats: "ats", tk: "tk", design: "design" };
+function showTab(t, noScroll) {
+  if (!TABS.includes(t)) t = "build"; document.body.dataset.t = t;
+  document.querySelectorAll("#wtabs button").forEach(b => b.classList.toggle("on", b.dataset.t === t));
+  if (t === "ats" && !$("atext").value.trim() && lastCv) { $("atext").value = cvToText(lastCv); if (!$("ajob").value.trim()) $("ajob").value = $("job").value; }
+  if (!noScroll) scrollTo({ top: Math.max(0, $("wtabs").offsetTop - 64), behavior: "smooth" });
+}
+$("wtabs").onclick = e => { const b = e.target.closest("button"); if (!b) return; showTab(b.dataset.t); try { history.replaceState(null, "", b.dataset.t === "build" ? location.pathname + location.search : "#" + b.dataset.t); } catch (x) {} };
+document.addEventListener("click", e => {
+  const a = e.target.closest('a[href^="#"]'); if (!a) return; const id = a.getAttribute("href").slice(1); if (!(id in HASHTAB)) return;
+  e.preventDefault(); showTab(HASHTAB[id], true); setTimeout(() => (id === "top" ? document.body : $(id) || $("wtabs")).scrollIntoView({ behavior: "smooth", block: "start" }), 30);
+});
+showTab(HASHTAB[location.hash.slice(1)] || "build", true);
+addEventListener("hashchange", () => { const h = HASHTAB[location.hash.slice(1)]; if (h) showTab(h, true); });
+$("dsn3").onclick = dopen;
+let dlT;
+function afterDl() {
+  const m = $("dlm"); m.hidden = false; clearTimeout(dlT); dlT = setTimeout(() => { m.hidden = true; }, 18000);
+  $("dltip").innerHTML = SITE.supportUrl ? `<a href="${esc(SITE.supportUrl)}" target="_blank" rel="noopener">Found this useful? Support this free project ☕</a>` : "";
+}
+$("dlx").onclick = () => { $("dlm").hidden = true; };
+$("dlc").onclick = () => { $("dlm").hidden = true; showTab("tk"); document.querySelector('#tkt [data-p="cover"]').click(); };
+$("dla").onclick = () => { $("dlm").hidden = true; showTab("ats"); $("agen").click(); };
+if (SITE.github) $("ghl").href = SITE.github;
+if (SITE.ENABLE_ADS) {
+  document.querySelectorAll(".adslot").forEach(a => { a.hidden = false; a.innerHTML = '<small class="hint">Advertisement</small>' + (SITE.adsHtml || ""); });
+  if (/^https:\/\//.test(SITE.adsScript || "")) { const sc = document.createElement("script"); sc.async = true; sc.src = SITE.adsScript; document.head.appendChild(sc); }
+}
+{ const q = new URLSearchParams(location.search).get("region"); if (q && [...$("reg").options].some(o => o.value === q)) { $("reg").value = q; $("reg").dispatchEvent(new Event("change")); } }
 </script>
 </body>
 </html>

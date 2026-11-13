@@ -1,0 +1,5 @@
+{
+  "general":   [ { "title": "Resume review", "desc": "Get expert feedback on your CV", "url": "https://your-affiliate-link", "cta": "Get started" } ],
+  "ats":       [ { "title": "Excel for beginners", "desc": "Close common skill gaps", "url": "https://your-affiliate-link", "cta": "View course" } ],
+  "interview": [ { "title": "Mock interview practice", "desc": "Practise with a coach", "url": "https://your-affiliate-link", "cta": "Practise now" } ]
+}
