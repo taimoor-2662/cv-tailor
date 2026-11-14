@@ -107,7 +107,6 @@ details{margin:8px 0}summary{cursor:pointer;font-weight:600}
 .cvx[data-up=upper] h1{text-transform:uppercase;letter-spacing:.06em;font-size:1.8em}.cvx[data-up=big] h1{font-size:2.7em;line-height:1}.cvx[data-up=light] h1{font-weight:300;letter-spacing:.02em}
 .cvx[data-sbs=accent][data-sb=dark] .side,.cvx[data-sbs=accent][data-ly=sn] .hd{background:var(--a)}
 .cvx[data-ly=sn][data-sb=light] .hd{background:#f3f4f7;color:#222}.cvx[data-ly=sn][data-sb=light] .hd h1{color:var(--d)}.cvx[data-ly=sn][data-sb=light] .hd .ttl{color:var(--a)}.cvx[data-ly=sn][data-sb=light] .hd .ct{color:#444}.cvx[data-ly=sn][data-sb=light] .av{background:var(--a);color:#fff}
-#cv.pgl::after{content:"";position:absolute;left:0;right:0;top:0;bottom:0;pointer-events:none;z-index:9;background:repeating-linear-gradient(to bottom,transparent 0,transparent 1120px,rgba(110,110,140,.55) 1120px,rgba(110,110,140,.55) 1122px)}
 /* designer */
 #ds{padding:0;background:var(--bg);z-index:70}.dtop{position:sticky;top:0;z-index:30;background:var(--card);border-bottom:1px solid var(--bd)}
 .dsb{display:flex;gap:6px;padding:6px 8px;overflow-x:auto;align-items:center;white-space:nowrap}.dsb button{padding:6px 10px;font-size:13px;background:var(--bg);color:var(--tx);border:1px solid var(--bd);flex:none}.dsb button.p{background:var(--pri);color:#fff;border-color:var(--pri)}
@@ -198,7 +197,18 @@ body[data-t=build] [data-tab]:not([data-tab=build]),body[data-t=ats] [data-tab]:
 .adslot{min-height:120px;margin:0 0 16px;border:1px dashed var(--bd);border-radius:14px;padding:8px;text-align:center}.adslot[hidden]{display:none}
 .aff a small{display:block;color:var(--mut);font-size:11px;text-transform:uppercase;letter-spacing:.06em}
 @media(hover:hover){.wtabs button:not(.on):hover{background:rgba(124,58,237,.12);color:var(--pri);transform:none;box-shadow:none}}
-@media print{#cv.pgl::after{display:none}*{-webkit-print-color-adjust:exact;print-color-adjust:exact}body *{visibility:hidden}#cv,#cv *{visibility:visible}#cv{position:absolute;left:0;top:0;outline:0}}
+.pgap{position:absolute;left:0;right:0;z-index:20;background:#d9dce3;display:flex;align-items:center;justify-content:center;font:600 11px system-ui,sans-serif;color:#667085;pointer-events:none;box-shadow:inset 0 7px 7px -7px rgba(0,0,0,.35),inset 0 -7px 7px -7px rgba(0,0,0,.35)}
+.pbar{height:10px;border-radius:8px;background:var(--bd);overflow:hidden}.pbar i{display:block;height:100%;width:0;background:var(--grad);border-radius:8px;transition:width .4s ease}.pmeta{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;font-size:13px;color:var(--mut);margin-top:6px}
+@page{size:A4;margin:0}
+@media print{
+*{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+body{background:#fff!important}
+.nav,header,.wtabs,.flow,footer,.ov,.dlm,.adslot,[data-tab]:not(#out),#gchk,#pb,#tb,#out>.row,#out>.hint{display:none!important}
+main{max-width:none;padding:0;margin:0}
+#out{border:0!important;box-shadow:none!important;padding:0!important;margin:0!important;background:none!important;transform:none!important;opacity:1!important}
+.wrap{padding:0;background:none;overflow:visible;border-radius:0}
+#cv{margin:0;outline:0}
+}
 </style>
 </head>
 <body data-t="build">
@@ -458,7 +468,7 @@ $("go").onclick = async () => {
   const cvText = $("cvtext").value.trim(), job = $("job").value.trim();
   if (cvText.length < 50) return say("Please upload or paste your CV first.", true);
   if (job.length < 3) return say("Please enter a job role or description.", true);
-  $("go").disabled = true; say("Tailoring your CV… this can take 10-30 seconds.");
+  $("go").disabled = true; const stop = startProgress($("msg"), [["Reading your CV", 0.15], ["Sending it to the AI", 0.3], ["Writing your tailored CV", 0.75], ["Checking facts against your original", 0.92]], 20);
   try {
     const r = await fetch("/api", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ cvText, job, region: $("reg").value, lang: $("lang").value.trim() || "English" }) });
     const d = await r.json();
@@ -466,9 +476,9 @@ $("go").onclick = async () => {
     lastCv = d.cv; lastCv.lang = $("lang").value.trim() || "English"; const gb = groundCheck(lastCv, cvText), bn = [];
     if (d.truncated) bn.push("Your CV or job text was very long, so the end was trimmed before the AI read it. Shorten it or remove less relevant parts, then generate again.");
     if (d.unverified || gb.length) bn.push("Please double-check your job dates and company names before downloading." + (gb.length ? " Not found in your original CV: " + gb.map(esc).join("; ") + "." : "") + " Fix anything with ✏️ Edit CV.");
-    $("gchk").innerHTML = bn.map(x => `<div class="is warn">⚠ ${x}</div>`).join(""); show(); say("Done! Choose a template, edit if needed, then download.");
+    $("gchk").innerHTML = bn.map(x => `<div class="is warn">⚠ ${x}</div>`).join(""); stop(true); show(); say("Done! Choose a template, edit if needed, then download.");
     $("out").hidden = false; $("out").scrollIntoView({ behavior: "smooth" });
-  } catch (err) { say(err.message, true); }
+  } catch (err) { stop(); say(err.message, true); }
   $("go").disabled = false;
 };
 
@@ -640,25 +650,32 @@ function apply(el, t) {
   place(el, t); labels(el, t);
 }
 /* ---------- multi-page flow: keeps lines/entries whole and moves them to the next A4 page ---------- */
-const PH = 1122; let pgT;
-function paginate(root) {
+const PH = 1122, GAP = 26, TOPM = 48, BOTM = 48; let pgT;
+// Splits the CV into real A4 pages. Content never crosses a page edge: whole lines/entries move to the next page (with a safe top margin).
+// With gap > 0 (screen preview) grey gaps show between pages. With gap = 0 (PDF, PNG, print) pages are exact A4 sheets with no gap.
+function paginate(root, gap = GAP) {
+  const P = PH + gap;
+  root.querySelectorAll(".pgap").forEach(x => x.remove());
   root.style.minHeight = "";
   root.querySelectorAll("[data-pg]").forEach(e => { e.style.marginTop = e.dataset.pg; delete e.dataset.pg; });
-  const sel = "h2,.job,li,.it,.sk,.s-sum>div";
-  for (let n = 0; n < 400; n++) {
+  const sel = "h2,.job,li,.it,.sk,.s-sum>div,.s-ft";
+  for (let n = 0; n < 500; n++) {
     const top0 = root.getBoundingClientRect().top; let moved = false;
     for (const e of root.querySelectorAll(sel)) {
       const r = e.getBoundingClientRect(), t = r.top - top0, b = r.bottom - top0, h = b - t;
       if (h < 1 || h > 260) continue;
-      const pg = Math.floor((t + 1) / PH), lim = (pg + 1) * PH - 36 - (e.tagName === "H2" ? 60 : 0);
+      const pg = Math.floor((t + 1) / P), lim = pg * P + PH - BOTM - (e.tagName === "H2" ? 60 : 0);
       if (b > lim) {
         if (e.dataset.pg === undefined) e.dataset.pg = e.style.marginTop;
-        e.style.marginTop = (parseFloat(getComputedStyle(e).marginTop) + (pg + 1) * PH + 40 - t) + "px"; moved = true; break;
+        e.style.marginTop = (parseFloat(getComputedStyle(e).marginTop) + (pg + 1) * P + TOPM - t) + "px"; moved = true; break;
       }
     }
     if (!moved) break;
   }
-  root.style.minHeight = Math.max(1, Math.ceil(root.getBoundingClientRect().height / PH - 0.01)) * PH + "px";
+  const pages = Math.max(1, Math.ceil((root.getBoundingClientRect().height + gap) / P - 0.01));
+  root.style.minHeight = pages * P - gap + "px";
+  if (gap > 0) for (let i = 1; i < pages; i++) { const d = document.createElement("div"); d.className = "pgap"; d.style.top = i * P - gap + "px"; d.style.height = gap + "px"; d.textContent = `Page ${i}  |  Page ${i + 1}`; root.appendChild(d); }
+  return pages;
 }
 function show() { if (!lastCv) return; $("cv").dir = isRtl(lastCv.lang) ? "rtl" : "ltr"; $("cv").innerHTML = cvHTML(lastCv); apply($("cv"), cur); paginate($("cv")); }
 function choose(t) { cur = t; $("cur").textContent = t.name; if (lastCv) { apply($("cv"), t); paginate($("cv")); } $("pv").classList.remove("on"); $("ov").classList.remove("on"); }
@@ -792,11 +809,14 @@ $("psz").oninput = e => $("cv").style.setProperty("--ph", e.target.value + "px")
 
 /* ---------- download / print ---------- */
 $("dl").onclick = () => {
-  const cv = $("cv"), was = cv.classList.contains("editing"); cv.classList.remove("editing", "pgl"); paginate(cv);
+  const cv = $("cv"), was = cv.classList.contains("editing"); cv.classList.remove("editing"); paginate(cv, 0);
   const name = (cv.querySelector("h1")?.textContent || "cv").trim().replace(/\s+/g, "-");
-  html2pdf().set({ margin: 0, filename: `${name}-tailored-cv.pdf`, image: { type: "jpeg", quality: 0.98 }, html2canvas: { scale: 2 }, jsPDF: { unit: "mm", format: "a4" }, pagebreak: { mode: ["css"] } }).from(cv).save().then(() => { cv.classList.add("pgl"); if (was) cv.classList.add("editing"); afterDl(); });
+  const done = ok => { paginate(cv); if (was) cv.classList.add("editing"); if (ok) afterDl(); };
+  html2pdf().set({ margin: 0, filename: `${name}-tailored-cv.pdf`, image: { type: "jpeg", quality: 0.98 }, html2canvas: { scale: 2 }, jsPDF: { unit: "mm", format: "a4" }, pagebreak: { mode: ["css"] } }).from(cv).save().then(() => done(true), () => done(false));
 };
 $("print").onclick = () => window.print();
+addEventListener("beforeprint", () => { if (!$("out").hidden) paginate($("cv"), 0); });
+addEventListener("afterprint", () => { if (!$("out").hidden) paginate($("cv")); });
 
 /* ---------- design from scratch ---------- */
 let dz = 1, dsel = null, dhist = [], dhp = -1;
@@ -1058,7 +1078,26 @@ async function callAI(mode, extra) {
 const need = (job) => { if (cvSource().length < 50) { alert("Please add your CV at the top first (upload, paste, or generate)."); return false; } if (job && $("job").value.trim().length < 3) { alert("Please enter the job role at the top first."); return false; } return true; };
 const copyT = async t => { try { await navigator.clipboard.writeText(t); } catch (e) { prompt("Copy this text:", t); } };
 const saveF = (name, type, data) => { const a = document.createElement("a"); a.href = URL.createObjectURL(new Blob([data], { type })); a.download = name; a.click(); setTimeout(() => URL.revokeObjectURL(a.href), 2000); };
-const busy = async (btn, fn) => { btn.disabled = true; try { await fn(); } catch (e) { alert(e.message); } btn.disabled = false; };
+const busy = async (btn, fn) => {
+  const t0 = Date.now(), label = btn.textContent; btn.disabled = true;
+  const iv = setInterval(() => { btn.textContent = `Working… ${Math.round((Date.now() - t0) / 1000)}s`; }, 500);
+  try { await fn(); } catch (e) { alert(e.message); }
+  clearInterval(iv); btn.textContent = label; btn.disabled = false;
+};
+// The AI does not report real progress, so this is an honest ESTIMATE: it eases toward ~92% and only reaches 100% when the answer arrives.
+function startProgress(el, stages, expect) {
+  const t0 = Date.now(); el.className = "";
+  el.innerHTML = '<div class="pbar"><i></i></div><div class="pmeta"><span></span><span></span></div>';
+  const fill = el.querySelector("i"), [st, tm] = el.querySelectorAll(".pmeta span");
+  const tick = () => {
+    const sec = (Date.now() - t0) / 1000, f = 0.92 * (1 - Math.exp(-sec / (expect / 2.2))), pct = Math.round(f * 100), g = stages.find(x => f <= x[1]) || stages[stages.length - 1];
+    fill.style.width = pct + "%";
+    st.textContent = (sec > expect * 1.8 ? "Still working. Busy servers can take longer" : g[0]) + "… (about " + pct + "%, estimated)";
+    tm.textContent = Math.round(sec) + "s elapsed · usually about " + expect + "s";
+  };
+  tick(); const iv = setInterval(tick, 300);
+  return done => { clearInterval(iv); if (done) fill.style.width = "100%"; };
+}
 $("tkt").onclick = e => { const b = e.target.closest(".tab"); if (!b) return; document.querySelectorAll("#tkt .tab").forEach(x => x.classList.toggle("on", x === b)); document.querySelectorAll(".tp").forEach(p => p.classList.toggle("on", p.id === "p-" + b.dataset.p)); };
 $("cgo").onclick = () => need(true) && busy($("cgo"), async () => { $("cvo").value = "Writing…"; $("cvo").value = (await callAI("cover", { company: $("cco").value, manager: $("cmg").value })).text; });
 $("ccp").onclick = () => copyT($("cvo").value); $("ctx").onclick = () => saveF("cover-letter.txt", "text/plain", $("cvo").value);
@@ -1114,8 +1153,9 @@ $("dhtml").onclick = () => needCv() && saveF(cvName() + ".html", "text/html", wo
 $("djson").onclick = () => needCv() && saveF(cvName() + ".json", "application/json", JSON.stringify(lastCv, null, 2));
 $("dcp").onclick = () => needCv() && copyT(cvDomText());
 $("dpng").onclick = () => {
-  if (!needCv()) return; const cv = $("cv"), was = cv.classList.contains("editing"); cv.classList.remove("editing", "pgl");
-  html2pdf().set({ html2canvas: { scale: 2 } }).from(cv).toCanvas().get("canvas").then(c => { const a = document.createElement("a"); a.href = c.toDataURL("image/png"); a.download = cvName() + ".png"; a.click(); cv.classList.add("pgl"); if (was) cv.classList.add("editing"); });
+  if (!needCv()) return; const cv = $("cv"), was = cv.classList.contains("editing"); cv.classList.remove("editing"); paginate(cv, 0);
+  const done = () => { paginate(cv); if (was) cv.classList.add("editing"); };
+  html2pdf().set({ html2canvas: { scale: 2 } }).from(cv).toCanvas().get("canvas").then(c => { const a = document.createElement("a"); a.href = c.toDataURL("image/png"); a.download = cvName() + ".png"; a.click(); done(); }, done);
 };
 const letter = () => $("cvo").value.trim();
 const noLetter = () => { if (!letter()) { alert("Write a cover letter first."); return true; } };
