@@ -6,6 +6,7 @@
 <meta property="og:title" content="Free AI CV Tailor – ATS-friendly CV builder"><meta property="og:description" content="Tailor your CV to any job, check your ATS score and download as PDF or Word. 1,000+ templates, free."><meta property="og:type" content="website">
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"Free AI CV Tailor","applicationCategory":"BusinessApplication","operatingSystem":"Any","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"}}</script>
 <link rel="canonical" href="https://cv-tailor-220.pages.dev/">
+<style id="pgstyle">@page{size:A4;margin:0}</style>
 <link rel="manifest" href="/manifest.json"><meta name="theme-color" content="#4f46e5"><link rel="icon" href="/icon-192.png">
 <title>Free AI CV Tailor – Match Your CV to Any Job</title>
 <meta name="description" content="Upload your old CV, add the job description, pick from 1,000+ templates and download a tailored ATS-friendly CV as a free PDF. No signup.">
@@ -28,12 +29,12 @@ button:disabled{opacity:.6}button.sec{background:transparent;color:var(--pri);bo
 footer{text-align:center;color:var(--mut);font-size:13px;padding:24px}footer a{color:var(--mut)}
 details{margin:8px 0}summary{cursor:pointer;font-weight:600}
 /* ===== CV templates: layout (data-ly) + header (data-hd) + headings (data-h2) + skills (data-sk) + experience (data-ex) ===== */
-.cvx{--f:Georgia,serif;--a:#2563eb;--d:#1e3a8a;--pad:46px;--fs:13.5px;--sw:32%;background:#fff;color:#111;width:794px;max-width:none;margin:0 auto;font-family:var(--f);font-size:var(--fs);line-height:1.5;min-height:1122px;position:relative;isolation:isolate;display:flex;flex-direction:column;padding-bottom:36px}
+.cvx{--f:Georgia,serif;--a:#2563eb;--d:#1e3a8a;--pad:46px;--fs:13.5px;--sw:32%;background:#fff;color:#111;width:var(--pw,794px);max-width:none;margin:0 auto;font-family:var(--f);font-size:var(--fs);line-height:calc(1.5 + (var(--gap,1) - 1)*.16);min-height:1122px;position:relative;isolation:isolate;display:flex;flex-direction:column;padding-bottom:36px}
 .cvx .side,.cvx .main{display:contents}
 .cvx .hd{padding:36px var(--pad) 14px}.cvx .s{padding:0 var(--pad)}
 .cvx h1{margin:0;font-size:2.1em;color:var(--d);font-weight:700;line-height:1.15}.cvx .ttl{margin:3px 0;font-size:1.1em;color:var(--a)}.cvx .ct{font-size:.92em;color:#444}
-.cvx h2{margin:1.3em 0 .45em;font-size:1em;text-transform:uppercase;letter-spacing:.08em;color:var(--d)}
-.cvx ul{margin:4px 0 8px;padding-left:20px}.cvx .job{margin-top:.7em;font-weight:700}.cvx .job .jd{font-weight:400;color:#555}
+.cvx h2{margin:calc(1.3em*var(--gap,1)) 0 .45em;font-size:1em;text-transform:uppercase;letter-spacing:.08em;color:var(--d)}
+.cvx ul{margin:4px 0 8px;padding-left:20px}.cvx .job{margin-top:calc(.7em*var(--gap,1));font-weight:700}.cvx .job .jd{font-weight:400;color:#555}
 .cvx .av{display:none}.cvx[data-av=on] .av{display:flex;width:84px;height:84px;border-radius:50%;background:var(--a);color:#fff;font-size:30px;font-weight:700;align-items:center;justify-content:center;margin-bottom:12px}
 /* headers */
 .cvx[data-hd=center] .hd{text-align:center;border-bottom:2px solid var(--d);margin:0 var(--pad);padding:36px 0 14px}.cvx[data-hd=center] .av{margin:0 auto 12px}
@@ -199,7 +200,11 @@ body[data-t=build] [data-tab]:not([data-tab=build]),body[data-t=ats] [data-tab]:
 @media(hover:hover){.wtabs button:not(.on):hover{background:rgba(124,58,237,.12);color:var(--pri);transform:none;box-shadow:none}}
 .pgap{position:absolute;left:0;right:0;z-index:20;background:#d9dce3;display:flex;align-items:center;justify-content:center;font:600 11px system-ui,sans-serif;color:#667085;pointer-events:none;box-shadow:inset 0 7px 7px -7px rgba(0,0,0,.35),inset 0 -7px 7px -7px rgba(0,0,0,.35)}
 .pbar{height:10px;border-radius:8px;background:var(--bd);overflow:hidden}.pbar i{display:block;height:100%;width:0;background:var(--grad);border-radius:8px;transition:width .4s ease}.pmeta{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;font-size:13px;color:var(--mut);margin-top:6px}
-@page{size:A4;margin:0}
+.cvx li{margin-bottom:calc(.18em*(var(--gap,1) - 1))}
+.cvx h1,.cvx h2,.cvx h3{break-after:avoid;page-break-after:avoid}.cvx .it,.cvx .job,.cvx li{break-inside:avoid;page-break-inside:avoid}
+.cvx[dir=rtl]{text-align:right}.cvx[dir=rtl] *{letter-spacing:normal!important}.cvx[dir=rtl] ul{padding-left:0;padding-right:20px}
+.cvx[dir=rtl][data-bu=dash] ul,.cvx[dir=rtl][data-bu=arrow] ul,.cvx[dir=rtl][data-bu=square] ul{padding-right:16px}
+.cvx[dir=rtl][data-bu=dash] li::before,.cvx[dir=rtl][data-bu=arrow] li::before,.cvx[dir=rtl][data-bu=square] li::before{left:auto;right:-14px}
 @media print{
 *{-webkit-print-color-adjust:exact;print-color-adjust:exact}
 body{background:#fff!important}
@@ -248,7 +253,7 @@ main{max-width:none;padding:0;margin:0}
     <div class="row" style="margin:0 0 12px">
       <div class="dd"><button data-dd>⬇ Download ▾</button><div class="ddm">
         <button id="dl">📕 PDF document (.pdf)</button><button id="wd">📘 Word document (.doc)</button><button id="dtxt">📄 Plain text (.txt)</button><button id="dhtml">🌐 Web page (.html)</button><button id="dpng">🖼️ Image (.png)</button><button id="djson">🧾 Data (.json)</button><hr><button id="dcp">📋 Copy as text</button></div></div>
-      <button class="sec" id="print">🖨️ Print</button><button class="sec" id="edit">✏️ Edit CV</button><button class="sec" id="gal2">🎨 Change template</button><button class="sec" id="dsn2">✨ Design from scratch</button>
+      <select id="psize" title="Page size" style="width:auto"><option value="a4">A4 (210 × 297 mm)</option><option value="letter">US Letter (8.5 × 11 in)</option></select><button class="sec" id="print">🖨️ Print</button><button class="sec" id="edit">✏️ Edit CV</button><button class="sec" id="gal2">🎨 Change template</button><button class="sec" id="dsn2">✨ Design from scratch</button>
     </div>
     <div id="gchk"></div>
     <div class="tb on" id="pb" style="position:static"><b>📷 Photo</b><button id="pup">Upload / Replace</button><button id="prm">Remove</button><select id="psh" title="Photo shape"><option value="50%">Circle</option><option value="16px">Rounded</option><option value="0">Square</option></select><small>Size</small><input type="range" id="psz" min="60" max="170" value="96"><input type="file" id="pfile" accept="image/*" hidden></div>
@@ -364,7 +369,7 @@ main{max-width:none;padding:0;margin:0}
 <script>
 const $ = id => document.getElementById(id);
 const SITE = window.SITE || {};
-const esc = s => String(s == null ? "" : s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+const esc = s => String(s == null ? "" : s).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
 const arr = x => Array.isArray(x) ? x : [];
 $("yr").textContent = new Date().getFullYear();
 if (window.pdfjsLib) pdfjsLib.GlobalWorkerOptions.workerSrc = "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js";
@@ -476,8 +481,8 @@ $("go").onclick = async () => {
     lastCv = d.cv; lastCv.lang = $("lang").value.trim() || "English"; const gb = groundCheck(lastCv, cvText), bn = [];
     if (d.truncated) bn.push("Your CV or job text was very long, so the end was trimmed before the AI read it. Shorten it or remove less relevant parts, then generate again.");
     if (d.unverified || gb.length) bn.push("Please double-check your job dates and company names before downloading." + (gb.length ? " Not found in your original CV: " + gb.map(esc).join("; ") + "." : "") + " Fix anything with ✏️ Edit CV.");
-    $("gchk").innerHTML = bn.map(x => `<div class="is warn">⚠ ${x}</div>`).join(""); stop(true); show(); say("Done! Choose a template, edit if needed, then download.");
-    $("out").hidden = false; $("out").scrollIntoView({ behavior: "smooth" });
+    if (cvText.length < 250 || arr(lastCv.experience).length + arr(lastCv.education).length < 2) bn.push("Your CV details are quite brief. Add more projects, certifications, languages or job responsibilities (only things that are true) to make a stronger, fuller first page.");
+    $("gchk").innerHTML = bn.map(x => `<div class="is warn">⚠ ${x}</div>`).join(""); stop(true); $("out").hidden = false; show(); say("Done! Choose a template, edit if needed, then download."); $("out").scrollIntoView({ behavior: "smooth" });
   } catch (err) { stop(); say(err.message, true); }
   $("go").disabled = false;
 };
@@ -491,7 +496,7 @@ function cvHTML(c) {
   const ini = String(c.name || "").split(/\s+/).filter(Boolean).slice(0, 2).map(w => w[0]).join("").toUpperCase();
   const ct = it(c.contact).map(x => `<span>${esc(x)}</span>`).join(" ");
   const hd = `<div class="hd">${avHTML(ini)}<div class="hn"><h1>${esc(c.name)}</h1>${c.title ? `<div class="ttl">${esc(c.title)}</div>` : ""}${ct ? `<div class="ct">${ct}</div>` : ""}</div></div>`;
-  const job = (t, co, d) => `<div class="job"><span class="jt">${esc(t)}${co ? ", " + esc(co) : ""}</span> <span class="jd">${esc(d)}</span></div>`;
+  const job = (t, co, d) => `<div class="job"><span class="jt">${esc(t)}${co ? ", " + esc(co) : ""}</span> <span class="jd" dir="ltr">${esc(d)}</span></div>`;
   const sec = (k, h, body) => body ? `<div class="s s-${k}"><h2>${h}</h2>${body}</div>` : "";
   const sum = sec("sum", "Summary", c.summary ? `<div>${esc(c.summary)}</div>` : "");
   const sk = sec("sk", "Skills", it(c.skills).length ? `<div class="sk">${it(c.skills).map(x => `<span>${esc(x)}</span>`).join(" ")}</div>` : "");
@@ -636,7 +641,7 @@ function place(el, t) {
 function labels(el, t) {
   const src = lastCv || SAMPLE, en = !src.lang || /^english/i.test(src.lang);
   const dict = LBL[String(src.lang || "").toLowerCase().replace(/\s*\(.*$/, "")], ks = ["summary", "skills", "experience", "education", "personal", "languages"];
-  const lb = en ? { ...DEFLB, ...(LBP[t.lb] || {}) } : { ...DEFLB, ...(dict ? Object.fromEntries(ks.map((k, i) => [k, dict[i]])) : {}), ...(src.labels || {}) };
+  const lb = en ? { ...DEFLB, ...(LBP[t.lb] || {}) } : { ...DEFLB, ...(src.labels || {}), ...(dict ? Object.fromEntries(ks.map((k, i) => [k, dict[i]])) : {}) };
   [["sum", "summary"], ["sk", "skills"], ["exp", "experience"], ["edu", "education"], ["pd", "personal"], ["lg", "languages"]].forEach(([k, n]) => { const h = el.querySelector(".s-" + k + ">h2"); if (h && typeof lb[n] === "string" && lb[n]) h.textContent = lb[n]; });
   el.querySelectorAll(".s-ft").forEach(x => x.remove());
   if (t.ft && FT[t.ft] && en) { const d = document.createElement("div"); d.className = "s s-ft"; d.textContent = FT[t.ft]; el.querySelector(".main").appendChild(d); }
@@ -650,11 +655,31 @@ function apply(el, t) {
   place(el, t); labels(el, t);
 }
 /* ---------- multi-page flow: keeps lines/entries whole and moves them to the next A4 page ---------- */
-const PH = 1122, GAP = 26, TOPM = 48, BOTM = 48; let pgT;
-// Splits the CV into real A4 pages. Content never crosses a page edge: whole lines/entries move to the next page (with a safe top margin).
-// With gap > 0 (screen preview) grey gaps show between pages. With gap = 0 (PDF, PNG, print) pages are exact A4 sheets with no gap.
+const PH = 1122, GAP = 26, TOPM = 48, BOTM = 48; let pgT;   // PH = A4 height, still used by the Design Studio
+const SIZES = { a4: { w: 794, h: 1122, fmt: "a4", css: "A4" }, letter: { w: 816, h: 1056, fmt: "letter", css: "Letter" } };
+let PSZ = "a4"; try { PSZ = localStorage.getItem("cvps") === "letter" ? "letter" : "a4"; } catch (e) {}
+const pdim = () => SIZES[PSZ];
+function applySize() {
+  const d = pdim(); $("cv").style.setProperty("--pw", d.w + "px"); $("pgstyle").textContent = `@page{size:${d.css};margin:0}`; $("psize").value = PSZ;
+  if (!$("out").hidden) paginate($("cv"));
+}
+// If page 1 is more than 30% empty, spread the spacing a little (bounded) so a short CV looks complete instead of leaving a void at the bottom.
+function fillPage(root, H) {
+  const bottom = () => { const t = root.getBoundingClientRect().top; let b = 0; root.querySelectorAll(".s,.hd").forEach(e => { b = Math.max(b, e.getBoundingClientRect().bottom - t); }); return b; };
+  if (bottom() >= H * 0.7) return;
+  let prev = 1;
+  for (let g = 1.2; g <= 2.6; g += 0.2) {
+    root.style.setProperty("--gap", g.toFixed(2)); const b = bottom();
+    if (b > H - BOTM - 70) { root.style.setProperty("--gap", prev); return; }
+    prev = g.toFixed(2); if (b >= H * 0.8) return;
+  }
+}
+// Splits the CV into real pages. Content never crosses a page edge: whole lines/entries move to the next page (with a safe top margin).
+// With gap > 0 (screen preview) grey gaps show between pages. With gap = 0 (PDF, PNG, print) pages are exact sheets with no gap.
 function paginate(root, gap = GAP) {
-  const P = PH + gap;
+  if (!root.offsetHeight) return 1;   // hidden (another tab): skip; it is repaginated when it is shown again
+  const H = pdim().h, P = H + gap;
+  root.style.setProperty("--pw", pdim().w + "px"); root.style.setProperty("--gap", 1);
   root.querySelectorAll(".pgap").forEach(x => x.remove());
   root.style.minHeight = "";
   root.querySelectorAll("[data-pg]").forEach(e => { e.style.marginTop = e.dataset.pg; delete e.dataset.pg; });
@@ -664,7 +689,7 @@ function paginate(root, gap = GAP) {
     for (const e of root.querySelectorAll(sel)) {
       const r = e.getBoundingClientRect(), t = r.top - top0, b = r.bottom - top0, h = b - t;
       if (h < 1 || h > 260) continue;
-      const pg = Math.floor((t + 1) / P), lim = pg * P + PH - BOTM - (e.tagName === "H2" ? 60 : 0);
+      const pg = Math.floor((t + 1) / P), lim = pg * P + H - BOTM - (e.tagName === "H2" ? 60 : 0);
       if (b > lim) {
         if (e.dataset.pg === undefined) e.dataset.pg = e.style.marginTop;
         e.style.marginTop = (parseFloat(getComputedStyle(e).marginTop) + (pg + 1) * P + TOPM - t) + "px"; moved = true; break;
@@ -673,6 +698,7 @@ function paginate(root, gap = GAP) {
     if (!moved) break;
   }
   const pages = Math.max(1, Math.ceil((root.getBoundingClientRect().height + gap) / P - 0.01));
+  if (pages === 1) fillPage(root, H);
   root.style.minHeight = pages * P - gap + "px";
   if (gap > 0) for (let i = 1; i < pages; i++) { const d = document.createElement("div"); d.className = "pgap"; d.style.top = i * P - gap + "px"; d.style.height = gap + "px"; d.textContent = `Page ${i}  |  Page ${i + 1}`; root.appendChild(d); }
   return pages;
@@ -808,13 +834,24 @@ $("psh").onchange = e => $("cv").style.setProperty("--pr", e.target.value);
 $("psz").oninput = e => $("cv").style.setProperty("--ph", e.target.value + "px");
 
 /* ---------- download / print ---------- */
-$("dl").onclick = () => {
-  const cv = $("cv"), was = cv.classList.contains("editing"); cv.classList.remove("editing"); paginate(cv, 0);
-  const name = (cv.querySelector("h1")?.textContent || "cv").trim().replace(/\s+/g, "-");
-  const done = ok => { paginate(cv); if (was) cv.classList.add("editing"); if (ok) afterDl(); };
-  html2pdf().set({ margin: 0, filename: `${name}-tailored-cv.pdf`, image: { type: "jpeg", quality: 0.98 }, html2canvas: { scale: 2 }, jsPDF: { unit: "mm", format: "a4" }, pagebreak: { mode: ["css"] } }).from(cv).save().then(() => done(true), () => done(false));
+// Exports are captured from a clean copy fixed at the top-left of the page, so the page's scroll position can never shift or cut the result.
+async function withCapture(fn) {
+  const cv = $("cv"), d = pdim(), was = cv.classList.contains("editing"); cv.classList.remove("editing"); paginate(cv, 0);
+  const box = document.createElement("div"); box.style.cssText = `position:fixed;top:0;left:0;margin:0;z-index:-9999;width:${d.w}px;background:#fff;pointer-events:none`;
+  const clone = cv.cloneNode(true); clone.removeAttribute("id"); clone.style.margin = "0"; box.appendChild(clone); document.body.appendChild(box);
+  try { return await fn(clone, d); } finally { box.remove(); paginate(cv); if (was) cv.classList.add("editing"); }
+}
+const CAP = d => ({ scale: 2, scrollX: 0, scrollY: 0, x: 0, y: 0, windowWidth: d.w });
+$("dl").onclick = async () => {
+  if (!needCv()) return; const name = ($("cv").querySelector("h1")?.textContent || "cv").trim().replace(/\s+/g, "-");
+  try {
+    await withCapture((clone, d) => html2pdf().set({ margin: 0, filename: `${name}-tailored-cv.pdf`, image: { type: "jpeg", quality: 0.98 }, html2canvas: CAP(d), jsPDF: { unit: "mm", format: d.fmt }, pagebreak: { mode: ["css"] } }).from(clone).save());
+    afterDl();
+  } catch (e) { alert("The PDF could not be created. " + (e && e.message ? e.message : "")); }
 };
 $("print").onclick = () => window.print();
+$("psize").onchange = e => { PSZ = e.target.value === "letter" ? "letter" : "a4"; try { localStorage.setItem("cvps", PSZ); } catch (x) {} applySize(); };
+applySize();
 addEventListener("beforeprint", () => { if (!$("out").hidden) paginate($("cv"), 0); });
 addEventListener("afterprint", () => { if (!$("out").hidden) paginate($("cv")); });
 
@@ -1060,11 +1097,11 @@ $("acheck").onclick = () => {
   <div class="row"><button id="aai">✨ Get AI improvement tips</button><button class="sec" id="afix">Tailor my CV with the job</button></div><div id="aaiout"></div>`;
   if (r.kw && r.kw.miss.length) $("ares").insertAdjacentHTML("beforeend", partnerHTML(PARTNERS.ats, "Close your skill gaps"));
   $("aai").onclick = async () => {
-    $("aai").disabled = true; $("aaiout").innerHTML = '<p class="hint">Thinking…</p>';
+    $("aai").disabled = true; const stopAi = startProgress($("aaiout"), [["Analysing your CV", 0.5], ["Writing tips", 0.92]], 12);
     try {
       const d = (await callAI("ats", { cvText: t, job: jd, findings: r.iss.map(i => i.tx).join(" ") + (r.kw ? " Missing keywords: " + r.kw.miss.join(", ") : "") })).data;
-      $("aaiout").innerHTML = `<h3>AI tips</h3>${arr(d.tips).map(x => `<div class="is warn">${esc(x)}</div>`).join("")}${arr(d.rewrites).length ? "<h3>Stronger wording</h3>" + arr(d.rewrites).map(x => `<div class="is ok"><small>Before: ${esc(x.before)}</small>After: ${esc(x.after)}</div>`).join("") : ""}${arr(d.keywords).length ? "<h3>Keywords to consider (only if true)</h3>" + arr(d.keywords).map(k => `<span class="chip">${esc(k)}</span>`).join("") : ""}`;
-    } catch (e) { $("aaiout").innerHTML = `<p class="hint err">${esc(e.message)}</p>`; }
+      stopAi(true); $("aaiout").innerHTML = `<h3>AI tips</h3>${arr(d.tips).map(x => `<div class="is warn">${esc(x)}</div>`).join("")}${arr(d.rewrites).length ? "<h3>Stronger wording</h3>" + arr(d.rewrites).map(x => `<div class="is ok"><small>Before: ${esc(x.before)}</small>After: ${esc(x.after)}</div>`).join("") : ""}${arr(d.keywords).length ? "<h3>Keywords to consider (only if true)</h3>" + arr(d.keywords).map(k => `<span class="chip">${esc(k)}</span>`).join("") : ""}`;
+    } catch (e) { stopAi(); $("aaiout").innerHTML = `<p class="hint err">${esc(e.message)}</p>`; }
     $("aai").disabled = false;
   };
   $("afix").onclick = () => { $("cvtext").value = t; if (jd) $("job").value = jd.slice(0, 4000); say("Your CV and job were copied above. Click Generate to rewrite it with these fixes."); scrollTo({ top: 0, behavior: "smooth" }); };
@@ -1080,7 +1117,7 @@ const copyT = async t => { try { await navigator.clipboard.writeText(t); } catch
 const saveF = (name, type, data) => { const a = document.createElement("a"); a.href = URL.createObjectURL(new Blob([data], { type })); a.download = name; a.click(); setTimeout(() => URL.revokeObjectURL(a.href), 2000); };
 const busy = async (btn, fn) => {
   const t0 = Date.now(), label = btn.textContent; btn.disabled = true;
-  const iv = setInterval(() => { btn.textContent = `Working… ${Math.round((Date.now() - t0) / 1000)}s`; }, 500);
+  const iv = setInterval(() => { btn.textContent = `Working… ${Math.round(92 * (1 - Math.exp(-(Date.now() - t0) / 1000 / 5.5)))}%`; }, 400);
   try { await fn(); } catch (e) { alert(e.message); }
   clearInterval(iv); btn.textContent = label; btn.disabled = false;
 };
@@ -1092,8 +1129,7 @@ function startProgress(el, stages, expect) {
   const tick = () => {
     const sec = (Date.now() - t0) / 1000, f = 0.92 * (1 - Math.exp(-sec / (expect / 2.2))), pct = Math.round(f * 100), g = stages.find(x => f <= x[1]) || stages[stages.length - 1];
     fill.style.width = pct + "%";
-    st.textContent = (sec > expect * 1.8 ? "Still working. Busy servers can take longer" : g[0]) + "… (about " + pct + "%, estimated)";
-    tm.textContent = Math.round(sec) + "s elapsed · usually about " + expect + "s";
+    st.textContent = (sec > expect * 1.8 ? "Almost there" : g[0]) + "…"; tm.textContent = pct + "%";
   };
   tick(); const iv = setInterval(tick, 300);
   return done => { clearInterval(iv); if (done) fill.style.width = "100%"; };
@@ -1106,10 +1142,15 @@ $("igo").onclick = () => need(true) && busy($("igo"), async () => { $("iout").in
 $("lgo").onclick = () => need(false) && busy($("lgo"), async () => { $("lout").innerHTML = '<p class="hint">Writing…</p>'; const d = (await callAI("linkedin")).data; $("lout").innerHTML = `<h3>Headline</h3><div class="hl" id="lh">${esc(d.headline)}</div><div class="row"><button class="sec" id="lch">Copy headline</button></div><h3>About</h3><div class="hl" id="la">${esc(d.about)}</div><div class="row"><button class="sec" id="lca">Copy About</button></div>`; $("lch").onclick = () => copyT(d.headline); $("lca").onclick = () => copyT(d.about); });
 $("tgo").onclick = () => { if (!lastCv) return alert("Generate a CV in step 1 first."); busy($("tgo"), async () => { const l = $("tlang").value.trim() || "English", d = await callAI("translate", { lang: l, cvJson: JSON.stringify({ ...lastCv, lang: undefined, labels: undefined }) }); lastCv = d.cv; lastCv.lang = l; show(); scrollTo({ top: $("out").offsetTop, behavior: "smooth" }); }); };
 function wordHTML() {
-  const cv = $("cv"), h1 = cv.querySelector("h1"); if (!h1) return "";
-  const secs = ["sum", "pd", "sk", "lg", "exp", "edu", "ex"].map(k => { const n = cv.querySelector(".s-" + k); if (!n) return ""; const c = n.cloneNode(true); c.querySelectorAll(".sk").forEach(x => { x.innerHTML = esc([...x.children].map(y => y.textContent).join(" • ")); }); return c.innerHTML; }).join("");
-  const ttl = cv.querySelector(".ttl")?.textContent || "", ct = cv.querySelector(".ct")?.textContent || "";
-  return `\ufeff<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w="urn:schemas-microsoft-com:office:word"><head><meta charset="utf-8"><title>CV</title><style>body{font-family:Calibri,Arial,sans-serif;font-size:11pt;color:#111}h1{font-size:24pt;color:${cur.d};margin:0}h2{font-size:12pt;color:${cur.d};border-bottom:1.5pt solid ${cur.a};text-transform:uppercase;margin:14pt 0 4pt}.job{font-weight:bold;margin-top:6pt}.job .jd{font-weight:normal;color:#555}ul{margin:2pt 0}</style></head><body><h1>${esc(h1.textContent)}</h1><p>${esc(ttl)}<br>${esc(ct)}</p>${secs}</body></html>`;
+  const m = domModel(); if (!m.name) return ""; const e = esc, rtl = $("cv").dir === "rtl", sz = PSZ === "letter" ? "612pt 792pt" : "595.3pt 841.9pt";
+  const body = m.secs.map(s => {
+    if (s.k === "ex") return s.blocks.map(b => `<h2>${e(b.h)}</h2><ul>${b.bullets.map(x => `<li>${e(x)}</li>`).join("")}</ul>`).join("");
+    let h = `<h2>${e(s.h)}</h2>`;
+    if (s.text) h += `<p>${e(s.text)}</p>`; if (s.list) h += `<p>${s.list.map(e).join(" • ")}</p>`; if (s.lines) h += s.lines.map(x => `<p style="margin:2pt 0">${e(x)}</p>`).join("");
+    if (s.entries) h += s.entries.map(en => `<p class="job">${e(en.head)}${en.dates ? ` <span class="jd" dir="ltr">${e(en.dates)}</span>` : ""}</p>${en.bullets.length ? `<ul>${en.bullets.map(x => `<li>${e(x)}</li>`).join("")}</ul>` : ""}`).join("");
+    return h;
+  }).join("");
+  return `\ufeff<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w="urn:schemas-microsoft-com:office:word"><head><meta charset="utf-8"><title>${e(m.name)} CV</title><style>@page WordSection1{size:${sz};margin:50pt 46pt}div.WordSection1{page:WordSection1}body{font-family:Calibri,Arial,sans-serif;font-size:11pt;color:#111}h1{font-size:24pt;color:${cur.d};margin:0}h2{font-size:12pt;color:${cur.d};border-bottom:1.5pt solid ${cur.a};text-transform:uppercase;margin:14pt 0 4pt}.job{font-weight:bold;margin:6pt 0 0}.job .jd{font-weight:normal;color:#555}ul{margin:2pt 0}</style></head><body${rtl ? ' dir="rtl" style="direction:rtl;text-align:right"' : ""}><div class="WordSection1"><h1>${e(m.name)}</h1><p>${e(m.title)}${m.title && m.contact.length ? "<br>" : ""}${m.contact.map(e).join(" · ")}</p>${body}</div></body></html>`;
 }
 const doWord = () => { if (!lastCv) return alert("Generate a CV in step 1 first."); saveF(($("cv").querySelector("h1")?.textContent || "cv").trim().replace(/\s+/g, "-") + "-cv.doc", "application/msword", wordHTML()); afterDl(); };
 $("wd").onclick = doWord;
@@ -1121,7 +1162,7 @@ $("shl").onclick = () => { if (!lastCv) return alert("Generate a CV in step 1 fi
   $("shout").textContent = url.length > 2000 ? `Link copied, but it is long (${url.length} characters). WhatsApp, LinkedIn and some other apps may cut long links, so please download a PDF or Word file instead.` : "Link copied to your clipboard.";
 }); };
 (async () => { if (!location.hash.startsWith("#v=")) return; try {
-  const o = JSON.parse(new TextDecoder().decode(await pipe(unb64(location.hash.slice(3)), DecompressionStream))); lastCv = o.c; if (o.t && okT(o.t)) cur = o.t; $("cur").textContent = cur.name; show(); $("out").hidden = false; say("Shared CV. Make your own free CV below."); $("out").scrollIntoView();
+  const o = JSON.parse(new TextDecoder().decode(await pipe(unb64(location.hash.slice(3)), DecompressionStream))); lastCv = o.c; if (o.t && okT(o.t)) cur = o.t; $("cur").textContent = cur.name; $("out").hidden = false; show(); say("Shared CV. Make your own free CV below."); $("out").scrollIntoView();
 } catch (e) {} })();
 let jobs = []; try { jobs = JSON.parse(localStorage.getItem("cvjobs") || "[]"); } catch (e) {}
 const saveJ = () => { try { localStorage.setItem("cvjobs", JSON.stringify(jobs)); } catch (e) {} };
@@ -1146,16 +1187,42 @@ document.addEventListener("click", e => {
 });
 document.querySelectorAll("[data-click]").forEach(b => b.onclick = () => $(b.dataset.click).click());
 const cvName = () => ($("cv").querySelector("h1")?.textContent || "cv").trim().replace(/\s+/g, "-") + "-cv";
-function cvDomText() { const cv = $("cv"), t = [cv.querySelector(".hd")?.innerText.trim()]; ["sum", "pd", "sk", "lg", "exp", "edu", "ex"].forEach(k => { const n = cv.querySelector(".s-" + k); if (n) t.push(n.innerText.trim()); }); return t.filter(Boolean).join("\n\n"); }
+function domModel() {
+  const cv = $("cv"), tx = n => (n ? n.textContent.replace(/\s+/g, " ").trim() : "");
+  const m = { name: tx(cv.querySelector("h1")), title: tx(cv.querySelector(".ttl")), contact: [...cv.querySelectorAll(".ct span")].map(tx).filter(Boolean), secs: [] };
+  ["sum", "pd", "sk", "lg", "exp", "edu", "ex"].forEach(k => {
+    const n = cv.querySelector(".s-" + k); if (!n) return; const sec = { k, h: k === "ex" ? "" : tx(n.querySelector("h2")) };
+    if (k === "sum") sec.text = tx(n.querySelector("h2 + div"));
+    else if (k === "sk") sec.list = [...n.querySelectorAll(".sk span")].map(tx).filter(Boolean);
+    else if (k === "pd" || k === "lg") sec.lines = [...n.querySelectorAll(".pd > div, .lg > div")].map(tx).filter(Boolean);
+    else if (k === "exp") sec.entries = [...n.querySelectorAll(".it")].map(e => ({ head: tx(e.querySelector(".jt")), dates: tx(e.querySelector(".jd")), bullets: [...e.querySelectorAll("li")].map(tx) }));
+    else if (k === "edu") sec.entries = [...n.querySelectorAll(".job")].map(e => ({ head: tx(e.querySelector(".jt")), dates: tx(e.querySelector(".jd")), bullets: [] }));
+    else { sec.blocks = []; let b = null; [...n.children].forEach(c => { if (c.tagName === "H2") { b = { h: tx(c), bullets: [] }; sec.blocks.push(b); } else if (b) b.bullets.push(...[...c.querySelectorAll("li")].map(tx)); }); }
+    m.secs.push(sec);
+  });
+  return m;
+}
+function cvDomText() {
+  const m = domModel(), o = [m.name, m.title, m.contact.join(" · ")].filter(Boolean);
+  m.secs.forEach(s => {
+    o.push("");
+    if (s.k === "ex") { s.blocks.forEach(b => { o.push(b.h.toUpperCase()); b.bullets.forEach(x => o.push("- " + x)); o.push(""); }); return; }
+    o.push(s.h.toUpperCase());
+    if (s.text) o.push(s.text); if (s.list) o.push(s.list.join(" • ")); if (s.lines) o.push(...s.lines);
+    if (s.entries) s.entries.forEach(e => { o.push(e.head + (e.dates ? " (" + e.dates + ")" : "")); e.bullets.forEach(x => o.push("- " + x)); });
+  });
+  return o.join("\n").replace(/\n{3,}/g, "\n\n").trim() + "\n";
+}
 const needCv = () => { if (!lastCv) { alert("Generate a CV in step 1 first."); return false; } return true; };
 $("dtxt").onclick = () => needCv() && (saveF(cvName() + ".txt", "text/plain", cvDomText()), afterDl());
 $("dhtml").onclick = () => needCv() && saveF(cvName() + ".html", "text/html", wordHTML().replace(/^\ufeff/, ""));
 $("djson").onclick = () => needCv() && saveF(cvName() + ".json", "application/json", JSON.stringify(lastCv, null, 2));
 $("dcp").onclick = () => needCv() && copyT(cvDomText());
-$("dpng").onclick = () => {
-  if (!needCv()) return; const cv = $("cv"), was = cv.classList.contains("editing"); cv.classList.remove("editing"); paginate(cv, 0);
-  const done = () => { paginate(cv); if (was) cv.classList.add("editing"); };
-  html2pdf().set({ html2canvas: { scale: 2 } }).from(cv).toCanvas().get("canvas").then(c => { const a = document.createElement("a"); a.href = c.toDataURL("image/png"); a.download = cvName() + ".png"; a.click(); done(); }, done);
+$("dpng").onclick = async () => {
+  if (!needCv()) return;
+  try {
+    await withCapture(async (clone, d) => { const c = await html2pdf().set({ html2canvas: CAP(d) }).from(clone).toCanvas().get("canvas"); const a = document.createElement("a"); a.href = c.toDataURL("image/png"); a.download = cvName() + ".png"; a.click(); });
+  } catch (e) { alert("The image could not be created."); }
 };
 const letter = () => $("cvo").value.trim();
 const noLetter = () => { if (!letter()) { alert("Write a cover letter first."); return true; } };
@@ -1183,6 +1250,7 @@ $("reg").addEventListener("change", e => { const t = TPL.find(x => x.rg === e.ta
 const TABS = ["build", "ats", "tk", "design"], HASHTAB = { tool: "build", feat: "build", top: "build", ats: "ats", tk: "tk", design: "design" };
 function showTab(t, noScroll) {
   if (!TABS.includes(t)) t = "build"; document.body.dataset.t = t;
+  if (t === "build" && lastCv && !$("out").hidden) paginate($("cv"));
   document.querySelectorAll("#wtabs button").forEach(b => b.classList.toggle("on", b.dataset.t === t));
   if (t === "ats" && !$("atext").value.trim() && lastCv) { $("atext").value = cvToText(lastCv); if (!$("ajob").value.trim()) $("ajob").value = $("job").value; }
   if (!noScroll) scrollTo({ top: Math.max(0, $("wtabs").offsetTop - 64), behavior: "smooth" });
