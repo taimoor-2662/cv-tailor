@@ -1,4 +1,7 @@
-// Cloudflare Pages Function -> /api   (bindings: AI = Workers AI, optional secret GEMINI_API_KEY)
+// Cloudflare Pages Function -> /api   (binding: AI = Workers AI)
+// Google Gemini is OFF by default. It runs only if you set BOTH secrets GEMINI_API_KEY and ALLOW_GEMINI=true,
+// and you should only do that with a PAID (billing-enabled) Gemini key: Google's free tier may use submitted text to improve its products,
+// may let humans read it, and is not allowed for apps used in the EEA, Switzerland or the UK.
 const hits = new Map();
 const json = (o, s = 200) => new Response(JSON.stringify(o), { status: s, headers: { "Content-Type": "application/json" } });
 const M8 = "@cf/meta/llama-3.1-8b-instruct-fp8-fast", M70 = "@cf/meta/llama-3.3-70b-instruct-fp8-fast", M3 = "@cf/meta/llama-3.2-3b-instruct";
@@ -37,8 +40,13 @@ STRICT RULES: ${RULES}
 4. "contact" is the email, phone and city exactly as written.
 5. "skills": use skills named in the CV; if there are none, derive 6-10 from the job bullets only.
 6. You may improve the wording of the summary and bullets and put the most relevant items first, but every fact must stay the same.
+7. Verb tense: start bullets of past roles with past-tense action verbs (Managed, Resolved, Led) and bullets of the current role with present-tense verbs. Never mix tenses inside one job.
+8. Summary: write a confident, specific summary for the target job. Never use filler such as "seeking a challenging role", "seeking an opportunity" or "seeking to leverage". If the CV is short (under about 600 characters of details), write a fuller 3-4 sentence summary using ONLY the facts given. Do not add duties, numbers, employers, dates, tools or skills that are not in the CV.
+9. "title": use the candidate's real title. You may word it closer to the target job only if it truthfully describes their experience. Never claim a title, qualification or licence they do not have.
+10. Keep honorifics and post-nominals in "name" (Dr., Engr., MBBS, ACCA...). Keep licences and statuses (driving licence, iqama, professional registration) in "personal". Keep grades such as CGPA in "education". Keep Publications, Speaking, Grants and Awards, Teaching and Certifications in "extra", each with its own heading; do not drop them. Never put an education item in "experience".
+11. Output language: translate everything into the requested language, including every heading in "labels", every "extra" heading, the label of each personal detail, and open-ended dates such as "Present" (for example "Heute" in German, "حتى الآن" in Arabic). Use natural wording for headings (for example Arabic "المعلومات الشخصية").
 Return ONLY valid JSON, no markdown, in this exact shape: ${SCHEMA}`,
-  translate: `You translate CVs. Translate every text value of the given CV JSON into the requested language (including the "labels" section headings and the "label" of each personal detail), keeping names, emails, phone numbers, numbers and company names unchanged. Return ONLY valid JSON in the same shape: ${SCHEMA}`,
+  translate: `You translate CVs. Translate every text value of the given CV JSON into the requested language, keeping names, honorifics, emails, phone numbers, numbers and company names unchanged. Also translate EVERY heading in "labels" and in each "extra" heading, the "label" of each personal detail, and open-ended dates such as "Present" (for example "Heute" in German, "حتى الآن" in Arabic). Use natural wording for headings (for example Arabic "المعلومات الشخصية"). Never leave a heading in English. Return ONLY valid JSON in the same shape: ${SCHEMA}`,
   ats: `You are an ATS and recruiter expert. Given a CV, an optional job description and automated findings, give practical advice. ${RULES} Return ONLY valid JSON: {"tips":["max 6 short actionable tips"],"rewrites":[{"before":"weak line copied from the CV","after":"stronger version using only facts in the CV"}],"keywords":["up to 10 keywords the CV should include only if the candidate truly has them"]}`,
   interview: `You are an interview coach. Write the 10 most likely interview questions for this job and candidate, each with a short tip on how to answer using the candidate's REAL experience from the CV. Return ONLY valid JSON: {"questions":[{"q":"","tip":""}]}`,
   linkedin: `You write LinkedIn profiles. ${RULES} Return ONLY valid JSON: {"headline":"max 200 characters","about":"150-220 words, first person, friendly and professional"}`,
@@ -70,8 +78,8 @@ async function ai(env, system, user, loose, strict, o = {}) {
   let dbg = "", fb = null;
   const take = t => { if (!loose) return t.trim() || null; const x = parse(t, loose); if (x && (!strict || strict(x))) return x; if (x && !fb) fb = x; return null; };
   const gem = async () => {
-    if (!env.GEMINI_API_KEY) return null;
-    for (const gm of [...new Set([env.GEMINI_MODEL, "gemini-3.8-flash", "gemini-2.5-flash"].filter(Boolean))]) {
+    if (!(env.ALLOW_GEMINI === "true" && env.GEMINI_API_KEY)) return null;
+    for (const gm of [...new Set([env.GEMINI_MODEL, "gemini-3.8-flash", "gemini-3.5-flash-lite", "gemini-2.5-flash-lite"].filter(Boolean))]) {
       try {
         const r = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${gm}:generateContent?key=${env.GEMINI_API_KEY}`, { method: "POST", headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ systemInstruction: { parts: [{ text: system }] }, contents: [{ role: "user", parts: [{ text: user }] }], generationConfig: loose ? { responseMimeType: "application/json" } : {} }) });
@@ -98,13 +106,16 @@ async function ai(env, system, user, loose, strict, o = {}) {
 
 export async function onRequestPost({ request, env }) {
   const ip = request.headers.get("CF-Connecting-IP") || "x", now = Date.now();
+  for (const [k, v] of hits) if (!v.some(t => now - t < 3600e3)) hits.delete(k);   // prune expired IPs so warm isolates do not leak memory
+  if (hits.size > 5000) hits.clear();
   const recent = (hits.get(ip) || []).filter(t => now - t < 3600e3);
   if (recent.length >= 40) return json({ error: "Hourly limit reached. Please try again later." }, 429);
   recent.push(now); hits.set(ip, recent);
 
   let b; try { b = await request.json(); } catch { return json({ error: "Bad request" }, 400); }
   const mode = SYS[b.mode] ? b.mode : "tailor";
-  const cv = String(b.cvText || "").slice(0, 9000), job = String(b.job || "").slice(0, 4000);
+  const rawCv = String(b.cvText || ""), rawJob = String(b.job || "");
+  const cv = rawCv.slice(0, 9000), job = rawJob.slice(0, 4000), truncated = rawCv.length > 9000 || rawJob.length > 4000;
   const need = mode === "translate" ? String(b.cvJson || "").length < 20 : cv.length < 50;
   if (need) return json({ error: "Please provide your CV first." }, 400);
   if ((mode === "tailor" || mode === "cover" || mode === "interview") && job.length < 3) return json({ error: "Please enter a job role or description." }, 400);
@@ -115,10 +126,13 @@ export async function onRequestPost({ request, env }) {
   if (mode === "ats") user += `\n\nAUTOMATED FINDINGS:\n${String(b.findings || "").slice(0, 1500)}`;
   if (mode === "cover") user += `\n\nCOMPANY: ${String(b.company || "").slice(0, 80) || "(not given)"}\nHIRING MANAGER: ${String(b.manager || "").slice(0, 80) || "(not given)"}`;
 
-  const heavy = mode === "tailor" || mode === "translate";
-  const { v, dbg, unverified } = await ai(env, system, user, OK[mode], mode === "tailor" ? o => grounded(o, cv) : null, { geminiFirst: heavy, models: heavy ? [M70, M8, M3] : [M8, M70, M3] });
-  if (!v) return json({ error: "The AI could not finish. " + dbg + "Please try again." }, 503);
-  if (mode === "cover") return json({ text: v });
-  if (mode === "tailor" || mode === "translate") return json({ cv: v, unverified: !!unverified });
-  return json({ data: v });
+  // Cheapest model first (about 5x fewer free neurons per CV); escalates to the 70B model only when the reply is invalid or fails the grounding check.
+  const { v, dbg, unverified } = await ai(env, system, user, OK[mode], mode === "tailor" ? o => grounded(o, cv) : null, { models: [M8, M70, M3] });
+  if (!v) {
+    if (/free allocation|4006|neurons/i.test(dbg)) return json({ error: "Today's free AI capacity is used up. It resets daily at 00:00 UTC, so please try again later.", quota: true }, 503);
+    return json({ error: "The AI could not finish. " + dbg + "Please try again." }, 503);
+  }
+  if (mode === "cover") return json({ text: v, truncated });
+  if (mode === "tailor" || mode === "translate") return json({ cv: v, unverified: !!unverified, truncated });
+  return json({ data: v, truncated });
 }
