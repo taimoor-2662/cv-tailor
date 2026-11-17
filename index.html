@@ -186,7 +186,7 @@ textarea,select,input[type=text],input[type=number],input[type=file]{transition:
 .cvx[data-sk=cols] .sk{columns:2;column-gap:26px}.cvx[data-sk=cols] .sk span{display:block;position:relative;padding-left:12px;break-inside:avoid}.cvx[data-sk=cols] .sk span::before{content:"";position:absolute;left:0;top:.62em;width:5px;height:5px;background:var(--a);border-radius:1px}
 .cvx[data-sk=pipe] .sk span:not(:last-child)::after{content:"  |  ";color:#aaa}
 .cvx[data-ex=rule] .it{border-top:1px solid #dcdfe6;padding-top:8px;margin-top:10px}.cvx[data-ex=rule] .it .job{margin-top:0}
-.cvx[data-ex=dl] .it{display:grid;grid-template-columns:24% 1fr;column-gap:14px;margin-top:10px}.cvx[data-ex=dl] .job{display:contents}.cvx[data-ex=dl] .jd{grid-column:1;grid-row:1;font-size:.9em}.cvx[data-ex=dl] .jt{grid-column:2;grid-row:1;font-weight:700}.cvx[data-ex=dl] .it ul{grid-column:2;margin:2px 0 6px}
+.cvx[data-ex=dl] .it{display:grid;grid-template-columns:24% 1fr;column-gap:14px;margin-top:10px}.cvx[data-ex=dl] .it .job{display:contents}.cvx[data-ex=dl] .it .jd{grid-column:1;grid-row:1;font-size:.9em}.cvx[data-ex=dl] .it .jt{grid-column:2;grid-row:1;font-weight:700}.cvx[data-ex=dl] .it ul{grid-column:2;margin:2px 0 6px}
 .cvx[data-ly=eu] .s{display:grid;grid-template-columns:26% 1fr;column-gap:18px;row-gap:0;margin-bottom:14px}.cvx[data-ly=eu] .s>h2{grid-column:1;grid-row:1/span 60;margin:0;padding-top:2px}.cvx[data-ly=eu] .s>*:not(h2){grid-column:2}.cvx[data-ly=eu] .s-ft{display:block}
 .cvx .pd div,.cvx .lg div{margin:2px 0}.cvx .s-ft{margin-top:18px;font-size:.88em;color:#555;font-style:italic}
 .cvx .side .job{display:block}.cvx .side .sk{columns:1}.cvx .side .it{display:block}
@@ -198,6 +198,11 @@ body[data-t=build] [data-tab]:not([data-tab=build]),body[data-t=ats] [data-tab]:
 .adslot{min-height:120px;margin:0 0 16px;border:1px dashed var(--bd);border-radius:14px;padding:8px;text-align:center}.adslot[hidden]{display:none}
 .aff a small{display:block;color:var(--mut);font-size:11px;text-transform:uppercase;letter-spacing:.06em}
 @media(hover:hover){.wtabs button:not(.on):hover{background:rgba(124,58,237,.12);color:var(--pri);transform:none;box-shadow:none}}
+.cvx .s-edu .job{display:block;margin-bottom:6px}
+.cvx[data-ex=dl] .s-edu .job{display:grid;grid-template-columns:24% 1fr;column-gap:14px}.cvx[data-ex=dl] .s-edu .jd{grid-column:1;grid-row:1;font-size:.9em}.cvx[data-ex=dl] .s-edu .jt{grid-column:2;grid-row:1;font-weight:700}
+.cvx .side .s-edu .job{display:block}.cvx .side .s-edu .jd,.cvx .side .s-edu .jt{grid-column:auto;grid-row:auto}
+.cvx[dir=rtl] li,.cvx[dir=rtl] .s>div,.cvx[dir=rtl] .jt,.cvx[dir=rtl] .ttl,.cvx[dir=rtl] h1,.cvx[dir=rtl] h2{unicode-bidi:plaintext}.cvx[dir=rtl] .ct span{direction:ltr;unicode-bidi:isolate}
+#aff[hidden]{display:none!important}#pdfh{max-width:360px}
 .pgap{position:absolute;left:0;right:0;z-index:20;background:#d9dce3;display:flex;align-items:center;justify-content:center;font:600 11px system-ui,sans-serif;color:#667085;pointer-events:none;box-shadow:inset 0 7px 7px -7px rgba(0,0,0,.35),inset 0 -7px 7px -7px rgba(0,0,0,.35)}
 .pbar{height:10px;border-radius:8px;background:var(--bd);overflow:hidden}.pbar i{display:block;height:100%;width:0;background:var(--grad);border-radius:8px;transition:width .4s ease}.pmeta{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;font-size:13px;color:var(--mut);margin-top:6px}
 .cvx li{margin-bottom:calc(.18em*(var(--gap,1) - 1))}
@@ -207,7 +212,7 @@ body[data-t=build] [data-tab]:not([data-tab=build]),body[data-t=ats] [data-tab]:
 .cvx[dir=rtl][data-bu=dash] li::before,.cvx[dir=rtl][data-bu=arrow] li::before,.cvx[dir=rtl][data-bu=square] li::before{left:auto;right:-14px}
 @media print{
 *{-webkit-print-color-adjust:exact;print-color-adjust:exact}
-body{background:#fff!important}
+html,body{height:auto!important;overflow:visible!important;background:#fff!important}
 .nav,header,.wtabs,.flow,footer,.ov,.dlm,.adslot,[data-tab]:not(#out),#gchk,#pb,#tb,#out>.row,#out>.hint{display:none!important}
 main{max-width:none;padding:0;margin:0}
 #out{border:0!important;box-shadow:none!important;padding:0!important;margin:0!important;background:none!important;transform:none!important;opacity:1!important}
@@ -229,8 +234,8 @@ main{max-width:none;padding:0;margin:0}
   <div class="wtabs" id="wtabs"><button data-t="build" class="on">📝 Build CV</button><button data-t="ats">📊 ATS Checker</button><button data-t="tk">🧰 Career Toolkit</button><button data-t="design">✨ Design Studio</button></div>
   <div class="flow" data-tab="build"><span><b>1</b> Upload CV</span><i>→</i><span><b>2</b> Add job</span><i>→</i><span><b>3</b> Download</span></div>
   <div class="card" id="tool" data-tab="build">
-    <label for="file">1. Upload your old CV (PDF, DOCX or TXT)</label>
-    <input type="file" id="file" accept=".pdf,.docx,.txt">
+    <label for="file">1. Upload your old CV (PDF, scanned PDF, DOCX, TXT or photo)</label>
+    <input type="file" id="file" accept=".pdf,.docx,.txt,.png,.jpg,.jpeg,.webp">
     <label for="cvtext">…or paste your CV text</label>
     <textarea id="cvtext" placeholder="Your CV text appears here after upload. You can edit it."></textarea>
     <label for="job">2. Job role or job description</label>
@@ -244,7 +249,7 @@ main{max-width:none;padding:0;margin:0}
       <div><label for="lang">CV language</label><input type="text" id="lang" list="langs" placeholder="English (type or choose any language)"></div></div><datalist id="langs"></datalist>
     <div class="row">
       <button id="go">Generate tailored CV</button>
-      <button class="sec" id="dsn">✨ Design from scratch</button><button class="sec" id="gal">🎨 Templates: <span id="cur">Classic Navy</span></button>
+      <button class="sec" id="gal">🎨 Templates: <span id="cur">Classic Navy</span></button>
     </div>
     <div id="msg"></div>
   </div>
@@ -252,8 +257,8 @@ main{max-width:none;padding:0;margin:0}
   <div class="card" id="out" data-tab="build" hidden>
     <div class="row" style="margin:0 0 12px">
       <div class="dd"><button data-dd>⬇ Download ▾</button><div class="ddm">
-        <button id="dl">📕 PDF document (.pdf)</button><button id="wd">📘 Word document (.doc)</button><button id="dtxt">📄 Plain text (.txt)</button><button id="dhtml">🌐 Web page (.html)</button><button id="dpng">🖼️ Image (.png)</button><button id="djson">🧾 Data (.json)</button><hr><button id="dcp">📋 Copy as text</button></div></div>
-      <select id="psize" title="Page size" style="width:auto"><option value="a4">A4 (210 × 297 mm)</option><option value="letter">US Letter (8.5 × 11 in)</option></select><button class="sec" id="print">🖨️ Print</button><button class="sec" id="edit">✏️ Edit CV</button><button class="sec" id="gal2">🎨 Change template</button><button class="sec" id="dsn2">✨ Design from scratch</button>
+        <button id="dl">📕 PDF · selectable text (best for ATS)</button><button id="dlimg">🖼️ PDF · picture of your CV</button><button id="wd">📘 Word document (.doc)</button><button id="dtxt">📄 Plain text (.txt)</button><button id="dhtml">🌐 Web page (.html)</button><button id="dpng">🖼️ Image (.png)</button><button id="djson">🧾 Data (.json)</button><hr><button id="dcp">📋 Copy as text</button></div></div>
+      <select id="psize" title="Page size" style="width:auto"><option value="a4">A4 (210 × 297 mm)</option><option value="letter">US Letter (8.5 × 11 in)</option></select><button class="sec" id="print">🖨️ Print</button><button class="sec" id="edit">✏️ Edit CV</button><button class="sec" id="gal2">🎨 Change template</button>
     </div>
     <div id="gchk"></div>
     <div class="tb on" id="pb" style="position:static"><b>📷 Photo</b><button id="pup">Upload / Replace</button><button id="prm">Remove</button><select id="psh" title="Photo shape"><option value="50%">Circle</option><option value="16px">Rounded</option><option value="0">Square</option></select><small>Size</small><input type="range" id="psz" min="60" max="170" value="96"><input type="file" id="pfile" accept="image/*" hidden></div>
@@ -265,7 +270,7 @@ main{max-width:none;padding:0;margin:0}
   <div class="card" id="ats" data-tab="ats">
     <h2 style="margin-top:0">📊 ATS Score Checker</h2>
     <p class="hint" style="margin-top:0">Upload any CV (or use the one generated above) and see how well Applicant Tracking Systems can read it.</p>
-    <label for="afile">Upload a CV (PDF, DOCX or TXT)</label><input type="file" id="afile" accept=".pdf,.docx,.txt">
+    <label for="afile">Upload a CV (PDF, scanned PDF, DOCX, TXT or photo)</label><input type="file" id="afile" accept=".pdf,.docx,.txt,.png,.jpg,.jpeg,.webp">
     <label for="atext">…or paste CV text</label><textarea id="atext" placeholder="CV text appears here after upload"></textarea>
     <label for="ajob">Job description (optional, adds keyword matching)</label><textarea id="ajob" style="min-height:90px" placeholder="Paste the job posting to check how well your CV matches it"></textarea>
     <div class="row"><button id="acheck">Check ATS score</button><button class="sec" id="agen">Use my generated CV</button></div>
@@ -295,7 +300,7 @@ main{max-width:none;padding:0;margin:0}
     <div class="st"><i>🎨</i><b>1,000+ templates</b><span>1,000+ unique layouts plus 22 regional CV formats, all editable.</span><button data-click="gal">Browse templates</button></div>
     <div class="st"><i>📊</i><b>ATS score checker</b><span>See what to fix so robots can read your CV.</span><a class="btn" href="#ats" style="padding:7px 12px;font-size:13px">Check my CV</a></div>
     <div class="st"><i>✉️</i><b>Cover letters</b><span>A tailored letter for any job in seconds.</span><a class="btn" href="#tk" style="padding:7px 12px;font-size:13px">Write one</a></div>
-    <div class="st"><i>🛠️</i><b>Design from scratch</b><span>Drag, drop and style every element yourself.</span><button data-click="dsn">Open designer</button></div>
+    <div class="st"><i>🛠️</i><b>Design from scratch</b><span>Drag, drop and style every element yourself.</span><button data-click="dsn3">Open designer</button></div>
     <div class="st"><i>🌍</i><b>Translate &amp; formats</b><span>Arabic, Urdu, Italian and more, plus USA, Europe and Gulf styles.</span><a class="btn" href="#tool" style="padding:7px 12px;font-size:13px">Try it</a></div>
     <div class="st"><i>📚</i><b>Free CV guides</b><span>Examples and keywords for 18+ jobs.</span><a class="btn" href="/guides/" style="padding:7px 12px;font-size:13px">Read guides</a></div>
   </div>
@@ -359,8 +364,9 @@ main{max-width:none;padding:0;margin:0}
   </div>
   <div id="dcv"></div>
 </div>
+<div id="pdfh" class="dlm" hidden><button class="x" id="pdfx" aria-label="Close">✕</button><b>Save as a text PDF</b><ol class="hint" style="margin:6px 0 8px;padding-left:18px"><li>In the print window set <b>Destination</b> to <b>Save as PDF</b>.</li><li>Set <b>Margins</b> to <b>None</b>.</li><li>Turn <b>Headers and footers</b> off.</li></ol><label class="hint" style="margin:0 0 8px;display:flex;gap:6px;align-items:center;font-weight:400"><input type="checkbox" id="pdfn" style="width:auto"> Don't show this again</label><div class="row" style="margin:0"><button id="pdfo">Open print window</button><button class="sec" id="pdfc">Cancel</button></div></div>
 <div id="dlm" class="dlm" hidden><button class="x" id="dlx" aria-label="Close">✕</button><b>✅ Download started</b><p class="hint" style="margin:4px 0 8px">What would you like to do next?</p><div class="row" style="margin:0"><button id="dlc">✉️ Cover letter</button><button class="sec" id="dla">📊 ATS score</button></div><p class="hint" id="dltip" style="margin:8px 0 0"></p></div>
-<footer>© <span id="yr"></span> Free AI CV Tailor · <a href="/privacy">Privacy</a> · <a href="/about">About</a> · <a href="/guides/">Guides</a> · <a id="ghl" href="https://github.com/taimoor-2662/cv-tailor" target="_blank" rel="noopener">GitHub</a> <button class="sec" id="inst" style="display:none;padding:4px 10px;margin-left:8px">📲 Install app</button></footer>
+<footer>© <span id="yr"></span> Free AI CV Tailor · <a href="/privacy">Privacy</a> · <a href="/about">About</a> · <a href="/guides/">Guides</a> · <a id="ghl" href="https://github.com/taimoor-2662/cv-tailor" target="_blank" rel="noopener">GitHub</a> · <a id="mailc" href="mailto:taimoor28092001@gmail.com">Contact</a> <button class="sec" id="inst" style="display:none;padding:4px 10px;margin-left:8px">📲 Install app</button></footer>
 
 <script src="/site-config.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
@@ -451,23 +457,13 @@ async function docxPhoto(buf) {
   return "";
 }
 $("file").onchange = async e => {
-  const f = e.target.files[0]; if (!f) return;
-  say("Reading file…"); photoData = "";
+  const f = e.target.files[0]; if (!f) return; say("Reading file…"); photoData = "";
   try {
-    let text = ""; const name = f.name.toLowerCase();
-    if (name.endsWith(".pdf")) {
-      const pdf = await pdfjsLib.getDocument({ data: await f.arrayBuffer() }).promise;
-      text = await pdfText(pdf, " | ");
-      try { photoData = await pdfPhoto(pdf); } catch (e) {}
-    } else if (name.endsWith(".docx")) {
-      const buf = await f.arrayBuffer();
-      text = (await mammoth.extractRawText({ arrayBuffer: buf })).value;
-      try { photoData = await docxPhoto(buf); } catch (e) {}
-    } else text = await f.text();
-    if (text.trim().length < 50) throw new Error("empty");
-    $("cvtext").value = text.trim();
-    say("CV loaded. Now add the job and click Generate.");
-  } catch (err) { say("Couldn't read that file (scanned PDFs have no text). Please paste your CV text instead.", true); }
+    const r = await readCvFile(f, { el: $("msg"), photo: true, sep: " | " });
+    if (r.text.trim().length < 50) throw new Error("empty");
+    $("cvtext").value = r.text.trim(); photoData = r.photo || "";
+    say(r.ocr ? "CV read from your scan or photo using text recognition in your browser. Please check the text for mistakes, then add the job and click Generate." : "CV loaded. Now add the job and click Generate.");
+  } catch (err) { say("Couldn't read that file. Please try another file or paste your CV text instead.", true); }
 };
 $("go").onclick = async () => {
   const cvText = $("cvtext").value.trim(), job = $("job").value.trim();
@@ -478,10 +474,10 @@ $("go").onclick = async () => {
     const r = await fetch("/api", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ cvText, job, region: $("reg").value, lang: $("lang").value.trim() || "English" }) });
     const d = await r.json();
     if (!r.ok || !d.cv) throw new Error(d.error || "Something went wrong.");
-    lastCv = d.cv; lastCv.lang = $("lang").value.trim() || "English"; const gb = groundCheck(lastCv, cvText), bn = [];
+    lastCv = cleanCv(d.cv); lastCv.lang = $("lang").value.trim() || "English"; const gb = groundCheck(lastCv, cvText), bn = [];
     if (d.truncated) bn.push("Your CV or job text was very long, so the end was trimmed before the AI read it. Shorten it or remove less relevant parts, then generate again.");
     if (d.unverified || gb.length) bn.push("Please double-check your job dates and company names before downloading." + (gb.length ? " Not found in your original CV: " + gb.map(esc).join("; ") + "." : "") + " Fix anything with ✏️ Edit CV.");
-    if (cvText.length < 250 || arr(lastCv.experience).length + arr(lastCv.education).length < 2) bn.push("Your CV details are quite brief. Add more projects, certifications, languages or job responsibilities (only things that are true) to make a stronger, fuller first page.");
+    if (cvText.length < 300 || arr(lastCv.experience).length + arr(lastCv.education).length < 2) bn.push("Your CV details are brief. Add more projects, certifications, languages or job responsibilities (only things that are true) for a stronger, fuller first page.");
     $("gchk").innerHTML = bn.map(x => `<div class="is warn">⚠ ${x}</div>`).join(""); stop(true); $("out").hidden = false; show(); say("Done! Choose a template, edit if needed, then download."); $("out").scrollIntoView({ behavior: "smooth" });
   } catch (err) { stop(); say(err.message, true); }
   $("go").disabled = false;
@@ -491,6 +487,18 @@ $("go").onclick = async () => {
 const SAMPLE = { name: "Your Name", title: "Job Title", contact: ["email@example.com", "+00 000 0000", "City"], summary: "Motivated professional with experience delivering results and working in teams.", skills: ["Communication", "Planning", "MS Office", "Teamwork"], experience: [{ title: "Role", company: "Company", dates: "2021 - 2024", bullets: ["Achieved key targets", "Improved processes"] }], education: [{ degree: "Degree", school: "University", dates: "2020" }], personal: [{ label: "Date of birth", value: "01 Jan 1995" }, { label: "Nationality", value: "Your country" }], languages: [{ name: "English", level: "Fluent" }, { name: "Your language", level: "Native" }], extra: [] };
 let lastCv = null, photoData = "";
 const avHTML = ini => photoData ? `<div class="av ph"><img src="${photoData}" alt=""></div>` : `<div class="av">${esc(ini)}</div>`;
+// Removes empty placeholders and near-duplicate skills (for example "Wireframing" next to "Figma wireframing").
+function cleanCv(c) {
+  const A = a => Array.isArray(a) ? a : [], o = { ...c };
+  o.personal = A(o.personal).filter(x => x && String(x.value || "").trim());
+  o.languages = A(o.languages).filter(x => x && String(x.name || "").trim());
+  o.extra = A(o.extra).map(x => ({ ...x, items: A(x.items).map(i => String(i || "").trim()).filter(Boolean) })).filter(x => x.items.length);
+  o.education = A(o.education).filter(x => x && (x.degree || x.school));
+  o.experience = A(o.experience).filter(x => x && (x.title || x.company)).map(j => ({ ...j, bullets: A(j.bullets).map(b => String(b || "").trim()).filter(Boolean) }));
+  const sk = A(o.skills).map(x => String(x || "").trim()).filter(Boolean), seen = new Set(), wd = x => x.toLowerCase().split(/\s+/);
+  o.skills = sk.filter((x, i) => { const k = x.toLowerCase(); if (seen.has(k)) return false; seen.add(k); const w = wd(x); return !sk.some((y, j) => j !== i && y.toLowerCase() !== k && wd(y).length > w.length && w.every(t => wd(y).includes(t))); });
+  return o;
+}
 function cvHTML(c) {
   const it = a => arr(a).filter(Boolean);
   const ini = String(c.name || "").split(/\s+/).filter(Boolean).slice(0, 2).map(w => w[0]).join("").toUpperCase();
@@ -504,8 +512,8 @@ function cvHTML(c) {
   const edu = sec("edu", "Education", it(c.education).map(e => job(e.degree, e.school, e.dates)).join(""));
   const pd = sec("pd", "Personal details", `<div class="pd">${it(c.personal).filter(x => x.value).map(x => `<div><b>${esc(x.label)}:</b> ${esc(x.value)}</div>`).join("")}</div>`.replace('<div class="pd"></div>', ""));
   const lg = sec("lg", "Languages", `<div class="lg">${it(c.languages).filter(x => x.name).map(x => `<div><b>${esc(x.name)}</b>${x.level ? " – " + esc(x.level) : ""}</div>`).join("")}</div>`.replace('<div class="lg"></div>', ""));
-  const ex = it(c.extra).filter(x => it(x.items).length).map(x => `<h2>${esc(x.heading)}</h2><ul>${it(x.items).map(i => `<li>${esc(i)}</li>`).join("")}</ul>`).join("");
-  return hd + `<div class="side">${sk}${edu}${pd}${lg}</div><div class="main">${sum}${exp}${ex ? `<div class="s s-ex">${ex}</div>` : ""}</div>`;
+  const ex = it(c.extra).filter(x => it(x.items).length).map(x => `<div class="s s-ex"><h2>${esc(x.heading)}</h2><ul>${it(x.items).map(i => `<li>${esc(i)}</li>`).join("")}</ul></div>`).join("");
+  return hd + `<div class="side">${sk}${edu}${pd}${lg}</div><div class="main">${sum}${exp}${ex}</div>`;
 }
 
 /* ---------- templates: 1,000+ structurally unique layouts + regional formats ---------- */
@@ -634,8 +642,8 @@ function place(el, t) {
   let S = [], M;
   if (g === "col") { S = [...p[0], "pd", "lg"]; M = p[1]; } else { M = [...p]; if (g !== "eu") { const i = M.indexOf("sk"); M.splice(i < 0 ? 1 : i + 1, 0, "pd", "lg"); } }
   const all = [...el.querySelectorAll(".s")], used = new Set();
-  S.forEach(k => { const n = el.querySelector(".s-" + k); if (n) { side.appendChild(n); used.add(n); } });
-  M.forEach(k => { const n = el.querySelector(".s-" + k); if (n) { main.appendChild(n); used.add(n); } });
+  S.forEach(k => el.querySelectorAll(".s-" + k).forEach(n => { side.appendChild(n); used.add(n); }));
+  M.forEach(k => el.querySelectorAll(".s-" + k).forEach(n => { main.appendChild(n); used.add(n); }));
   all.forEach(n => { if (!used.has(n)) main.appendChild(n); });
 }
 function labels(el, t) {
@@ -655,7 +663,7 @@ function apply(el, t) {
   place(el, t); labels(el, t);
 }
 /* ---------- multi-page flow: keeps lines/entries whole and moves them to the next A4 page ---------- */
-const PH = 1122, GAP = 26, TOPM = 48, BOTM = 48; let pgT;   // PH = A4 height, still used by the Design Studio
+const PH = 1122, GAP = 26, TOPM = 57, BOTM = 50; let pgT;   // PH = A4 height, still used by the Design Studio
 const SIZES = { a4: { w: 794, h: 1122, fmt: "a4", css: "A4" }, letter: { w: 816, h: 1056, fmt: "letter", css: "Letter" } };
 let PSZ = "a4"; try { PSZ = localStorage.getItem("cvps") === "letter" ? "letter" : "a4"; } catch (e) {}
 const pdim = () => SIZES[PSZ];
@@ -699,7 +707,7 @@ function paginate(root, gap = GAP) {
   }
   const pages = Math.max(1, Math.ceil((root.getBoundingClientRect().height + gap) / P - 0.01));
   if (pages === 1) fillPage(root, H);
-  root.style.minHeight = pages * P - gap + "px";
+  root.style.minHeight = pages * P - gap - (gap === 0 ? 1 : 0) + "px";
   if (gap > 0) for (let i = 1; i < pages; i++) { const d = document.createElement("div"); d.className = "pgap"; d.style.top = i * P - gap + "px"; d.style.height = gap + "px"; d.textContent = `Page ${i}  |  Page ${i + 1}`; root.appendChild(d); }
   return pages;
 }
@@ -842,7 +850,7 @@ async function withCapture(fn) {
   try { return await fn(clone, d); } finally { box.remove(); paginate(cv); if (was) cv.classList.add("editing"); }
 }
 const CAP = d => ({ scale: 2, scrollX: 0, scrollY: 0, x: 0, y: 0, windowWidth: d.w });
-$("dl").onclick = async () => {
+$("dlimg").onclick = async () => {
   if (!needCv()) return; const name = ($("cv").querySelector("h1")?.textContent || "cv").trim().replace(/\s+/g, "-");
   try {
     await withCapture((clone, d) => html2pdf().set({ margin: 0, filename: `${name}-tailored-cv.pdf`, image: { type: "jpeg", quality: 0.98 }, html2canvas: CAP(d), jsPDF: { unit: "mm", format: d.fmt }, pagebreak: { mode: ["css"] } }).from(clone).save());
@@ -850,6 +858,10 @@ $("dl").onclick = async () => {
   } catch (e) { alert("The PDF could not be created. " + (e && e.message ? e.message : "")); }
 };
 $("print").onclick = () => window.print();
+const doPrint = () => { $("pdfh").hidden = true; window.print(); };
+$("dl").onclick = () => { if (!needCv()) return; let skip = false; try { skip = localStorage.getItem("cvpdfh") === "1"; } catch (e) {} if (skip) doPrint(); else $("pdfh").hidden = false; };
+$("pdfx").onclick = $("pdfc").onclick = () => { $("pdfh").hidden = true; };
+$("pdfo").onclick = () => { if ($("pdfn").checked) { try { localStorage.setItem("cvpdfh", "1"); } catch (e) {} } doPrint(); };
 $("psize").onchange = e => { PSZ = e.target.value === "letter" ? "letter" : "a4"; try { localStorage.setItem("cvps", PSZ); } catch (x) {} applySize(); };
 applySize();
 addEventListener("beforeprint", () => { if (!$("out").hidden) paginate($("cv"), 0); });
@@ -890,7 +902,7 @@ function dopen() {
   if (!$("dcv").children.length) { let st = null; try { st = localStorage.getItem("cvds"); } catch (e) {} if (st) drestore(st); else dpage(""); dhist = []; dhp = -1; dpush(); }
   dzoom();
 }
-$("dsn").onclick = dopen; $("dsn2").onclick = dopen; $("dback").onclick = () => $("ds").classList.remove("on");
+$("dback").onclick = () => $("ds").classList.remove("on");
 $("dzoom").onchange = dzoom; addEventListener("resize", () => { if ($("ds").classList.contains("on")) dzoom(); });
 $("dundo").onclick = dundo; $("dredo").onclick = dredo;
 $("dnew").onclick = () => { if (confirm("Clear the whole design and start with a blank page?")) { $("dcv").innerHTML = ""; dpage(""); dhist = []; dhp = -1; dpush(); } };
@@ -1070,11 +1082,42 @@ function hlHTML(t, kw, weak) {
   let out = "", i = 0, m; while ((m = re.exec(t))) { out += esc(t.slice(i, m.index)); out += `<mark class="${m[1] ? "r" : m[2] ? "g" : "b"}">${esc(m[0])}</mark>`; i = m.index + m[0].length; if (!m[0]) re.lastIndex++; }
   return out + esc(t.slice(i));
 }
-async function fileText(f) {
-  const n = f.name.toLowerCase();
-  if (n.endsWith(".pdf")) { const pdf = await pdfjsLib.getDocument({ data: await f.arrayBuffer() }).promise; return pdfText(pdf, "   "); }
-  if (n.endsWith(".docx")) return (await mammoth.extractRawText({ arrayBuffer: await f.arrayBuffer() })).value;
-  return f.text();
+// ---- reading uploaded files. Scanned PDFs and photos are read with Tesseract.js (OCR) inside your browser; the file is never uploaded. ----
+const isImg = f => /^image\//.test(f.type) || /\.(png|jpe?g|webp)$/i.test(f.name);
+let tessP;
+const loadTess = () => tessP || (tessP = new Promise((ok, no) => { const sc = document.createElement("script"); sc.src = "https://cdn.jsdelivr.net/npm/tesseract.js@5.1.1/dist/tesseract.min.js"; sc.onload = () => ok(window.Tesseract); sc.onerror = () => { tessP = null; no(new Error("The text reader could not load")); }; document.head.appendChild(sc); }));
+function ocrBar(el) {
+  el.className = ""; el.innerHTML = '<div class="pbar"><i></i></div><div class="pmeta"><span>Preparing the text reader…</span><span>0%</span></div>';
+  const fill = el.querySelector("i"), [lb, pc] = el.querySelectorAll(".pmeta span");
+  return (p, label) => { fill.style.width = p + "%"; pc.textContent = p + "%"; if (label) lb.textContent = label; };
+}
+async function ocrCanvases(cs, set) {
+  set(0, "Preparing the text reader…"); const T = await loadTess(); let page = 0, out = "";
+  const w = await T.createWorker("eng", 1, { logger: m => { if (m.status === "recognizing text") set(Math.min(99, Math.round((page + m.progress) / cs.length * 100)), "Reading your scan…"); } });
+  try { for (page = 0; page < cs.length; page++) out += (await w.recognize(cs[page])).data.text + "\n\n"; } finally { await w.terminate(); }
+  set(100, "Done"); return out.trim();
+}
+async function pdfCanvases(pdf, max = 5) {
+  const cs = []; for (let i = 1; i <= Math.min(pdf.numPages, max); i++) { const pg = await pdf.getPage(i), vp = pg.getViewport({ scale: 2 }), c = document.createElement("canvas"); c.width = vp.width; c.height = vp.height; await pg.render({ canvasContext: c.getContext("2d"), viewport: vp }).promise; cs.push(c); } return cs;
+}
+async function imageCanvas(f) {
+  const bmp = await createImageBitmap(f), k = Math.min(2, 3000 / Math.max(bmp.width, bmp.height)), c = document.createElement("canvas");
+  c.width = Math.round(bmp.width * k); c.height = Math.round(bmp.height * k); const x = c.getContext("2d"); x.fillStyle = "#fff"; x.fillRect(0, 0, c.width, c.height); x.drawImage(bmp, 0, 0, c.width, c.height); return c;
+}
+async function readCvFile(f, o = {}) {
+  const n = f.name.toLowerCase(), sep = o.sep || "   "; let text = "", photo = "", ocr = false;
+  const runOcr = async cs => { ocr = true; return ocrCanvases(cs, o.el ? ocrBar(o.el) : () => {}); };
+  if (isImg(f)) text = await runOcr([await imageCanvas(f)]);
+  else if (n.endsWith(".pdf")) {
+    const pdf = await pdfjsLib.getDocument({ data: await f.arrayBuffer() }).promise;
+    text = await pdfText(pdf, sep);
+    if (text.trim().length < 30) text = await runOcr(await pdfCanvases(pdf));
+    else if (o.photo) { try { photo = await pdfPhoto(pdf); } catch (e) {} }
+  } else if (n.endsWith(".docx")) {
+    const buf = await f.arrayBuffer(); text = (await mammoth.extractRawText({ arrayBuffer: buf })).value;
+    if (o.photo) { try { photo = await docxPhoto(buf); } catch (e) {} }
+  } else text = await f.text();
+  return { text, photo, ocr };
 }
 const cvToText = c => [c.name, c.title, arr(c.contact).join(" | "), c.summary && "SUMMARY\n" + c.summary, arr(c.skills).length && "SKILLS\n" + arr(c.skills).join(", "),
   arr(c.experience).length && "EXPERIENCE\n" + arr(c.experience).map(j => `${j.title}, ${j.company} ${j.dates}\n` + arr(j.bullets).map(b => "- " + b).join("\n")).join("\n"),
@@ -1082,7 +1125,7 @@ const cvToText = c => [c.name, c.title, arr(c.contact).join(" | "), c.summary &&
 const cvSource = () => lastCv ? cvToText(lastCv) : $("cvtext").value.trim();
 $("afile").onchange = async e => {
   const f = e.target.files[0]; if (!f) return;
-  try { const t = (await fileText(f)).trim(); if (t.length < 50) throw 0; $("atext").value = t; $("ares").innerHTML = ""; } catch (x) { $("ares").innerHTML = '<p class="hint err">Couldn\'t read that file (scanned PDFs have no text). Please paste the text instead.</p>'; }
+  try { const r = await readCvFile(f, { el: $("ares") }); const t = r.text.trim(); if (t.length < 50) throw 0; $("atext").value = t; $("ares").innerHTML = r.ocr ? '<p class="hint">Read from your scan or photo using text recognition. Please check the text for mistakes, then click Check ATS score.</p>' : ""; } catch (x) { $("ares").innerHTML = '<p class="hint err">Couldn\'t read that file. Please try another file or paste the text instead.</p>'; }
 };
 $("agen").onclick = () => { if (!lastCv) return ($("ares").innerHTML = '<p class="hint err">Generate a CV in step 1 first.</p>'); $("atext").value = cvToText(lastCv); if (!$("ajob").value.trim()) $("ajob").value = $("job").value; $("acheck").click(); };
 $("acheck").onclick = () => {
@@ -1140,7 +1183,7 @@ $("ccp").onclick = () => copyT($("cvo").value); $("ctx").onclick = () => saveF("
 $("cwd").onclick = () => saveF("cover-letter.doc", "application/msword", "\ufeff<html><head><meta charset='utf-8'></head><body style='font-family:Calibri;font-size:11pt'>" + $("cvo").value.split(/\n\n+/).map(p => `<p>${esc(p).replace(/\n/g, "<br>")}</p>`).join("") + "</body></html>");
 $("igo").onclick = () => need(true) && busy($("igo"), async () => { $("iout").innerHTML = '<p class="hint">Preparing…</p>'; const d = (await callAI("interview")).data; $("iout").innerHTML = arr(d.questions).map((q, i) => `<div class="is ok"><b>${i + 1}. ${esc(q.q)}</b><small>${esc(q.tip)}</small></div>`).join("") + partnerHTML(PARTNERS.interview, "Practise for the real thing"); });
 $("lgo").onclick = () => need(false) && busy($("lgo"), async () => { $("lout").innerHTML = '<p class="hint">Writing…</p>'; const d = (await callAI("linkedin")).data; $("lout").innerHTML = `<h3>Headline</h3><div class="hl" id="lh">${esc(d.headline)}</div><div class="row"><button class="sec" id="lch">Copy headline</button></div><h3>About</h3><div class="hl" id="la">${esc(d.about)}</div><div class="row"><button class="sec" id="lca">Copy About</button></div>`; $("lch").onclick = () => copyT(d.headline); $("lca").onclick = () => copyT(d.about); });
-$("tgo").onclick = () => { if (!lastCv) return alert("Generate a CV in step 1 first."); busy($("tgo"), async () => { const l = $("tlang").value.trim() || "English", d = await callAI("translate", { lang: l, cvJson: JSON.stringify({ ...lastCv, lang: undefined, labels: undefined }) }); lastCv = d.cv; lastCv.lang = l; show(); scrollTo({ top: $("out").offsetTop, behavior: "smooth" }); }); };
+$("tgo").onclick = () => { if (!lastCv) return alert("Generate a CV in step 1 first."); busy($("tgo"), async () => { const l = $("tlang").value.trim() || "English", d = await callAI("translate", { lang: l, cvJson: JSON.stringify({ ...lastCv, lang: undefined, labels: undefined }) }); lastCv = cleanCv(d.cv); lastCv.lang = l; show(); scrollTo({ top: $("out").offsetTop, behavior: "smooth" }); }); };
 function wordHTML() {
   const m = domModel(); if (!m.name) return ""; const e = esc, rtl = $("cv").dir === "rtl", sz = PSZ === "letter" ? "612pt 792pt" : "595.3pt 841.9pt";
   const body = m.secs.map(s => {
@@ -1197,9 +1240,11 @@ function domModel() {
     else if (k === "pd" || k === "lg") sec.lines = [...n.querySelectorAll(".pd > div, .lg > div")].map(tx).filter(Boolean);
     else if (k === "exp") sec.entries = [...n.querySelectorAll(".it")].map(e => ({ head: tx(e.querySelector(".jt")), dates: tx(e.querySelector(".jd")), bullets: [...e.querySelectorAll("li")].map(tx) }));
     else if (k === "edu") sec.entries = [...n.querySelectorAll(".job")].map(e => ({ head: tx(e.querySelector(".jt")), dates: tx(e.querySelector(".jd")), bullets: [] }));
+    else if (k === "ex") return;
     else { sec.blocks = []; let b = null; [...n.children].forEach(c => { if (c.tagName === "H2") { b = { h: tx(c), bullets: [] }; sec.blocks.push(b); } else if (b) b.bullets.push(...[...c.querySelectorAll("li")].map(tx)); }); }
     m.secs.push(sec);
   });
+  const exs = [...cv.querySelectorAll(".s-ex")]; if (exs.length) m.secs.push({ k: "ex", h: "", blocks: exs.map(n => ({ h: tx(n.querySelector("h2")), bullets: [...n.querySelectorAll("li")].map(tx) })) });
   return m;
 }
 function cvDomText() {
@@ -1216,7 +1261,7 @@ function cvDomText() {
 const needCv = () => { if (!lastCv) { alert("Generate a CV in step 1 first."); return false; } return true; };
 $("dtxt").onclick = () => needCv() && (saveF(cvName() + ".txt", "text/plain", cvDomText()), afterDl());
 $("dhtml").onclick = () => needCv() && saveF(cvName() + ".html", "text/html", wordHTML().replace(/^\ufeff/, ""));
-$("djson").onclick = () => needCv() && saveF(cvName() + ".json", "application/json", JSON.stringify(lastCv, null, 2));
+$("djson").onclick = () => needCv() && saveF(cvName() + ".json", "application/json", JSON.stringify(cleanCv(lastCv), null, 2));
 $("dcp").onclick = () => needCv() && copyT(cvDomText());
 $("dpng").onclick = async () => {
   if (!needCv()) return;
@@ -1266,12 +1311,13 @@ $("dsn3").onclick = dopen;
 let dlT;
 function afterDl() {
   const m = $("dlm"); m.hidden = false; clearTimeout(dlT); dlT = setTimeout(() => { m.hidden = true; }, 18000);
-  $("dltip").innerHTML = SITE.supportUrl ? `<a href="${esc(SITE.supportUrl)}" target="_blank" rel="noopener">Found this useful? Support this free project ☕</a>` : "";
+  $("dltip").innerHTML = SITE.supportUrl ? `<a href="${esc(SITE.supportUrl)}" target="_blank" rel="noopener">Saved you $20? Support this free project ☕</a>` : "";
 }
 $("dlx").onclick = () => { $("dlm").hidden = true; };
 $("dlc").onclick = () => { $("dlm").hidden = true; showTab("tk"); document.querySelector('#tkt [data-p="cover"]').click(); };
 $("dla").onclick = () => { $("dlm").hidden = true; showTab("ats"); $("agen").click(); };
 if (SITE.github) $("ghl").href = SITE.github;
+if (SITE.contactEmail) $("mailc").href = "mailto:" + SITE.contactEmail;
 if (SITE.ENABLE_ADS) {
   document.querySelectorAll(".adslot").forEach(a => { a.hidden = false; a.innerHTML = '<small class="hint">Advertisement</small>' + (SITE.adsHtml || ""); });
   if (/^https:\/\//.test(SITE.adsScript || "")) { const sc = document.createElement("script"); sc.async = true; sc.src = SITE.adsScript; document.head.appendChild(sc); }
