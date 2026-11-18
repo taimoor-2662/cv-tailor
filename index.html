@@ -203,6 +203,11 @@ body[data-t=build] [data-tab]:not([data-tab=build]),body[data-t=ats] [data-tab]:
 .cvx .side .s-edu .job{display:block}.cvx .side .s-edu .jd,.cvx .side .s-edu .jt{grid-column:auto;grid-row:auto}
 .cvx[dir=rtl] li,.cvx[dir=rtl] .s>div,.cvx[dir=rtl] .jt,.cvx[dir=rtl] .ttl,.cvx[dir=rtl] h1,.cvx[dir=rtl] h2{unicode-bidi:plaintext}.cvx[dir=rtl] .ct span{direction:ltr;unicode-bidi:isolate}
 #aff[hidden]{display:none!important}#pdfh{max-width:360px}
+.cb{position:relative}.cb input{padding-right:64px}
+.cb .cbv,.cb .cbx{position:absolute;top:50%;transform:translateY(-50%);background:transparent;color:var(--mut);box-shadow:none;border:0;padding:4px 8px;font-size:15px;line-height:1}.cb .cbv{right:2px}.cb .cbx{right:30px}
+.cb button:hover{transform:translateY(-50%)!important;box-shadow:none!important;filter:none!important;color:var(--pri)}
+.cbl{position:absolute;left:0;right:0;top:calc(100% + 4px);max-height:240px;overflow:auto;background:var(--card);border:1px solid var(--bd);border-radius:12px;box-shadow:0 16px 36px rgba(0,0,0,.28);padding:4px;z-index:55;list-style:none;margin:0;display:none}.cbl.open{display:block}
+.cbl li{padding:8px 10px;border-radius:8px;cursor:pointer}.cbl li.hi,.cbl li:hover{background:rgba(124,58,237,.14)}.cbl li.sel{font-weight:700}.cbl li.none{color:var(--mut)}
 .pgap{position:absolute;left:0;right:0;z-index:20;background:#d9dce3;display:flex;align-items:center;justify-content:center;font:600 11px system-ui,sans-serif;color:#667085;pointer-events:none;box-shadow:inset 0 7px 7px -7px rgba(0,0,0,.35),inset 0 -7px 7px -7px rgba(0,0,0,.35)}
 .pbar{height:10px;border-radius:8px;background:var(--bd);overflow:hidden}.pbar i{display:block;height:100%;width:0;background:var(--grad);border-radius:8px;transition:width .4s ease}.pmeta{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;font-size:13px;color:var(--mut);margin-top:6px}
 .cvx li{margin-bottom:calc(.18em*(var(--gap,1) - 1))}
@@ -246,7 +251,7 @@ main{max-width:none;padding:0;margin:0}
       <optgroup label="Middle East &amp; Africa"><option value="gulf">Gulf (UAE)</option><option value="ksa">Saudi / Qatar / Kuwait</option><option value="af">Africa (Nigeria, Kenya, South Africa)</option></optgroup>
       <optgroup label="Asia-Pacific"><option value="sa">South Asia (Pakistan, India, Bangladesh)</option><option value="jp">Japan</option><option value="cn">China</option><option value="kr">Korea</option><option value="sea">Southeast Asia</option><option value="au">Australia / New Zealand</option></optgroup>
       <optgroup label="Other"><option value="acad">Academic CV (worldwide)</option></optgroup></select></div>
-      <div><label for="lang">CV language</label><input type="text" id="lang" list="langs" placeholder="English (type or choose any language)"></div></div><datalist id="langs"></datalist>
+      <div><label for="lang">CV language</label><input type="text" id="lang" placeholder="English (type or choose any language)" autocomplete="off"></div></div>
     <div class="row">
       <button id="go">Generate tailored CV</button>
       <button class="sec" id="gal">🎨 Templates: <span id="cur">Classic Navy</span></button>
@@ -286,7 +291,7 @@ main{max-width:none;padding:0;margin:0}
       <div class="row"><button class="sec" id="ccp">📋 Copy</button><div class="dd"><button data-dd>⬇ Download ▾</button><div class="ddm"><button id="cpdf">📕 PDF (.pdf)</button><button id="cwd">📘 Word (.doc)</button><button id="ctx">📄 Plain text (.txt)</button><button id="chtml">🌐 Web page (.html)</button><button id="cmd">📝 Markdown (.md)</button></div></div></div></div>
     <div class="tp" id="p-int"><div class="row" style="margin-top:0"><button id="igo">Generate interview questions</button></div><div id="iout"></div></div>
     <div class="tp" id="p-li"><div class="row" style="margin-top:0"><button id="lgo">Write headline and About</button></div><div id="lout"></div></div>
-    <div class="tp" id="p-tr"><label>Translate my generated CV into</label><input type="text" id="tlang" list="langs" placeholder="Type or choose any language" value="Arabic">
+    <div class="tp" id="p-tr"><label>Translate my generated CV into</label><input type="text" id="tlang" placeholder="Type or choose any language" value="Arabic" autocomplete="off">
       <div class="row"><button id="tgo">Translate CV</button></div><p class="hint">Works with any language. Quality is best for widely used languages, so please review the result carefully.</p></div>
     <div class="tp" id="p-sh"><div class="row" style="margin-top:0"><button id="shl">🔗 Copy share link</button></div>
       <p class="hint">The share link contains your CV inside the address, so anyone with it can view your CV (your photo is not included). Share it only with people you trust. For Word or PDF, use the <b>⬇ Download</b> menu in the CV section: the .doc file opens cleanly in Microsoft Word and Google Docs.</p><div id="shout" class="hint"></div></div>
@@ -477,8 +482,9 @@ $("go").onclick = async () => {
     lastCv = cleanCv(d.cv); lastCv.lang = $("lang").value.trim() || "English"; const gb = groundCheck(lastCv, cvText), bn = [];
     if (d.truncated) bn.push("Your CV or job text was very long, so the end was trimmed before the AI read it. Shorten it or remove less relevant parts, then generate again.");
     if (d.unverified || gb.length) bn.push("Please double-check your job dates and company names before downloading." + (gb.length ? " Not found in your original CV: " + gb.map(esc).join("; ") + "." : "") + " Fix anything with ✏️ Edit CV.");
-    if (cvText.length < 300 || arr(lastCv.experience).length + arr(lastCv.education).length < 2) bn.push("Your CV details are brief. Add more projects, certifications, languages or job responsibilities (only things that are true) for a stronger, fuller first page.");
-    $("gchk").innerHTML = bn.map(x => `<div class="is warn">⚠ ${x}</div>`).join(""); stop(true); $("out").hidden = false; show(); say("Done! Choose a template, edit if needed, then download."); $("out").scrollIntoView({ behavior: "smooth" });
+    if (cvText.length < 500 || arr(lastCv.experience).length + arr(lastCv.education).length < 2) bn.push("Your CV details are brief. Add more projects, certifications, languages or job responsibilities (only things that are true) for a stronger, fuller first page.");
+    $("gchk").innerHTML = bn.map(x => `<div class="is warn">⚠ ${x}</div>`).join("");
+    if (cvText.length < 500 && arr(lastCv.experience).length) { $("gchk").insertAdjacentHTML("beforeend", '<div class="row" style="margin:0 0 10px"><button class="sec" id="sugb">✨ Suggest bullet ideas to review</button></div><div id="sugo"></div>'); $("sugb").onclick = suggestBullets; } stop(true); $("out").hidden = false; show(); say("Done! Choose a template, edit if needed, then download."); $("out").scrollIntoView({ behavior: "smooth" });
   } catch (err) { stop(); say(err.message, true); }
   $("go").disabled = false;
 };
@@ -493,24 +499,28 @@ function cleanCv(c) {
   o.personal = A(o.personal).filter(x => x && String(x.value || "").trim());
   o.languages = A(o.languages).filter(x => x && String(x.name || "").trim());
   o.extra = A(o.extra).map(x => ({ ...x, items: A(x.items).map(i => String(i || "").trim()).filter(Boolean) })).filter(x => x.items.length);
+  if (o.title) { const m = String(o.title).match(/^(.*?)\s*[-–|]\s*([^-–|]+)$/); if (m && A(o.contact).join(" ").toLowerCase().includes(m[2].trim().toLowerCase())) o.title = m[1].trim(); }   // "Director of Operations - London" -> "Director of Operations"
   o.education = A(o.education).filter(x => x && (x.degree || x.school));
   o.experience = A(o.experience).filter(x => x && (x.title || x.company)).map(j => ({ ...j, bullets: A(j.bullets).map(b => String(b || "").trim()).filter(Boolean) }));
   const sk = A(o.skills).map(x => String(x || "").trim()).filter(Boolean), seen = new Set(), wd = x => x.toLowerCase().split(/\s+/);
   o.skills = sk.filter((x, i) => { const k = x.toLowerCase(); if (seen.has(k)) return false; seen.add(k); const w = wd(x); return !sk.some((y, j) => j !== i && y.toLowerCase() !== k && wd(y).length > w.length && w.every(t => wd(y).includes(t))); });
   return o;
 }
+const LTRX = /(\+?\d[\d\s().-]{6,}\d|[\w.+-]+@[\w-]+\.[\w.-]+|\b(?:19|20)\d{2}\s?[-–]\s?(?:(?:19|20)\d{2}|Present|Heute)\b)/g;
+const wrapLtr = (t, rtl) => { const e = esc(t); return rtl ? e.replace(LTRX, '<span dir="ltr" style="unicode-bidi:isolate">$1</span>') : e; };
 function cvHTML(c) {
+  const W = x => wrapLtr(x, isRtl(c.lang));
   const it = a => arr(a).filter(Boolean);
   const ini = String(c.name || "").split(/\s+/).filter(Boolean).slice(0, 2).map(w => w[0]).join("").toUpperCase();
-  const ct = it(c.contact).map(x => `<span>${esc(x)}</span>`).join(" ");
+  const ct = it(c.contact).map(x => `<span>${W(x)}</span>`).join(" ");
   const hd = `<div class="hd">${avHTML(ini)}<div class="hn"><h1>${esc(c.name)}</h1>${c.title ? `<div class="ttl">${esc(c.title)}</div>` : ""}${ct ? `<div class="ct">${ct}</div>` : ""}</div></div>`;
   const job = (t, co, d) => `<div class="job"><span class="jt">${esc(t)}${co ? ", " + esc(co) : ""}</span> <span class="jd" dir="ltr">${esc(d)}</span></div>`;
   const sec = (k, h, body) => body ? `<div class="s s-${k}"><h2>${h}</h2>${body}</div>` : "";
-  const sum = sec("sum", "Summary", c.summary ? `<div>${esc(c.summary)}</div>` : "");
+  const sum = sec("sum", "Summary", c.summary ? `<div>${W(c.summary)}</div>` : "");
   const sk = sec("sk", "Skills", it(c.skills).length ? `<div class="sk">${it(c.skills).map(x => `<span>${esc(x)}</span>`).join(" ")}</div>` : "");
-  const exp = sec("exp", "Experience", it(c.experience).map(j => `<div class="it">${job(j.title, j.company, j.dates)}<ul>${it(j.bullets).map(b => `<li>${esc(b)}</li>`).join("")}</ul></div>`).join(""));
+  const exp = sec("exp", "Experience", it(c.experience).map(j => `<div class="it">${job(j.title, j.company, j.dates)}<ul>${it(j.bullets).map(b => `<li>${W(b)}</li>`).join("")}</ul></div>`).join(""));
   const edu = sec("edu", "Education", it(c.education).map(e => job(e.degree, e.school, e.dates)).join(""));
-  const pd = sec("pd", "Personal details", `<div class="pd">${it(c.personal).filter(x => x.value).map(x => `<div><b>${esc(x.label)}:</b> ${esc(x.value)}</div>`).join("")}</div>`.replace('<div class="pd"></div>', ""));
+  const pd = sec("pd", "Personal details", `<div class="pd">${it(c.personal).filter(x => x.value).map(x => `<div><b>${esc(x.label)}:</b> ${W(x.value)}</div>`).join("")}</div>`.replace('<div class="pd"></div>', ""));
   const lg = sec("lg", "Languages", `<div class="lg">${it(c.languages).filter(x => x.name).map(x => `<div><b>${esc(x.name)}</b>${x.level ? " – " + esc(x.level) : ""}</div>`).join("")}</div>`.replace('<div class="lg"></div>', ""));
   const ex = it(c.extra).filter(x => it(x.items).length).map(x => `<div class="s s-ex"><h2>${esc(x.heading)}</h2><ul>${it(x.items).map(i => `<li>${esc(i)}</li>`).join("")}</ul></div>`).join("");
   return hd + `<div class="side">${sk}${edu}${pd}${lg}</div><div class="main">${sum}${exp}${ex}</div>`;
@@ -545,7 +555,6 @@ const LBP = {
 const LBL = { arabic: ["نبذة عني","المهارات","الخبرة العملية","التعليم","المعلومات الشخصية","اللغات"], urdu: ["تعارف","مہارتیں","پیشہ ورانہ تجربہ","تعلیم","ذاتی معلومات","زبانیں"], italian: ["Profilo","Competenze","Esperienza professionale","Istruzione e formazione","Dati personali","Lingue"], german: ["Profil","Kenntnisse","Berufserfahrung","Ausbildung","Persönliche Daten","Sprachen"], french: ["Profil","Compétences","Expérience professionnelle","Formation","Informations personnelles","Langues"], spanish: ["Perfil","Habilidades","Experiencia profesional","Formación","Datos personales","Idiomas"], portuguese: ["Perfil","Competências","Experiência profissional","Formação","Dados pessoais","Idiomas"], turkish: ["Profil","Beceriler","İş deneyimi","Eğitim","Kişisel bilgiler","Diller"] };
 const FT = { gdpr: "I authorise the processing of my personal data in accordance with the GDPR (EU Regulation 2016/679).", ref: "References available upon request.", refau: "Referees available on request.", sig: "Place and date: ____________      Signature: ____________", decl: "I hereby declare that the information given above is true and correct to the best of my knowledge." };
 const LANGS = "English,Arabic,Urdu,Hindi,Bengali,Punjabi,Gujarati,Marathi,Tamil,Telugu,Kannada,Malayalam,Sinhala,Nepali,Pashto,Persian (Farsi),Persian (Dari),Sindhi,Kurdish,Turkish,Azerbaijani,Kazakh,Uzbek,Kyrgyz,Turkmen,Tajik,Uyghur,Chinese (Simplified),Chinese (Traditional),Japanese,Korean,Vietnamese,Thai,Indonesian,Malay,Filipino (Tagalog),Burmese,Khmer,Lao,Mongolian,Tibetan,Dhivehi,Russian,Ukrainian,Belarusian,Polish,Czech,Slovak,Hungarian,Romanian,Bulgarian,Serbian,Croatian,Bosnian,Slovenian,Macedonian,Albanian,Greek,Italian,Spanish,Portuguese,French,German,Dutch,Danish,Swedish,Norwegian,Finnish,Icelandic,Estonian,Latvian,Lithuanian,Irish,Welsh,Catalan,Basque,Galician,Maltese,Luxembourgish,Hebrew,Yiddish,Armenian,Georgian,Amharic,Swahili,Hausa,Yoruba,Igbo,Zulu,Xhosa,Afrikaans,Somali,Oromo,Tigrinya,Malagasy,Haitian Creole,Maori,Samoan,Tongan,Fijian,Hawaiian,Quechua,Latin,Esperanto".split(",");
-$("langs").innerHTML = LANGS.map(l => `<option value="${l}">`).join("");
 const isRtl = l => /arab|urdu|persian|farsi|dari|pashto|sindhi|hebrew|dhivehi|uyghur|yiddish|kurdish/i.test(l || "");
 const R = (rg, n, lb, ft, o) => Object.assign({ rg, n, lb, ft, f: ["Arial","Calibri","Segoe UI"] }, o);
 const REGS = [
@@ -853,19 +862,19 @@ const CAP = d => ({ scale: 2, scrollX: 0, scrollY: 0, x: 0, y: 0, windowWidth: d
 $("dlimg").onclick = async () => {
   if (!needCv()) return; const name = ($("cv").querySelector("h1")?.textContent || "cv").trim().replace(/\s+/g, "-");
   try {
-    await withCapture((clone, d) => html2pdf().set({ margin: 0, filename: `${name}-tailored-cv.pdf`, image: { type: "jpeg", quality: 0.98 }, html2canvas: CAP(d), jsPDF: { unit: "mm", format: d.fmt }, pagebreak: { mode: ["css"] } }).from(clone).save());
+    await withCapture((clone, d) => html2pdf().set({ margin: 0, filename: `${cvName()}.pdf`, image: { type: "jpeg", quality: 0.98 }, html2canvas: CAP(d), jsPDF: { unit: "mm", format: d.fmt }, pagebreak: { mode: ["css"] } }).from(clone).save());
     afterDl();
   } catch (e) { alert("The PDF could not be created. " + (e && e.message ? e.message : "")); }
 };
-$("print").onclick = () => window.print();
-const doPrint = () => { $("pdfh").hidden = true; window.print(); };
+$("print").onclick = () => { setPrintTitle(); window.print(); };
+const doPrint = () => { $("pdfh").hidden = true; setPrintTitle(); window.print(); };
 $("dl").onclick = () => { if (!needCv()) return; let skip = false; try { skip = localStorage.getItem("cvpdfh") === "1"; } catch (e) {} if (skip) doPrint(); else $("pdfh").hidden = false; };
 $("pdfx").onclick = $("pdfc").onclick = () => { $("pdfh").hidden = true; };
 $("pdfo").onclick = () => { if ($("pdfn").checked) { try { localStorage.setItem("cvpdfh", "1"); } catch (e) {} } doPrint(); };
 $("psize").onchange = e => { PSZ = e.target.value === "letter" ? "letter" : "a4"; try { localStorage.setItem("cvps", PSZ); } catch (x) {} applySize(); };
 applySize();
-addEventListener("beforeprint", () => { if (!$("out").hidden) paginate($("cv"), 0); });
-addEventListener("afterprint", () => { if (!$("out").hidden) paginate($("cv")); });
+addEventListener("beforeprint", () => { if (!$("out").hidden) { setPrintTitle(); paginate($("cv"), 0); } });
+addEventListener("afterprint", () => { restoreTitle(); if (!$("out").hidden) paginate($("cv")); });
 
 /* ---------- design from scratch ---------- */
 let dz = 1, dsel = null, dhist = [], dhp = -1;
@@ -1184,6 +1193,21 @@ $("cwd").onclick = () => saveF("cover-letter.doc", "application/msword", "\ufeff
 $("igo").onclick = () => need(true) && busy($("igo"), async () => { $("iout").innerHTML = '<p class="hint">Preparing…</p>'; const d = (await callAI("interview")).data; $("iout").innerHTML = arr(d.questions).map((q, i) => `<div class="is ok"><b>${i + 1}. ${esc(q.q)}</b><small>${esc(q.tip)}</small></div>`).join("") + partnerHTML(PARTNERS.interview, "Practise for the real thing"); });
 $("lgo").onclick = () => need(false) && busy($("lgo"), async () => { $("lout").innerHTML = '<p class="hint">Writing…</p>'; const d = (await callAI("linkedin")).data; $("lout").innerHTML = `<h3>Headline</h3><div class="hl" id="lh">${esc(d.headline)}</div><div class="row"><button class="sec" id="lch">Copy headline</button></div><h3>About</h3><div class="hl" id="la">${esc(d.about)}</div><div class="row"><button class="sec" id="lca">Copy About</button></div>`; $("lch").onclick = () => copyT(d.headline); $("lca").onclick = () => copyT(d.about); });
 $("tgo").onclick = () => { if (!lastCv) return alert("Generate a CV in step 1 first."); busy($("tgo"), async () => { const l = $("tlang").value.trim() || "English", d = await callAI("translate", { lang: l, cvJson: JSON.stringify({ ...lastCv, lang: undefined, labels: undefined }) }); lastCv = cleanCv(d.cv); lastCv.lang = l; show(); scrollTo({ top: $("out").offsetTop, behavior: "smooth" }); }); };
+// Optional help for very short CVs: the AI drafts typical duties for each role, but nothing is added until YOU tick what is true.
+function suggestBullets() {
+  busy($("sugb"), async () => {
+    const jobs = arr(lastCv.experience).map((j, i) => ({ index: i, title: j.title, company: j.company, dates: j.dates, current: /present|current|now/i.test(j.dates || ""), bullets: arr(j.bullets) }));
+    const d = (await callAI("suggest", { jobsJson: JSON.stringify(jobs), lang: lastCv.lang || "English" })).data;
+    const list = arr(d.jobs).filter(x => lastCv.experience[x.index] && arr(x.bullets).length);
+    if (!list.length) return alert("No ideas this time. Please try again.");
+    $("sugo").innerHTML = '<div class="is warn"><b>Draft ideas, not facts.</b> Tick only what is TRUE for you, then add them.</div>' + list.map(x => `<div class="is ok"><b>${esc(lastCv.experience[x.index].title)}${lastCv.experience[x.index].company ? ", " + esc(lastCv.experience[x.index].company) : ""}</b>${arr(x.bullets).map(b => `<label style="display:flex;gap:8px;align-items:flex-start;font-weight:400;margin:6px 0"><input type="checkbox" style="width:auto;margin-top:4px" data-j="${x.index}" data-t="${esc(b)}"> <span>${esc(b)}</span></label>`).join("")}</div>`).join("") + '<div class="row" style="margin:0 0 10px"><button id="sugadd">Add selected to my CV</button></div>';
+    $("sugadd").onclick = () => {
+      const ch = [...$("sugo").querySelectorAll("input:checked")]; if (!ch.length) return alert("Tick at least one idea first.");
+      ch.forEach(i => { const j = lastCv.experience[+i.dataset.j]; j.bullets = [...arr(j.bullets), i.dataset.t]; });
+      $("sugo").innerHTML = ""; show();
+    };
+  });
+}
 function wordHTML() {
   const m = domModel(); if (!m.name) return ""; const e = esc, rtl = $("cv").dir === "rtl", sz = PSZ === "letter" ? "612pt 792pt" : "595.3pt 841.9pt";
   const body = m.secs.map(s => {
@@ -1195,7 +1219,7 @@ function wordHTML() {
   }).join("");
   return `\ufeff<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w="urn:schemas-microsoft-com:office:word"><head><meta charset="utf-8"><title>${e(m.name)} CV</title><style>@page WordSection1{size:${sz};margin:50pt 46pt}div.WordSection1{page:WordSection1}body{font-family:Calibri,Arial,sans-serif;font-size:11pt;color:#111}h1{font-size:24pt;color:${cur.d};margin:0}h2{font-size:12pt;color:${cur.d};border-bottom:1.5pt solid ${cur.a};text-transform:uppercase;margin:14pt 0 4pt}.job{font-weight:bold;margin:6pt 0 0}.job .jd{font-weight:normal;color:#555}ul{margin:2pt 0}</style></head><body${rtl ? ' dir="rtl" style="direction:rtl;text-align:right"' : ""}><div class="WordSection1"><h1>${e(m.name)}</h1><p>${e(m.title)}${m.title && m.contact.length ? "<br>" : ""}${m.contact.map(e).join(" · ")}</p>${body}</div></body></html>`;
 }
-const doWord = () => { if (!lastCv) return alert("Generate a CV in step 1 first."); saveF(($("cv").querySelector("h1")?.textContent || "cv").trim().replace(/\s+/g, "-") + "-cv.doc", "application/msword", wordHTML()); afterDl(); };
+const doWord = () => { if (!lastCv) return alert("Generate a CV in step 1 first."); saveF(cvName() + ".doc", "application/msword", wordHTML()); afterDl(); };
 $("wd").onclick = doWord;
 const b64u = u8 => { let s = ""; u8.forEach(b => s += String.fromCharCode(b)); return btoa(s).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, ""); };
 const unb64 = s => Uint8Array.from(atob(s.replace(/-/g, "+").replace(/_/g, "/")), c => c.charCodeAt(0));
@@ -1229,7 +1253,11 @@ document.addEventListener("click", e => {
   const it = e.target.closest(".ddm button"); if (it) it.closest(".dd").classList.remove("open");
 });
 document.querySelectorAll("[data-click]").forEach(b => b.onclick = () => $(b.dataset.click).click());
-const cvName = () => ($("cv").querySelector("h1")?.textContent || "cv").trim().replace(/\s+/g, "-") + "-cv";
+const sanitizeFilename = x => String(x || "").replace(/[\\/:*?"<>|\u0000-\u001f]/g, "").replace(/\s+/g, "-").replace(/^[-.]+|[-.]+$/g, "");
+const cvName = () => (sanitizeFilename($("cv").querySelector("h1")?.textContent) || "Tailored") + "-CV";
+let oldTitle = null, titleT;
+function setPrintTitle() { if ($("out").hidden || !lastCv) return; if (oldTitle === null) oldTitle = document.title; document.title = cvName(); clearTimeout(titleT); titleT = setTimeout(restoreTitle, 120000); }
+function restoreTitle() { clearTimeout(titleT); if (oldTitle !== null) { document.title = oldTitle; oldTitle = null; } }
 function domModel() {
   const cv = $("cv"), tx = n => (n ? n.textContent.replace(/\s+/g, " ").trim() : "");
   const m = { name: tx(cv.querySelector("h1")), title: tx(cv.querySelector(".ttl")), contact: [...cv.querySelectorAll(".ct span")].map(tx).filter(Boolean), secs: [] };
@@ -1323,6 +1351,36 @@ if (SITE.ENABLE_ADS) {
   if (/^https:\/\//.test(SITE.adsScript || "")) { const sc = document.createElement("script"); sc.async = true; sc.src = SITE.adsScript; document.head.appendChild(sc); }
 }
 { const q = new URLSearchParams(location.search).get("region"); if (q && [...$("reg").options].some(o => o.value === q)) { $("reg").value = q; $("reg").dispatchEvent(new Event("change")); } }
+
+/* ---------- searchable language dropdown: opens the full list on click, filters as you type, accepts any language ---------- */
+function langBox(inp) {
+  const w = document.createElement("div"); w.className = "cb"; inp.parentNode.insertBefore(w, inp); w.appendChild(inp);
+  const mk = (cls, txt, label) => { const b = document.createElement("button"); b.type = "button"; b.className = cls; b.textContent = txt; b.setAttribute("aria-label", label); w.appendChild(b); return b; };
+  const clr = mk("cbx", "✕", "Clear language"), chv = mk("cbv", "▾", "Show languages"), ul = document.createElement("ul"); ul.className = "cbl"; ul.setAttribute("role", "listbox"); w.appendChild(ul);
+  let items = [], hi = -1;
+  const show = f => {
+    const q = (f || "").trim().toLowerCase(); items = LANGS.filter(l => !q || l.toLowerCase().includes(q)); const cur = inp.value.trim().toLowerCase();
+    hi = f ? (items.length ? 0 : -1) : items.findIndex(l => l.toLowerCase() === cur);
+    ul.innerHTML = items.length ? items.map((l, i) => `<li role="option" data-i="${i}" class="${i === hi ? "hi " : ""}${l.toLowerCase() === cur ? "sel" : ""}">${esc(l)}</li>`).join("") : `<li class="none" data-custom="1">Use "${esc(inp.value.trim())}" (press Enter)</li>`;
+    ul.classList.add("open"); const h = ul.querySelector(".hi"); if (h) ul.scrollTop = h.offsetTop - 60;
+  };
+  const close = () => ul.classList.remove("open");
+  const pick = v => { inp.value = v; clr.style.display = v ? "" : "none"; close(); inp.dispatchEvent(new Event("change", { bubbles: true })); };
+  const move = d => { if (!ul.classList.contains("open")) return show(""); if (!items.length) return; hi = (hi + d + items.length) % items.length; ul.querySelectorAll("li").forEach((li, i) => li.classList.toggle("hi", i === hi)); const h = ul.querySelector(".hi"); if (h) h.scrollIntoView({ block: "nearest" }); };
+  inp.addEventListener("focus", () => show("")); inp.addEventListener("click", () => show(""));
+  inp.addEventListener("input", () => { clr.style.display = inp.value ? "" : "none"; show(inp.value); });
+  inp.addEventListener("keydown", e => {
+    if (e.key === "ArrowDown") { e.preventDefault(); move(1); } else if (e.key === "ArrowUp") { e.preventDefault(); move(-1); }
+    else if (e.key === "Enter") { e.preventDefault(); if (ul.classList.contains("open") && hi >= 0 && items[hi]) pick(items[hi]); else close(); }
+    else if (e.key === "Escape" || e.key === "Tab") close();
+  });
+  ul.addEventListener("mousedown", e => { e.preventDefault(); const li = e.target.closest("li"); if (!li) return; if (li.dataset.custom) close(); else pick(items[+li.dataset.i]); });
+  clr.addEventListener("mousedown", e => { e.preventDefault(); pick(""); inp.focus(); show(""); });
+  chv.addEventListener("mousedown", e => { e.preventDefault(); if (ul.classList.contains("open")) close(); else { inp.focus(); show(""); } });
+  document.addEventListener("mousedown", e => { if (!w.contains(e.target)) close(); });
+  clr.style.display = inp.value ? "" : "none";
+}
+langBox($("lang")); langBox($("tlang"));
 </script>
 </body>
 </html>
