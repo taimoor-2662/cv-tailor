@@ -42,30 +42,38 @@ STRICT RULES: ${RULES}
 6. You may improve the wording of the summary and bullets and put the most relevant items first, but every fact must stay the same.
 7. Verb tense: start bullets of past roles with past-tense action verbs (Managed, Resolved, Led) and bullets of the current role with present-tense verbs. Never mix tenses inside one job.
 8. Summary: write a confident, specific summary for the target job. Never use filler such as "seeking a challenging role", "seeking an opportunity" or "seeking to leverage". If the CV is short (under about 600 characters of details), write a fuller 3-4 sentence summary using ONLY the facts given. Do not add duties, numbers, employers, dates, tools or skills that are not in the CV.
-9. "title": use the candidate's real title. You may word it closer to the target job only if it truthfully describes their experience. Never claim a title, qualification or licence they do not have.
+9. "title": use the candidate's real title WITHOUT any city or country (write "Director of Hospital Operations", not "Director of Hospital Operations - London"). You may word it closer to the target job only if it truthfully describes their experience. Never claim a title, qualification or licence they do not have.
 10. Keep honorifics and post-nominals in "name" (Dr., Engr., MBBS, ACCA...). Keep licences and statuses (driving licence, iqama, professional registration) in "personal". Keep grades such as CGPA in "education". Keep Publications, Speaking, Grants and Awards, Teaching and Certifications in "extra", each with its own heading; do not drop them. Never put an education item in "experience".
-11. Output language: 100% of the content must be in the requested language: the summary, job titles, bullets, skills, degree names, and the labels and values of personal details. Keep only proper nouns (people, employers, schools, products), emails and numbers unchanged. Also translate every heading in "labels", every "extra" heading, the label of each personal detail, and open-ended dates such as "Present" (for example "Heute" in German, "حتى الآن" in Arabic). Use natural wording for headings (for example Arabic "المعلومات الشخصية").
+11. Output language: when the target language is Urdu, Arabic or any non-English language you MUST translate EVERY field (summary, title, job titles, experience bullets, skills, degree names, and personal labels and values) into that language. NEVER leave English sentences in the body. 100% of the content must be in the requested language: the summary, job titles, bullets, skills, degree names, and the labels and values of personal details. Keep only proper nouns (people, employers, schools, products), emails and numbers unchanged. Also translate every heading in "labels", every "extra" heading, the label of each personal detail, and open-ended dates such as "Present" (for example "Heute" in German, "حتى الآن" in Arabic). Use natural wording for headings (for example Arabic "المعلومات الشخصية").
 12. Skills: do not list near-duplicates back to back (for example "Figma wireframing" and "Wireframing"); keep the more specific one.
 Return ONLY valid JSON, no markdown, in this exact shape: ${SCHEMA}`,
   translate: `You translate CVs. Translate every text value of the given CV JSON into the requested language, keeping names, honorifics, emails, phone numbers, numbers and company names unchanged. Also translate EVERY heading in "labels" and in each "extra" heading, the "label" of each personal detail, and open-ended dates such as "Present" (for example "Heute" in German, "حتى الآن" in Arabic). Use natural wording for headings (for example Arabic "المعلومات الشخصية"). Never leave a heading or a job title in English unless the target language is English. Return ONLY valid JSON in the same shape: ${SCHEMA}`,
   ats: `You are an ATS and recruiter expert. Given a CV, an optional job description and automated findings, give practical advice. ${RULES} Return ONLY valid JSON: {"tips":["max 6 short actionable tips"],"rewrites":[{"before":"weak line copied from the CV","after":"stronger version using only facts in the CV"}],"keywords":["up to 10 keywords the CV should include only if the candidate truly has them"]}`,
   interview: `You are an interview coach. Write the 10 most likely interview questions for this job and candidate, each with a short tip on how to answer using the candidate's REAL experience from the CV. Return ONLY valid JSON: {"questions":[{"q":"","tip":""}]}`,
   linkedin: `You write LinkedIn profiles. ${RULES} Return ONLY valid JSON: {"headline":"max 200 characters","about":"150-220 words, first person, friendly and professional"}`,
+  suggest: `You help job seekers who wrote very short CVs. For each job listed, suggest 3 or 4 bullet points describing responsibilities that are typical for that job title. They are DRAFTS the candidate must confirm are true. Use past tense for finished jobs and present tense for the current job ("current": true). Do not include numbers, employer names, tools or achievements. Return ONLY valid JSON: {"jobs":[{"index":0,"bullets":["..."]}]}`,
   cover: `You are an expert career writer. Write a concise, professional cover letter (250-320 words) for this candidate and job. ${RULES} Address "Hiring Manager" unless a name is given. Plain text only, no markdown, no placeholders.`,
 };
-const OK = { tailor: o => o.name !== undefined, translate: o => o.name !== undefined, ats: o => Array.isArray(o.tips), interview: o => Array.isArray(o.questions), linkedin: o => !!o.headline };
+const OK = { suggest: o => Array.isArray(o.jobs), tailor: o => o.name !== undefined, translate: o => o.name !== undefined, ats: o => Array.isArray(o.tips), interview: o => Array.isArray(o.questions), linkedin: o => !!o.headline };
 
 function parse(t, check) {
   const a = t.indexOf("{"), b = t.lastIndexOf("}"); if (a < 0 || b < 0) return null;
   try { const o = JSON.parse(t.slice(a, b + 1)); return o && check(o) ? o : null; } catch { return null; }
 }
 const norm = t => " " + String(t || "").toLowerCase().replace(/[^\p{L}\p{N}]+/gu, " ") + " ";
-function grounded(o, src) {
+const SCRIPTS = [[/arab|urdu|persian|farsi|dari|pashto|sindhi|uyghur/i, /[\u0600-\u06FF]/], [/hebrew|yiddish/i, /[\u0590-\u05FF]/], [/russian|ukrain|belarus|bulgarian|macedonian|mongolian/i, /[\u0400-\u04FF]/], [/greek/i, /[\u0370-\u03FF]/], [/chinese|japanese/i, /[\u3040-\u30ff\u4e00-\u9fff]/], [/korean/i, /[\uac00-\ud7af]/], [/hindi|marathi|nepali/i, /[\u0900-\u097F]/], [/bengali/i, /[\u0980-\u09FF]/], [/tamil/i, /[\u0B80-\u0BFF]/], [/telugu/i, /[\u0C00-\u0C7F]/], [/thai/i, /[\u0E00-\u0E7F]/], [/armenian/i, /[\u0530-\u058F]/], [/georgian/i, /[\u10A0-\u10FF]/]];
+// Rejects a reply that was left in English when a non-Latin-script language was requested (the next model then retries).
+function scriptOk(o, lang) {
+  const r = (SCRIPTS.find(x => x[0].test(lang)) || [])[1]; if (!r) return true;
+  const bl = (Array.isArray(o.experience) ? o.experience : []).flatMap(j => j.bullets || []);
+  return r.test(String(o.summary || "")) && (!bl.length || r.test(String(bl[0])));
+}
+function grounded(o, src, checkNames = true) {
   const n = norm(src), lines = String(src).split(/\n/).map(norm), seen = new Set();
   for (const j of Array.isArray(o.experience) ? o.experience : []) {
     const key = [j.title, j.company, j.dates].join("|").toLowerCase(); if (seen.has(key)) return false; seen.add(key);
     const w = norm(j.company).trim().split(" ").filter(k => k.length > 2); if (!w.length) continue;
-    if (w.filter(k => n.includes(k)).length / w.length < 0.6) return false;
+    if (checkNames && w.filter(k => n.includes(k)).length / w.length < 0.6) return false;
     const yrs = String(j.dates || "").match(/(?:19|20)\d{2}/g) || [], tk = norm(j.company).trim().split(" "), phrase = tk.slice(0, 2).join(" ");
     if (yrs.length) {
       let at = lines.map((l, i) => (l.includes(" " + phrase + " ") || l.includes(phrase) ? i : -1)).filter(i => i >= 0);
@@ -121,14 +129,19 @@ export async function onRequestPost({ request, env }) {
   if (need) return json({ error: "Please provide your CV first." }, 400);
   if ((mode === "tailor" || mode === "cover" || mode === "interview") && job.length < 3) return json({ error: "Please enter a job role or description." }, 400);
 
+  const lang = String(b.lang || "English").slice(0, 40), nonEn = !/^english/i.test(lang);
   let system = SYS[mode], user = `CANDIDATE CV:\n${cv}\n\nTARGET JOB (title and/or description):\n${job || "(none given)"}`;
-  if (mode === "tailor") { const lang = String(b.lang || "English").slice(0, 40); system += (REG[b.region] || "") + ` Write every text value in ${lang} (translate from the CV if needed) and put the section headings translated into ${lang} in "labels".`; }
+  if (mode === "tailor") { system += (REG[b.region] || "") + ` Write every text value in ${lang} (translate from the CV if needed) and put the section headings translated into ${lang} in "labels".`; }
   if (mode === "translate") user = `LANGUAGE: ${String(b.lang || "English").slice(0, 30)}\n\nCV JSON:\n${String(b.cvJson).slice(0, 12000)}`;
+  if (mode === "suggest") user = `JOBS:\n${String(b.jobsJson || "").slice(0, 4000)}\n\nTARGET JOB: ${job || "(none given)"}\nWRITE IN: ${lang}`;
   if (mode === "ats") user += `\n\nAUTOMATED FINDINGS:\n${String(b.findings || "").slice(0, 1500)}`;
   if (mode === "cover") user += `\n\nCOMPANY: ${String(b.company || "").slice(0, 80) || "(not given)"}\nHIRING MANAGER: ${String(b.manager || "").slice(0, 80) || "(not given)"}`;
 
   // Cheapest model first (about 5x fewer free neurons per CV); escalates to the 70B model only when the reply is invalid or fails the grounding check.
-  const { v, dbg, unverified } = await ai(env, system, user, OK[mode], mode === "tailor" ? o => grounded(o, cv) : null, { models: [M8, M70, M3] });
+  // Non-English output needs the stronger model first; English starts with the cheaper one.
+  const heavy = nonEn && (mode === "tailor" || mode === "translate");
+  const strict = mode === "tailor" ? o => grounded(o, cv, !nonEn) && scriptOk(o, lang) : mode === "translate" ? o => scriptOk(o, lang) : null;
+  const { v, dbg, unverified } = await ai(env, system, user, OK[mode], strict, { models: heavy ? [M70, M8, M3] : [M8, M70, M3] });
   if (!v) {
     if (/free allocation|4006|neurons/i.test(dbg)) return json({ error: "Today's free AI capacity is used up. It resets daily at 00:00 UTC, so please try again later.", quota: true }, 503);
     return json({ error: "The AI could not finish. " + dbg + "Please try again." }, 503);
