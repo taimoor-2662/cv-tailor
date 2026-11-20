@@ -208,6 +208,8 @@ body[data-t=build] [data-tab]:not([data-tab=build]),body[data-t=ats] [data-tab]:
 .cb button:hover{transform:translateY(-50%)!important;box-shadow:none!important;filter:none!important;color:var(--pri)}
 .cbl{position:absolute;left:0;right:0;top:calc(100% + 4px);max-height:240px;overflow:auto;background:var(--card);border:1px solid var(--bd);border-radius:12px;box-shadow:0 16px 36px rgba(0,0,0,.28);padding:4px;z-index:55;list-style:none;margin:0;display:none}.cbl.open{display:block}
 .cbl li{padding:8px 10px;border-radius:8px;cursor:pointer}.cbl li.hi,.cbl li:hover{background:rgba(124,58,237,.14)}.cbl li.sel{font-weight:700}.cbl li.none{color:var(--mut)}
+#cmp.on{background:rgba(124,58,237,.14);border-color:var(--pri)}
+.gt{display:flex;gap:6px;flex-wrap:wrap;width:100%}.gt button{background:transparent;color:var(--tx);border:1px solid var(--bd);box-shadow:none;padding:8px 12px;font-weight:600}.gt button.on{background:var(--grad);color:#fff;border-color:transparent}
 .pgap{position:absolute;left:0;right:0;z-index:20;background:#d9dce3;display:flex;align-items:center;justify-content:center;font:600 11px system-ui,sans-serif;color:#667085;pointer-events:none;box-shadow:inset 0 7px 7px -7px rgba(0,0,0,.35),inset 0 -7px 7px -7px rgba(0,0,0,.35)}
 .pbar{height:10px;border-radius:8px;background:var(--bd);overflow:hidden}.pbar i{display:block;height:100%;width:0;background:var(--grad);border-radius:8px;transition:width .4s ease}.pmeta{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;font-size:13px;color:var(--mut);margin-top:6px}
 .cvx li{margin-bottom:calc(.18em*(var(--gap,1) - 1))}
@@ -263,7 +265,7 @@ main{max-width:none;padding:0;margin:0}
     <div class="row" style="margin:0 0 12px">
       <div class="dd"><button data-dd>⬇ Download ▾</button><div class="ddm">
         <button id="dl">📕 PDF · selectable text (best for ATS)</button><button id="dlimg">🖼️ PDF · picture of your CV</button><button id="wd">📘 Word document (.doc)</button><button id="dtxt">📄 Plain text (.txt)</button><button id="dhtml">🌐 Web page (.html)</button><button id="dpng">🖼️ Image (.png)</button><button id="djson">🧾 Data (.json)</button><hr><button id="dcp">📋 Copy as text</button></div></div>
-      <select id="psize" title="Page size" style="width:auto"><option value="a4">A4 (210 × 297 mm)</option><option value="letter">US Letter (8.5 × 11 in)</option></select><button class="sec" id="print">🖨️ Print</button><button class="sec" id="edit">✏️ Edit CV</button><button class="sec" id="gal2">🎨 Change template</button>
+      <select id="psize" title="Page size" style="width:auto"><option value="a4">A4 (210 × 297 mm)</option><option value="letter">US Letter (8.5 × 11 in)</option></select><button class="sec" id="cmp" title="Tighten spacing so the CV fits on fewer pages">⇕ Compact</button><button class="sec" id="print">🖨️ Print</button><button class="sec" id="edit">✏️ Edit CV</button><button class="sec" id="gal2">🎨 Change template</button>
     </div>
     <div id="gchk"></div>
     <div class="tb on" id="pb" style="position:static"><b>📷 Photo</b><button id="pup">Upload / Replace</button><button id="prm">Remove</button><select id="psh" title="Photo shape"><option value="50%">Circle</option><option value="16px">Rounded</option><option value="0">Square</option></select><small>Size</small><input type="range" id="psz" min="60" max="170" value="96"><input type="file" id="pfile" accept="image/*" hidden></div>
@@ -693,11 +695,9 @@ function fillPage(root, H) {
 }
 // Splits the CV into real pages. Content never crosses a page edge: whole lines/entries move to the next page (with a safe top margin).
 // With gap > 0 (screen preview) grey gaps show between pages. With gap = 0 (PDF, PNG, print) pages are exact sheets with no gap.
-function paginate(root, gap = GAP) {
-  if (!root.offsetHeight) return 1;   // hidden (another tab): skip; it is repaginated when it is shown again
-  const H = pdim().h, P = H + gap;
-  root.style.setProperty("--pw", pdim().w + "px"); root.style.setProperty("--gap", 1);
-  root.querySelectorAll(".pgap").forEach(x => x.remove());
+let COMPACT = false;
+// Moves whole lines/entries off page edges. Returns how many pages the CV needs at the current spacing.
+function splitPages(root, H, P, gap) {
   root.style.minHeight = "";
   root.querySelectorAll("[data-pg]").forEach(e => { e.style.marginTop = e.dataset.pg; delete e.dataset.pg; });
   const sel = "h2,.job,li,.it,.sk,.s-sum>div,.s-ft";
@@ -714,8 +714,21 @@ function paginate(root, gap = GAP) {
     }
     if (!moved) break;
   }
-  const pages = Math.max(1, Math.ceil((root.getBoundingClientRect().height + gap) / P - 0.01));
-  if (pages === 1) fillPage(root, H);
+  return Math.max(1, Math.ceil((root.getBoundingClientRect().height + gap) / P - 0.01));
+}
+function paginate(root, gap = GAP) {
+  if (!root.offsetHeight) return 1;   // hidden (another tab): skip; it is repaginated when it is shown again
+  const H = pdim().h, P = H + gap;
+  root.style.setProperty("--pw", pdim().w + "px"); root.style.setProperty("--gap", 1);
+  root.querySelectorAll(".pgap").forEach(x => x.remove());
+  let pages = splitPages(root, H, P, gap);
+  if (COMPACT && pages > 1) {   // tighten spacing step by step and keep the first level that saves a page
+    const base = pages; let hit = false;
+    for (const g of [0.85, 0.7, 0.55, 0.42]) { root.style.setProperty("--gap", g); pages = splitPages(root, H, P, gap); if (pages < base) { hit = true; break; } }
+    if (!hit) { root.style.setProperty("--gap", 1); pages = splitPages(root, H, P, gap); }
+    root.dataset.cmp = hit ? "1" : "0";
+  } else delete root.dataset.cmp;
+  if (pages === 1 && !COMPACT) fillPage(root, H);
   root.style.minHeight = pages * P - gap - (gap === 0 ? 1 : 0) + "px";
   if (gap > 0) for (let i = 1; i < pages; i++) { const d = document.createElement("div"); d.className = "pgap"; d.style.top = i * P - gap + "px"; d.style.height = gap + "px"; d.textContent = `Page ${i}  |  Page ${i + 1}`; root.appendChild(d); }
   return pages;
@@ -724,9 +737,15 @@ function show() { if (!lastCv) return; $("cv").dir = isRtl(lastCv.lang) ? "rtl" 
 function choose(t) { cur = t; $("cur").textContent = t.name; if (lastCv) { apply($("cv"), t); paginate($("cv")); } $("pv").classList.remove("on"); $("ov").classList.remove("on"); }
 
 /* ---------- gallery ---------- */
-let tabCat = "__all", atsOnly = true, gShown = 12, gDone = 0, glist = [];
+let tabCat = "__all", gmode = "ats", gShown = 12, gDone = 0, glist = [];
+const RSH = { eu: "Europass", uk: "UK", us: "USA", ca: "Canada", au: "Australia / NZ", de: "Germany / Austria / Switzerland", fr: "France / Belgium", it: "Italy", es: "Spain / Portugal", nl: "Netherlands / Nordics", ru: "Eastern Europe", tr: "Turkey", br: "Brazil / Latin America", gulf: "Gulf (UAE)", ksa: "Saudi / Qatar / Kuwait", af: "Africa", sa: "South Asia", jp: "Japan", cn: "China", kr: "Korea", sea: "Southeast Asia", acad: "Academic" };
+const WEST = ["us", "uk", "ca", "au"], PHOTO = ["gulf", "ksa", "de", "eu", "sa"];
+// Western regions: clean single-column, photo-free ATS layouts. Photo regions: structured layouts that carry a photo. Others: all of that region's formats.
+const regionOk = (t, r) => WEST.includes(r) ? t.ats : PHOTO.includes(r) ? !!t.av : true;
 function galList() {
-  let l = tabCat === "__all" ? TPL.slice() : TPL.filter(t => t.cat === tabCat); if (atsOnly) l = l.filter(t => t.ats); return l;
+  const r = $("reg").value;
+  if (gmode === "region" && r) return TPL.filter(t => t.rg === r && regionOk(t, r));
+  let l = tabCat === "__all" ? TPL.slice() : TPL.filter(t => t.cat === tabCat); if (gmode === "ats") l = l.filter(t => t.ats); return l;
 }
 function thumbs() {
   glist.slice(gDone, gShown).forEach(t => {
@@ -738,15 +757,21 @@ function thumbs() {
   requestAnimationFrame(() => document.querySelectorAll(".th").forEach(th => { th.querySelector(".cvx").style.transform = `scale(${th.clientWidth / 794})`; }));
 }
 function drawGallery() {
+  const rg = $("reg").value; if (gmode === "region" && !rg) gmode = "ats";
   const sty = [...new Set(TPL.filter(t => !t.rg).map(t => t.cat))], reg = [...new Set(TPL.filter(t => t.rg).map(t => t.cat))];
-  if (tabCat !== "__all" && ![...sty, ...reg].includes(tabCat)) tabCat = sty[0];
-  const o = a => a.map(c => `<option ${c === tabCat ? "selected" : ""}>${esc(c)}</option>`).join("");
-  $("tabs").className = "gf"; $("tabs").innerHTML = `<select id="gcat"><option value="__all" ${tabCat === "__all" ? "selected" : ""}>All templates (${TPL.length})</option><optgroup label="Styles">${o(sty)}</optgroup><optgroup label="Regional formats">${o(reg)}</optgroup></select><label><input type="checkbox" id="gats" ${atsOnly ? "checked" : ""}> ATS-safe only (untick to see all layouts)</label><button class="sec" id="gshuf">🔀 Shuffle</button>`;
+  if (tabCat !== "__all" && ![...sty, ...reg].includes(tabCat)) tabCat = "__all";
+  const o = a => a.map(c => `<option ${c === tabCat ? "selected" : ""}>${esc(c)}</option>`).join(""), on = m => (gmode === m ? "on" : "");
+  $("tabs").className = "gf";
+  $("tabs").innerHTML = `<div class="gt"><button data-m="all" class="${on("all")}">All Templates</button><button data-m="ats" class="${on("ats")}">ATS ✓</button>${rg ? `<button data-m="region" class="${on("region")}">${esc(RSH[rg] || rg)} Templates</button>` : ""}</div>` +
+    (gmode === "region" ? "" : `<select id="gcat"><option value="__all" ${tabCat === "__all" ? "selected" : ""}>All styles and regions (${TPL.length})</option><optgroup label="Styles">${o(sty)}</optgroup><optgroup label="Regional formats">${o(reg)}</optgroup></select>`) + `<button class="sec" id="gshuf">🔀 Shuffle</button>`;
   glist = galList(); gShown = 12; gDone = 0; $("grid").innerHTML = ""; $("gcnt").textContent = glist.length + " templates"; thumbs();
-  if (!glist.length) $("grid").innerHTML = '<p class="hint">No ATS-safe templates in this category. Untick "ATS-safe only" to see all layouts.</p>';
+  if (!glist.length) $("grid").innerHTML = '<p class="hint">No templates match this filter. Try All Templates.</p>';
 }
-$("tabs").addEventListener("change", e => { if (e.target.id === "gcat") { tabCat = e.target.value; drawGallery(); } if (e.target.id === "gats") { atsOnly = e.target.checked; drawGallery(); } });
-$("tabs").addEventListener("click", e => { if (e.target.id === "gshuf") { drawGallery(); glist = glist.map(t => [Math.random(), t]).sort((a, b) => a[0] - b[0]).map(x => x[1]); $("grid").innerHTML = ""; gDone = 0; thumbs(); } });
+$("tabs").addEventListener("change", e => { if (e.target.id === "gcat") { tabCat = e.target.value; drawGallery(); } });
+$("tabs").addEventListener("click", e => {
+  const m = e.target.closest("[data-m]"); if (m) { gmode = m.dataset.m; drawGallery(); return; }
+  if (e.target.id === "gshuf") { drawGallery(); glist = glist.map(t => [Math.random(), t]).sort((a, b) => a[0] - b[0]).map(x => x[1]); $("grid").innerHTML = ""; gDone = 0; thumbs(); }
+});
 $("gmore").onclick = () => { gShown += 12; thumbs(); };
 let pvT = null, actual = false;
 function fit() {
@@ -765,7 +790,7 @@ $("pvuse").onclick = () => choose(pvT);
 $("pvz").onclick = () => { actual = !actual; fit(); };
 addEventListener("resize", () => { if ($("pv").classList.contains("on")) fit(); });
 addEventListener("keydown", e => { if (e.key === "Escape") { if ($("pv").classList.contains("on")) $("pv").classList.remove("on"); else $("ov").classList.remove("on"); } });
-const openG = () => { $("ov").classList.add("on"); drawGallery(); };
+const openG = () => { $("ov").classList.add("on"); gmode = $("reg").value ? "region" : "ats"; drawGallery(); };
 $("gal").onclick = openG; $("gal2").onclick = openG; $("x").onclick = () => $("ov").classList.remove("on");
 $("mkb").onclick = () => $("mk").classList.toggle("on");
 $("mf").innerHTML = FONTS.map(f => `<option>${f[0]}</option>`).join("");
@@ -871,6 +896,10 @@ const doPrint = () => { $("pdfh").hidden = true; setPrintTitle(); window.print()
 $("dl").onclick = () => { if (!needCv()) return; let skip = false; try { skip = localStorage.getItem("cvpdfh") === "1"; } catch (e) {} if (skip) doPrint(); else $("pdfh").hidden = false; };
 $("pdfx").onclick = $("pdfc").onclick = () => { $("pdfh").hidden = true; };
 $("pdfo").onclick = () => { if ($("pdfn").checked) { try { localStorage.setItem("cvpdfh", "1"); } catch (e) {} } doPrint(); };
+$("cmp").onclick = () => {
+  COMPACT = !COMPACT; $("cmp").classList.toggle("on", COMPACT); paginate($("cv"));
+  $("cmp").textContent = !COMPACT ? "⇕ Compact" : $("cv").dataset.cmp === "0" ? "⇕ Compact (already tight)" : "⇕ Compact ✓";
+};
 $("psize").onchange = e => { PSZ = e.target.value === "letter" ? "letter" : "a4"; try { localStorage.setItem("cvps", PSZ); } catch (x) {} applySize(); };
 applySize();
 addEventListener("beforeprint", () => { if (!$("out").hidden) { setPrintTitle(); paginate($("cv"), 0); } });
@@ -1194,17 +1223,24 @@ $("igo").onclick = () => need(true) && busy($("igo"), async () => { $("iout").in
 $("lgo").onclick = () => need(false) && busy($("lgo"), async () => { $("lout").innerHTML = '<p class="hint">Writing…</p>'; const d = (await callAI("linkedin")).data; $("lout").innerHTML = `<h3>Headline</h3><div class="hl" id="lh">${esc(d.headline)}</div><div class="row"><button class="sec" id="lch">Copy headline</button></div><h3>About</h3><div class="hl" id="la">${esc(d.about)}</div><div class="row"><button class="sec" id="lca">Copy About</button></div>`; $("lch").onclick = () => copyT(d.headline); $("lca").onclick = () => copyT(d.about); });
 $("tgo").onclick = () => { if (!lastCv) return alert("Generate a CV in step 1 first."); busy($("tgo"), async () => { const l = $("tlang").value.trim() || "English", d = await callAI("translate", { lang: l, cvJson: JSON.stringify({ ...lastCv, lang: undefined, labels: undefined }) }); lastCv = cleanCv(d.cv); lastCv.lang = l; show(); scrollTo({ top: $("out").offsetTop, behavior: "smooth" }); }); };
 // Optional help for very short CVs: the AI drafts typical duties for each role, but nothing is added until YOU tick what is true.
+const MAXB = 7;
+const normB = t => String(t || "").toLowerCase().replace(/[^\p{L}\p{N}\s]/gu, " ").split(/\s+/).filter(w => w.length > 2);
+const similar = (a, b) => { const A = new Set(normB(a)), B = new Set(normB(b)); if (!A.size || !B.size) return false; let hit = 0; B.forEach(w => { if (A.has(w)) hit++; }); return hit / Math.min(A.size, B.size) >= 0.6; };
 function suggestBullets() {
   busy($("sugb"), async () => {
-    const jobs = arr(lastCv.experience).map((j, i) => ({ index: i, title: j.title, company: j.company, dates: j.dates, current: /present|current|now/i.test(j.dates || ""), bullets: arr(j.bullets) }));
+    const jobs = arr(lastCv.experience).map((j, i) => ({ index: i, title: j.title, company: j.company, dates: j.dates, current: /present|current|now/i.test(j.dates || ""), bullets: arr(j.bullets) }));   // existing bullets go to the AI so it writes different angles
     const d = (await callAI("suggest", { jobsJson: JSON.stringify(jobs), lang: lastCv.lang || "English" })).data;
-    const list = arr(d.jobs).filter(x => lastCv.experience[x.index] && arr(x.bullets).length);
-    if (!list.length) return alert("No ideas this time. Please try again.");
-    $("sugo").innerHTML = '<div class="is warn"><b>Draft ideas, not facts.</b> Tick only what is TRUE for you, then add them.</div>' + list.map(x => `<div class="is ok"><b>${esc(lastCv.experience[x.index].title)}${lastCv.experience[x.index].company ? ", " + esc(lastCv.experience[x.index].company) : ""}</b>${arr(x.bullets).map(b => `<label style="display:flex;gap:8px;align-items:flex-start;font-weight:400;margin:6px 0"><input type="checkbox" style="width:auto;margin-top:4px" data-j="${x.index}" data-t="${esc(b)}"> <span>${esc(b)}</span></label>`).join("")}</div>`).join("") + '<div class="row" style="margin:0 0 10px"><button id="sugadd">Add selected to my CV</button></div>';
+    const list = arr(d.jobs).map(x => {
+      const j = lastCv.experience[x.index]; if (!j || arr(j.bullets).length >= MAXB) return null; const keep = [];
+      arr(x.bullets).forEach(b => { if (![...arr(j.bullets), ...keep].some(e => similar(b, e))) keep.push(b); });
+      return keep.length ? { index: x.index, bullets: keep } : null;
+    }).filter(Boolean);
+    if (!list.length) return alert("No new ideas this time: each role either has plenty of bullets (up to " + MAXB + ") or the ideas repeated what you already have. Try again or write your own.");
+    $("sugo").innerHTML = '<div class="is warn"><b>Draft ideas, not facts.</b> Tick only what is TRUE for you, then add them (up to ' + MAXB + ' bullets per role).</div>' + list.map(x => `<div class="is ok"><b>${esc(lastCv.experience[x.index].title)}${lastCv.experience[x.index].company ? ", " + esc(lastCv.experience[x.index].company) : ""}</b>${x.bullets.map(b => `<label style="display:flex;gap:8px;align-items:flex-start;font-weight:400;margin:6px 0"><input type="checkbox" style="width:auto;margin-top:4px" data-j="${x.index}" data-t="${esc(b)}"> <span>${esc(b)}</span></label>`).join("")}</div>`).join("") + '<div class="row" style="margin:0 0 10px"><button id="sugadd">Add selected to my CV</button></div>';
     $("sugadd").onclick = () => {
-      const ch = [...$("sugo").querySelectorAll("input:checked")]; if (!ch.length) return alert("Tick at least one idea first.");
-      ch.forEach(i => { const j = lastCv.experience[+i.dataset.j]; j.bullets = [...arr(j.bullets), i.dataset.t]; });
-      $("sugo").innerHTML = ""; show();
+      const ch = [...$("sugo").querySelectorAll("input:checked")]; if (!ch.length) return alert("Tick at least one idea first."); let skipped = 0;
+      ch.forEach(i => { const j = lastCv.experience[+i.dataset.j], cur = arr(j.bullets), t = i.dataset.t; if (cur.length >= MAXB || cur.some(e => similar(t, e))) { skipped++; return; } j.bullets = [...cur, t]; });
+      $("sugo").innerHTML = ""; show(); if (skipped) alert(skipped + " idea(s) were skipped because they repeat an existing bullet or the role already has " + MAXB + " bullets.");
     };
   });
 }
